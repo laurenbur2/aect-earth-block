@@ -841,3 +841,15 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
   .kf-item .kf-ico { grid-row: span 2; margin: 0; }
   .kf-total { flex-direction: unset; }
 }
+
+/* ---------- Press cards (link to the exact episode / article) ---------- */
+.press-card { display: flex; flex-direction: column; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; text-decoration: none; color: var(--ink); transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+.press-card:hover { transform: translateY(-2px); border-color: #b9c2d1; box-shadow: var(--shadow); color: var(--ink); }
+.press-src { font: 700 .7rem/1 var(--font-head); letter-spacing: .12em; text-transform: uppercase; color: var(--sage); margin-bottom: 8px; }
+.press-card h4 { font-size: 1.2rem; margin: 0 0 6px; }
+.press-card p { color: var(--muted); font-size: .94rem; margin: 0 0 14px; flex: 1; }
+.press-cta { font: 700 .82rem/1 var(--font-head); letter-spacing: .06em; text-transform: uppercase; color: var(--brand); }
+.press-card:hover .press-cta { text-decoration: underline; }
+.press-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .press-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .press-grid { grid-template-columns: 1fr; } }

@@ -61,3 +61,12 @@ Home page listings (inventory): Impact 2001A built 2025 $59,000 SOLD; new BP714 
 - Images live on GoDaddy CDN: `https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/<file>/:/rs=w:1600`. Full list in `research/raw/*.images.txt`. Ask the client for originals (higher res, no GoDaddy dependency).
 - YouTube IDs: home `fx7tI67-8d0 J96o0FVk18A 3_vxBrD02mA`, Impact `xWIc9XZthN0`, 2500HD `-tpm1_4PtUE`, 3500 `EH7uwM30SD4`, Mega Mixer `v4zIhBTSKoU`, Small Block Press `2J7JJIW0Fcw`, calculator tutorial `kPkW0VvOlho`, batch plant `78pPHrg9bQw`, consulting `HdAawmGtHjw MM-5mQhBFGY`, Building With CEBs: `R4YBpiDa3Lc f7GYQH0fz8Q 9RBLwW-7fts cIqqwmTDHBY XM_UzUJ_6co cVdcuonnLpQ H2XWKlV8afo P1n1U0NF0NI eM52kJ6Cmyk 3G-2wuVTZGM -gVL8KWJdMU N4YLUS8ngl4 PJUqHKS4lpQ`.
 - For the hero we need a 15–30 s silent MP4 loop (machine pressing blocks, conveyor, finished home). Ask the client for raw footage.
+
+## Press links (verified 2026-10-13)
+- Netflix, Buy My House S1E4: https://www.netflix.com/title/81074133
+- Building Off The Grid, "Earth Block Ranch" (DIY Network, Oct 2019): https://www.primevideo.com/detail/0MJGDY9MJBM02HWC6Y8QR1JO90 (old diynetwork.com link is dead)
+- NY Times, disaster-proof housing (2021): https://www.nytimes.com/2021/11/12/realestate/disaster-proof-housing.html
+- Mashable: https://mashable.com/video/earth-blocks-mud-brick-technology (also Vimeo 851019521)
+- House of What?: Vimeo 851025518
+- HUD CEB study: https://www.huduser.gov/portal/sites/default/files/pdf/Compressed-Earth-Blocks.pdf
+- 2026 catalog PDF: site/assets/docs/aect-2026-catalog.pdf
