@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700;800&family=Fraunces:ital,opsz,wght@1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css?v=fe2b1e62">
+  <link rel="stylesheet" href="assets/css/styles.css?v=c689f902">
   <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 </head>
@@ -102,13 +102,23 @@
     <div class="wrap">
       <span class="eyebrow">Projects</span>
       <h2>Built with AECT</h2>
-      <div class="gallery">
-        <img class="wide" src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/finished%20outside%202.jpg/:/rs=w:1200" alt="CEB home exterior" loading="lazy">
-        <img class="tall" src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/fireplace_2.jpg/:/rs=w:800" alt="CEB fireplace" loading="lazy">
-        <img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/assembly%20line.jpg/:/rs=w:800" alt="Block production line" loading="lazy">
-        <img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/story%20poles%20with%20first%20four%20courses%20of%20blocks.jpg/:/rs=w:800" alt="First courses of CEB wall with story poles" loading="lazy">
-        <img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/nice%20blocks.jpg/:/rs=w:800" alt="Stack of CEBs" loading="lazy">
-        <img class="wide" src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/AECT%20Map%202019-0001.PNG/:/rs=w:1200" alt="Map of AECT machines around the world" loading="lazy" style="object-fit:contain;background:#fff">
+      <div class="carousel" data-carousel>
+        <div class="car-controls">
+          <button class="car-btn" type="button" data-dir="-1" aria-label="Previous photos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <button class="car-btn" type="button" data-dir="1" aria-label="Next photos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="car-track" tabindex="0" role="region" aria-label="AECT project photos, scroll sideways">
+          <figure class="car-item"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%201.jpg/:/rs=w:900" alt="AECT headquarters, built from CEBs" loading="lazy"><figcaption>AECT headquarters · San Antonio, TX</figcaption></figure>
+          <figure class="car-item"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/finished%20outside%202.jpg/:/rs=w:900" alt="CEB home exterior" loading="lazy"><figcaption>CEB home · Texas</figcaption></figure>
+          <figure class="car-item"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/block%20plant.JPG/:/rs=w:900" alt="AECT batch plant set up on a job site" loading="lazy"><figcaption>On-site batch plant</figcaption></figure>
+          <figure class="car-item"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/assembly%20line.jpg/:/rs=w:900" alt="Block production line" loading="lazy"><figcaption>Production line</figcaption></figure>
+          <figure class="car-item"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/story%20poles%20with%20first%20four%20courses%20of%20blocks.jpg/:/rs=w:900" alt="First courses of a CEB wall with story poles" loading="lazy"><figcaption>First courses, kept plumb with story poles</figcaption></figure>
+          <figure class="car-item"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/stabilized%20blocks_2.jpg/:/rs=w:900" alt="Stabilized CEB walls going up" loading="lazy"><figcaption>Walls going up</figcaption></figure>
+          <figure class="car-item"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/HOPE%20project%20photo.jpg/:/rs=w:900" alt="Ryan Runge at a customer build" loading="lazy"><figcaption>Ryan on a customer build</figcaption></figure>
+          <figure class="car-item"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/nice%20blocks.jpg/:/rs=w:900" alt="Pallet of fresh CEBs" loading="lazy"><figcaption>Fresh blocks, ready to cure</figcaption></figure>
+          <figure class="car-item"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/fireplace_2.jpg/:/rs=w:900" alt="CEB fireplace" loading="lazy"><figcaption>Fireplace</figcaption></figure>
+          <figure class="car-item"><img class="contain" src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/AECT%20Map%202019-0001.PNG/:/rs=w:900" alt="Map of AECT machines around the world" loading="lazy"><figcaption>AECT machines around the world</figcaption></figure>
+        </div>
       </div>
     </div>
   </section>

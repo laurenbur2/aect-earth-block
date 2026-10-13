@@ -811,3 +811,33 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .car-item figcaption { margin-top: 8px; font: 600 .9rem/1.3 var(--font-body); color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .car-track { scroll-behavior: auto; } }
 @media (max-width: 760px) { .car-controls { position: static; justify-content: flex-end; margin-bottom: 10px; } .car-item { flex-basis: 78%; } }
+.car-item img.contain { object-fit: contain; background: #fff; }
+
+/* ---------- Kit formula (Machines page) ---------- */
+.kit-formula { position: relative; background: radial-gradient(120% 140% at 0% 0%, #34405a 0%, var(--earth) 55%, #1b2230 100%); color: #dfe3ea; padding: clamp(40px, 5vw, 64px) 0; overflow: hidden; }
+.kit-formula::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 28px), repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 56px); pointer-events: none; }
+.kf-head { position: relative; max-width: 640px; margin-bottom: 28px; }
+.kf-head h2 { color: #fff; font-size: clamp(1.7rem, 3.2vw, 2.4rem); margin: 0; }
+.kf-row { position: relative; display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1.1fr; align-items: stretch; gap: 10px; }
+.kf-item { display: flex; flex-direction: column; gap: 4px; padding: 18px 16px; border-radius: 14px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); }
+.kf-ico { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; margin-bottom: 10px; background: rgba(173,187,137,.14); color: var(--logo-green); }
+.kf-ico svg { width: 26px; height: 26px; }
+.kf-item b { font: 700 1.12rem/1.2 var(--font-head); color: #fff; }
+.kf-item span:last-child { font-size: .86rem; line-height: 1.4; color: #aab2c0; }
+.kf-plus { align-self: center; font: 300 1.8rem/1 var(--font-body); color: rgba(255,255,255,.35); }
+.kf-total { background: var(--logo-cream); border-color: var(--logo-cream); }
+.kf-total .kf-ico { background: var(--earth); color: var(--logo-cream); }
+.kf-total b { color: var(--earth); }
+.kf-total span:last-child { color: var(--earth-2); }
+@media (max-width: 1080px) {
+  .kf-row { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .kf-plus { display: none; }
+  .kf-total { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 14px; }
+  .kf-total .kf-ico { margin: 0; }
+}
+@media (max-width: 480px) { .kf-row { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  .kf-item { display: grid; grid-template-columns: 46px 1fr; column-gap: 14px; row-gap: 2px; align-items: center; padding: 14px; }
+  .kf-item .kf-ico { grid-row: span 2; margin: 0; }
+  .kf-total { flex-direction: unset; }
+}
