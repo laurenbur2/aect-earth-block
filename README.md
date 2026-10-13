@@ -15,7 +15,8 @@ Then open http://localhost:4173. The hero video needs `http://`; it won't play f
 site/
   index.html        Home: hero video, planner entry, 3 paths, CEB 101, FAQ preview
   plan.html         The CEB planner (funnel)
-  machines.html     All machines, comparison table, specs, pricing
+  machines.html     Shop-style grid of all machines and equipment
+  <machine>.html    One product page per machine (generated, see below)
   blocks.html       Block sizes, stabilized vs un-stabilized, buying blocks
   rent.html         Equipment rental with operator + consulting
   learn.html        Full FAQ + build videos
@@ -29,6 +30,12 @@ research/
   calculator-logic.md    Reverse-engineered spreadsheet formulas + test cases
   calculator.js          Faithful port of the original spreadsheet (2022 prices)
   raw/                   Raw text and image lists for every current page
+```
+
+## Machine pages
+The 7 product pages (`impact-2001a.html`, `2500hd.html`, `3500.html`, `bp714.html`, `mega-mixer.html`, `small-block-press.html`, `block-cutter.html`) and the product cards on `machines.html` are generated from the data in `tools/build_machines.py`. To change a price, spec or photo, edit that file and run:
+```bash
+python3 tools/build_machines.py
 ```
 
 ## Before launch

@@ -6,10 +6,10 @@
   const LEAD_ENDPOINT = "";
   const IMG = "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/";
   const MACHINE_PAGES = {
-    "AECT Impact 2001A": { anchor: "impact-2001a", img: IMG + "e48a0068-88d7-476c-a776-9f0a846ac278.jpg/:/rs=w:800", rate: "300 blocks/hr" },
-    "AECT 2500HD": { anchor: "2500hd", img: IMG + "bf5b7c80-8d03-46af-8d3b-ffebd057b135.jpg/:/rs=w:800", rate: "480 blocks/hr" },
-    "AECT 3500": { anchor: "3500", img: IMG + "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg/:/rs=w:800", rate: "480 blocks/hr" },
-    "AECT BP714": { anchor: "bp714", img: IMG + "889d4a57-f36f-4da9-8b17-e691db617e06.png/:/rs=w:800", rate: "240 blocks/hr" },
+    "AECT Impact 2001A": { page: "impact-2001a.html", img: IMG + "e48a0068-88d7-476c-a776-9f0a846ac278.jpg/:/rs=w:800", rate: "300 blocks/hr" },
+    "AECT 2500HD": { page: "2500hd.html", img: IMG + "bf5b7c80-8d03-46af-8d3b-ffebd057b135.jpg/:/rs=w:800", rate: "480 blocks/hr" },
+    "AECT 3500": { page: "3500.html", img: IMG + "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg/:/rs=w:800", rate: "480 blocks/hr" },
+    "AECT BP714": { page: "bp714.html", img: IMG + "889d4a57-f36f-4da9-8b17-e691db617e06.png/:/rs=w:800", rate: "240 blocks/hr" },
   };
   // Rough share of interior CEB wall vs. exterior perimeter, by project type.
   const INTERIOR_RATIO = { home: 0.6, barn: 0.15, commercial: 0.4, outdoor: 0, business: 0.6 };
@@ -258,7 +258,7 @@
     const nextCards = {
       quote: `<div class="next-step ${timelineNext === "quote" ? "is-primary" : ""}"><h3>Request a formal quote</h3><p>Ready to move? We'll confirm pricing, delivery and training dates using this plan.</p><a class="btn" href="contact.html?topic=quote">Request my quote</a></div>`,
       consult: `<div class="next-step ${timelineNext === "consult" ? "is-primary" : ""}"><h3>Talk it through with Ryan</h3><p>30-minute video call with AECT's president. Bring this plan; he'll pressure-test it with you. $75.</p><a class="btn" href="contact.html#consult">Book a consult</a></div>`,
-      learn: `<div class="next-step ${timelineNext === "learn" ? "is-primary" : ""}"><h3>${state.soil === "yes" ? "Learn the build process" : "Test your soil first"}</h3><p>${state.soil === "yes" ? "Watch how CEB walls go up, from first course to plaster." : "The #1 thing to know before anything else. Our Small Block Press makes test blocks at real machine pressure."}</p><a class="btn" href="${state.soil === "yes" ? "learn.html#videos" : "machines.html#small-block-press"}">${state.soil === "yes" ? "Watch the videos" : "Soil testing"}</a></div>`,
+      learn: `<div class="next-step ${timelineNext === "learn" ? "is-primary" : ""}"><h3>${state.soil === "yes" ? "Learn the build process" : "Test your soil first"}</h3><p>${state.soil === "yes" ? "Watch how CEB walls go up, from first course to plaster." : "The #1 thing to know before anything else. Our Small Block Press makes test blocks at real machine pressure."}</p><a class="btn" href="${state.soil === "yes" ? "learn.html#videos" : "small-block-press.html"}">${state.soil === "yes" ? "Watch the videos" : "Soil testing"}</a></div>`,
     };
     const order = [timelineNext, ...["quote", "consult", "learn"].filter((k) => k !== timelineNext)];
 
@@ -292,7 +292,7 @@
               <li><span>Labor</span><span>${r.laborCost ? money(r.laborCost) : "Volunteer"}</span></li>
               <li><span>Pallets & consumables</span><span>${money(r.incidentalCost)}</span></li>
             </ul>
-            <a class="btn ${best === "own" ? "" : "btn--outline"}" href="machines.html#${m.anchor || "compare"}">See the ${r.machine.replace("AECT ", "")}</a>
+            <a class="btn ${best === "own" ? "" : "btn--outline"}" href="${m.page || "machines.html"}">See the ${r.machine.replace("AECT ", "")}</a>
           </div>
           ${intl ? "" : `
           <div class="opt ${best === "rent" ? "is-best" : ""}">${best === "rent" ? '<span class="flag">Best value</span>' : ""}
@@ -327,8 +327,8 @@
             <h3>${r.machine}</h3>
             <div class="price">${money(r.machineCost)}</div>
             <p class="fine" style="margin-bottom:12px">${m.rate || ""} · Makes your ${r.blockSize} blocks. Includes a week of on-site training, 1-year warranty and lifetime support.</p>
-            <p>${r.machine === "AECT 2500HD" ? "Over 30,000 blocks, the 2500HD's tractor-loaded hopper and 480 blocks/hr save you weeks of production." : r.machine === "AECT Impact 2001A" ? "Light enough to tow behind any vehicle and perfect for one to five houses." : r.machine === "AECT BP714" ? "Interlocking, holey blocks you can reinforce with rebar and grout, ideal where codes require it." : "The Cadillac of CEB machines. Some 3500s in the field have made three million blocks."} To run any machine at full speed, plan on a <a href="machines.html#mega-mixer">Mega Mixer</a> or another way to mix soil, stabilizer and water consistently.</p>
-            <a class="btn btn--outline" href="machines.html#${m.anchor || "compare"}">Full specs and video</a>
+            <p>${r.machine === "AECT 2500HD" ? "Over 30,000 blocks, the 2500HD's tractor-loaded hopper and 480 blocks/hr save you weeks of production." : r.machine === "AECT Impact 2001A" ? "Light enough to tow behind any vehicle and perfect for one to five houses." : r.machine === "AECT BP714" ? "Interlocking, holey blocks you can reinforce with rebar and grout, ideal where codes require it." : "The Cadillac of CEB machines. Some 3500s in the field have made three million blocks."} To run any machine at full speed, plan on a <a href="mega-mixer.html">Mega Mixer</a> or another way to mix soil, stabilizer and water consistently.</p>
+            <a class="btn btn--outline" href="${m.page || "machines.html"}">Full specs and video</a>
           </div>
         </div>
       </div>
