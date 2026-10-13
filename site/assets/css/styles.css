@@ -578,3 +578,41 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .partner-feature { margin-top: 40px; background: var(--paper); border: 2px solid var(--brand); border-radius: var(--radius-lg); padding: clamp(24px, 4vw, 36px); box-shadow: var(--shadow); }
 .partner-feature h3 { font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 6px 0 8px; }
 .partner-feature p { color: var(--muted); max-width: 60ch; }
+
+/* ---------- Contact form ---------- */
+.page-hero--short { padding-bottom: clamp(36px, 5vw, 56px); }
+.contact-wrap { max-width: 920px; }
+.contact-form fieldset { border: 0; padding: 0; margin: 0 0 40px; min-width: 0; }
+.contact-form legend { display: flex; align-items: center; gap: 12px; font: 800 clamp(1.4rem, 2.6vw, 1.9rem)/1.2 var(--font-head); color: var(--earth); margin-bottom: 20px; padding: 0; }
+.step-n { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--brand); color: var(--logo-cream); font-size: 1rem; flex: none; }
+.req { font: 600 .75rem/1 var(--font-body); color: var(--sage); background: #e6ebda; padding: 5px 8px; border-radius: 5px; letter-spacing: .02em; }
+.topic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.topic { position: relative; cursor: pointer; }
+.topic input { position: absolute; opacity: 0; pointer-events: none; }
+.topic-box { display: flex; flex-direction: column; gap: 4px; height: 100%; padding: 20px 18px; background: var(--paper); border: 2px solid var(--line); border-radius: 14px; transition: border-color .15s ease, transform .15s ease, background .15s ease; }
+.topic:hover .topic-box { border-color: #9aa6ba; transform: translateY(-2px); }
+.topic input:focus-visible + .topic-box { outline: 3px solid #b9c2d1; outline-offset: 2px; }
+.topic input:checked + .topic-box { border-color: var(--brand); background: #eef1f6; }
+.topic input:checked + .topic-box::after { content: "✓"; position: absolute; top: 12px; right: 12px; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: var(--logo-cream); display: grid; place-items: center; font-size: .8rem; font-weight: 700; }
+.topic-ico { font-size: 1.6rem; margin-bottom: 6px; }
+.topic-box b { font: 700 1.05rem/1.25 var(--font-head); color: var(--earth); }
+.topic-box small { color: var(--muted); font-size: .88rem; line-height: 1.35; }
+.contact-form .error { display: none; color: #a32b1a; font-size: .9rem; margin: 6px 0 0; }
+.contact-form .field.has-error .error { display: block; }
+.contact-form .field.has-error .input { border-color: #c4452d; }
+.contact-form .field label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--earth); }
+.contact-form .input { width: 100%; padding: 14px 16px; font: 500 1rem/1.4 var(--font-body); color: var(--ink); background: var(--paper); border: 2px solid var(--line); border-radius: 12px; outline: none; }
+.contact-form .input:focus { border-color: var(--brand); }
+.contact-form .field { margin-bottom: 18px; }
+.contact-form .hint { font-size: .86rem; color: var(--muted); margin: 6px 0 0; }
+.contact-form .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.details { background: var(--paper); border: 1px solid var(--line) !important; border-radius: var(--radius-lg); padding: clamp(20px, 4vw, 32px) !important; box-shadow: var(--shadow); transition: opacity .25s ease; }
+.details legend { float: left; width: 100%; }
+.details legend + * { clear: both; }
+.details:disabled { opacity: .45; }
+.details:disabled .btn { cursor: not-allowed; }
+.sent { text-align: center; padding: 48px 20px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+.sent .gate-check { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--brand); color: var(--logo-cream); font-size: 1.6rem; margin: 0 auto 16px; }
+@media (max-width: 760px) { .topic-grid { grid-template-columns: 1fr 1fr; } .contact-form .field-row { grid-template-columns: 1fr; } }
+@media (max-width: 340px) { .topic-grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .topic-box { padding: 16px 14px; } .topic-box small { font-size: .8rem; } }

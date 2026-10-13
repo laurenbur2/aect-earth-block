@@ -26,6 +26,7 @@
       <a href="blocks.html">Blocks</a>
       <a href="rent.html">Rent Equipment</a>
       <a href="about.html">About</a>
+      <a href="contact.html" aria-current="page">Contact</a>
       <a class="btn" href="plan.html">Plan my build</a>
     </nav>
   </div>
@@ -33,72 +34,53 @@
 
 
 <main>
-  <section class="page-hero" style="background-image:url('https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/conveyor%20full%20of%20blocks.jpg/:/rs=w:2000')">
+  <section class="page-hero page-hero--short" style="background-image:url('https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/conveyor%20full%20of%20blocks.jpg/:/rs=w:2000')">
     <div class="wrap">
-      <span class="eyebrow" style="color:var(--logo-cream)">Contact</span>
-      <h1>Let's talk about your build</h1>
-      <p class="lede">The fastest way to a real answer: <a href="plan.html" style="color:var(--logo-cream)">run the planner first</a>. Then bring your plan to us.</p>
+      <span class="eyebrow" style="color:var(--logo-cream)">Contact us</span>
+      <h1>Let's talk about your project</h1>
+      <p class="lede">Pick what you need and we'll get back to you by email. Looking for prices or block counts? <a href="plan.html" style="color:var(--logo-cream)">The planner</a> answers in 2 minutes.</p>
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <div class="paths" style="margin-top:0">
-        <div class="path" style="cursor:default">
-          <div class="path-body">
-            <span class="path-tag">Most questions</span>
-            <h3>Plan my build</h3>
-            <p>Block count, materials, machine and costs in about two minutes. Answers most of what people call us about.</p>
-            <a class="btn" href="plan.html">Start the planner</a>
+  <section class="section" id="quote" style="scroll-margin-top:var(--header-h)">
+    <div class="wrap contact-wrap">
+      <form class="contact-form" id="contactForm" novalidate>
+        <fieldset class="topics">
+          <legend><span class="step-n">1</span>What can we help you with? <span class="req">Required</span></legend>
+          <div class="topic-grid">
+            <label class="topic"><input type="radio" name="topic" value="kit" required><span class="topic-box"><span class="topic-ico" aria-hidden="true">🏗️</span><b>Buying a machine kit</b><small>Impact 2001A or 3500 kit</small></span></label>
+            <label class="topic"><input type="radio" name="topic" value="rental" required><span class="topic-box"><span class="topic-ico" aria-hidden="true">🚛</span><b>Renting equipment</b><small>AECT plant + operator at your site</small></span></label>
+            <label class="topic"><input type="radio" name="topic" value="blocks" required><span class="topic-box"><span class="topic-ico" aria-hidden="true">🧱</span><b>Buying blocks</b><small>Finished blocks through Terra Madre</small></span></label>
+            <label class="topic"><input type="radio" name="topic" value="consulting" required><span class="topic-box"><span class="topic-ico" aria-hidden="true">🧭</span><b>On-site consulting</b><small>Soil, production or construction help</small></span></label>
+            <label class="topic"><input type="radio" name="topic" value="tools" required><span class="topic-box"><span class="topic-ico" aria-hidden="true">🔧</span><b>Parts, presses & tools</b><small>Small Block Press, cutter, spare parts</small></span></label>
+            <label class="topic"><input type="radio" name="topic" value="consult" required><span class="topic-box"><span class="topic-ico" aria-hidden="true">🎥</span><b>Video call with Ryan</b><small>30 minutes · $75</small></span></label>
           </div>
-        </div>
-        <div class="path" id="consult" style="cursor:default;scroll-margin-top:calc(var(--header-h) + 20px)">
-          <div class="path-body">
-            <span class="path-tag">Talk it through</span>
-            <h3>Video consult with Ryan · $75</h3>
-            <p>30 minutes, one-on-one with AECT's president. Ideal once you have your plan and want an expert to pressure-test it.</p>
-            <a class="btn" href="https://aectearthblock.com/#6e9fbcdc-9ddd-428b-b3d8-1f82e59a8b5c">Book a time</a>
-          </div>
-        </div>
-        <div class="path" style="cursor:default">
-          <div class="path-body">
-            <span class="path-tag">Ready to buy</span>
-            <h3>Request a quote</h3>
-            <p>Machines, rentals, blocks or on-site consulting. Tell us what you need and we'll reply by email.</p>
-            <a class="btn" href="#quote">Request a quote</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+          <p class="error" id="topicError">Please choose what you need so we can route your request.</p>
+        </fieldset>
 
-  <section class="section section--sand" id="quote" style="scroll-margin-top:var(--header-h)">
-    <div class="wrap split" style="align-items:start">
-      <div>
-        <span class="eyebrow">Request a quote</span>
-        <h2>Tell us what you need</h2>
-        <p class="lede">We reply to every complete request. The more detail you give us, the faster we can quote.</p>
-        <ul class="checklist" style="margin-top:28px">
-          <li><b>Email:</b> <a href="mailto:info@AECTearthblock.com">info@AECTearthblock.com</a></li>
-          <li><b>Shop:</b> 10608 Cassiano Rd., San Antonio, TX 78223. Visits by appointment only.</li>
-        </ul>
-      </div>
-      <form class="planner-card" id="quoteForm" style="margin:0" onsubmit="return false">
-        <div class="field"><label for="q-topic" style="display:block;font-weight:600;margin-bottom:8px">I'm interested in</label>
-          <select class="select input" id="q-topic" name="topic" style="width:100%;padding:14px;border:2px solid var(--line);border-radius:12px;font:inherit;background:#fff">
-            <option value="quote">Buying a machine</option>
-            <option value="rental">Renting equipment with an operator</option>
-            <option value="blocks">Buying blocks</option>
-            <option value="consulting">On-site consulting</option>
-            <option value="order">Small Block Press or Block Cutter</option>
-            <option value="other">Something else</option>
-          </select></div>
-        <div class="field"><label for="q-machine" style="display:block;font-weight:600;margin-bottom:8px">Machine or product (optional)</label><input id="q-machine" name="machine" style="width:100%;padding:14px;border:2px solid var(--line);border-radius:12px;font:inherit"></div>
-        <div class="field"><label for="q-name" style="display:block;font-weight:600;margin-bottom:8px">Name</label><input id="q-name" name="name" required autocomplete="name" style="width:100%;padding:14px;border:2px solid var(--line);border-radius:12px;font:inherit"></div>
-        <div class="field"><label for="q-email" style="display:block;font-weight:600;margin-bottom:8px">Email</label><input id="q-email" name="email" type="email" required autocomplete="email" style="width:100%;padding:14px;border:2px solid var(--line);border-radius:12px;font:inherit"></div>
-        <div class="field"><label for="q-msg" style="display:block;font-weight:600;margin-bottom:8px">Project details</label><textarea id="q-msg" name="message" rows="5" placeholder="Location, timeline, block count from your plan…" style="width:100%;padding:14px;border:2px solid var(--line);border-radius:12px;font:inherit"></textarea></div>
-        <button class="btn btn--block" type="submit">Send request</button>
-        <p class="fine" id="q-status" style="margin:12px 0 0"></p>
+        <fieldset class="details" id="details" disabled>
+          <legend><span class="step-n">2</span>Tell us about your project</legend>
+          <div class="field-row">
+            <div class="field"><label for="c-name">Name</label><input class="input" id="c-name" name="name" autocomplete="name" required><p class="error">Please add your name.</p></div>
+            <div class="field"><label for="c-email">Email</label><input class="input" id="c-email" name="email" type="email" autocomplete="email" required><p class="error">Please add a valid email.</p></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="c-state">Project location</label><select class="input" id="c-state" name="state" required><option value="">Choose your state</option><option value="Outside the US">Outside the continental US</option></select><p class="error">Please choose a location.</p></div>
+            <div class="field"><label for="c-status">Do you have a project lined up?</label><select class="input" id="c-status" name="status" required><option value="">Choose one</option><option>Yes, starting within 6 months</option><option>Yes, 6 to 12 months out</option><option>I have land, a year or more out</option><option>Not yet, just exploring</option></select><p class="error">Please choose one.</p></div>
+          </div>
+          <div class="field" data-for="kit"><label for="c-kit">Which kit?</label><select class="input" id="c-kit" name="kit"><option>Impact 2001A kit</option><option>3500 kit</option><option>Not sure, recommend one</option></select></div>
+          <div class="field" data-for="kit rental blocks"><label for="c-blocks">Estimated block count</label><input class="input" id="c-blocks" name="blocks" type="number" inputmode="numeric" min="0" placeholder="From your plan, e.g. 6,000"><p class="hint">Don't know yet? <a href="plan.html">Get your number in 2 minutes</a>.</p></div>
+          <div class="field" data-for="tools"><label for="c-product">Product</label><select class="input" id="c-product" name="product"><option>Small Block Press</option><option>Block Cutter</option><option>Mega Mixer</option><option>Spare parts</option></select></div>
+          <div class="field"><label for="c-msg">Project details</label><textarea class="input" id="c-msg" name="message" rows="4" required placeholder="What are you building, and where?"></textarea><p class="error">A sentence or two helps us reply faster.</p></div>
+          <button class="btn btn--lg btn--block" type="submit">Send request <span class="arrow">→</span></button>
+          <p class="fine" style="margin-top:12px">We reply by email, usually within 2 business days. Visits to our shop at 10608 Cassiano Rd., San Antonio, TX are by appointment only.</p>
+        </fieldset>
+
+        <div class="sent" id="sent" hidden>
+          <span class="gate-check" aria-hidden="true">✓</span>
+          <h2>Thanks, we've got it</h2>
+          <p>Your request is in our queue. We'll reply by email. In the meantime, <a href="learn.html">our FAQ</a> answers the most common questions.</p>
+        </div>
       </form>
     </div>
   </section>
@@ -135,10 +117,9 @@
       <div>
         <h4>Contact</h4>
         <ul>
-          <li><a href="mailto:info@AECTearthblock.com">info@AECTearthblock.com</a></li>
+          <li><a href="contact.html">Send us a request</a></li>
           <li>10608 Cassiano Rd.<br>San Antonio, TX 78223</li>
           <li>Visits by appointment only</li>
-          <li><a href="contact.html">Contact us</a></li>
         </ul>
       </div>
     </div>
@@ -150,17 +131,7 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
-<script>
-  // Prefill from links like contact.html?topic=quote&machine=3500
-  (function () {
-    const p = new URLSearchParams(location.search);
-    if (p.get("topic")) document.getElementById("q-topic").value = p.get("topic");
-    if (p.get("machine")) document.getElementById("q-machine").value = p.get("machine");
-    document.getElementById("quoteForm").addEventListener("submit", function () {
-      // TODO: connect to the same lead endpoint as the planner (see assets/js/plan.js LEAD_ENDPOINT).
-      document.getElementById("q-status").textContent = "Form not connected yet. This is a prototype.";
-    });
-  })();
-</script>
+<script src="assets/js/calculator.js"></script>
+<script src="assets/js/contact.js"></script>
 </body>
 </html>
