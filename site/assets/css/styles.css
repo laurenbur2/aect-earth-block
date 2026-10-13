@@ -18,7 +18,7 @@
   --logo-cream: #fbf8cc;
   --logo-green: #adbb89;
 
-  --font-head: "Archivo", system-ui, sans-serif;
+  --font-head: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-accent: "Fraunces", Georgia, serif;
 
@@ -45,9 +45,8 @@ a { color: var(--brand-dark); }
 a:hover { color: var(--brand); }
 h1, h2, h3, h4 {
   font-family: var(--font-head);
-  font-stretch: 88%;
-  line-height: 1.05;
-  letter-spacing: -.01em;
+  line-height: 1.02;
+  letter-spacing: -.005em;
   margin: 0 0 .5em;
   color: var(--earth);
 }

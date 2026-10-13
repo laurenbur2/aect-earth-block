@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heading Font Options | AECT (internal)</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,800&family=League+Spartan:wght@600;700;800&family=Manrope:wght@700;800&family=Barlow+Semi+Condensed:wght@600;700&family=DM+Serif+Display&family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy: #45536c; --deep: #232c3c; --cream: #fbf8cc; --green: #adbb89; --sage: #66744a; --bg: #fbfaf5; --sand: #f1efe3; --line: #e1ded2; --muted: #5d6574; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--sand); color: var(--deep); font: 400 16px/1.6 Inter, system-ui, sans-serif; }
+    header.top { padding: 32px 16px 8px; text-align: center; }
+    header.top h1 { font: 700 1.6rem/1.2 Inter, sans-serif; margin: 0 0 6px; }
+    header.top p { color: var(--muted); margin: 0; }
+    .grid { max-width: 1240px; margin: 24px auto 64px; padding: 0 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 560px), 1fr)); gap: 24px; }
+    .opt { background: #fff; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 8px 24px rgba(35,44,60,.08); }
+    .opt.current { opacity: .8; }
+    .tag { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 16px 22px; border-bottom: 1px solid var(--line); }
+    .tag b { font-size: 1.05rem; }
+    .tag span { font-size: .85rem; color: var(--muted); text-align: right; }
+    .hero { position: relative; padding: 44px 24px 40px; text-align: center; color: #fff; background: #1d2533 url('https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/conveyor%20full%20of%20blocks.jpg/:/rs=w:1200') center/cover; isolation: isolate; }
+    .hero::after { content: ""; position: absolute; inset: 0; background: rgba(22,29,42,.62); z-index: -1; }
+    .eyebrow { font: 700 .7rem/1 Inter, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--green); }
+    .hero h2 { margin: 12px auto 12px; max-width: 15ch; line-height: 1; text-transform: uppercase; }
+    .hero p { margin: 0 auto 18px; max-width: 34ch; color: rgba(255,255,255,.9); font-size: .95rem; }
+    .btn { display: inline-block; background: var(--cream); color: var(--deep); padding: 12px 22px; border-radius: 999px; font: 700 .8rem/1 Inter, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+    .body { padding: 26px 24px 28px; }
+    .body h3 { margin: 6px 0 8px; line-height: 1.05; color: var(--deep); }
+    .body p { color: var(--muted); margin: 0 0 18px; }
+    .row { display: flex; gap: 14px; align-items: center; border-top: 1px solid var(--line); padding-top: 16px; }
+    .row .kit { line-height: 1; color: var(--deep); }
+    .row .price { margin-left: auto; color: var(--navy); line-height: 1; }
+    .why { padding: 14px 22px 18px; background: #f7f8fa; border-top: 1px solid var(--line); font-size: .9rem; color: var(--muted); }
+    .why b { color: var(--deep); }
+
+    /* Each option sets its heading font + the weights/sizes it looks best at */
+    .f-spartan .hf { font-family: "League Spartan", sans-serif; font-weight: 800; letter-spacing: -.01em; }
+    .f-spartan .hero h2 { font-size: 3rem; }
+    .f-spartan .body h3 { font-size: 2rem; }
+    .f-manrope .hf { font-family: Manrope, sans-serif; font-weight: 800; letter-spacing: -.02em; }
+    .f-manrope .hero h2 { font-size: 2.7rem; text-transform: none; }
+    .f-manrope .body h3 { font-size: 1.9rem; }
+    .f-barlow .hf { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; letter-spacing: 0; }
+    .f-barlow .hero h2 { font-size: 3.3rem; }
+    .f-barlow .body h3 { font-size: 2.2rem; }
+    .f-dmserif .hf { font-family: "DM Serif Display", serif; font-weight: 400; letter-spacing: 0; }
+    .f-dmserif .hero h2 { font-size: 3rem; text-transform: none; line-height: 1.02; }
+    .f-dmserif .body h3 { font-size: 2.1rem; }
+    .f-space .hf { font-family: "Space Grotesk", sans-serif; font-weight: 700; letter-spacing: -.02em; }
+    .f-space .hero h2 { font-size: 2.8rem; }
+    .f-space .body h3 { font-size: 1.9rem; }
+    .f-archivo .hf { font-family: Archivo, sans-serif; font-weight: 800; font-stretch: 88%; letter-spacing: -.01em; }
+    .f-archivo .hero h2 { font-size: 3rem; }
+    .f-archivo .body h3 { font-size: 2rem; }
+    .row .kit { font-size: 1.35rem; } .row .price { font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <h1>Heading font options</h1>
+    <p>Same layout, same body text (Inter). Only the headline font changes.</p>
+  </header>
+  <div class="grid">
+
+    <section class="opt f-spartan">
+      <div class="tag"><b>A · League Spartan</b><span>Matches the logo</span></div>
+      <div class="hero"><span class="eyebrow">Hand-built in San Antonio · Since 1989</span><h2 class="hf">Build with the dirt you're standing on</h2><p>See how many blocks you need and what they'll cost. Free, in 2 minutes.</p><span class="btn">Plan my build →</span></div>
+      <div class="body"><span class="eyebrow" style="color:var(--sage)">How it works</span><h3 class="hf">From dirt to walls in four steps</h3><p>An AECT machine compresses local soil into dense, uniform blocks at 300 to 480 an hour.</p><div class="row"><span class="kit hf">3500 Kit</span><span class="price hf">Kits from $149,000</span></div></div>
+      <div class="why"><b>Why:</b> geometric and bold, very close to the "AECT" lettering in their logo. Strong, confident, and ties the site to the brand.</div>
+    </section>
+
+    <section class="opt f-manrope">
+      <div class="tag"><b>B · Manrope</b><span>Modern &amp; premium</span></div>
+      <div class="hero"><span class="eyebrow">Hand-built in San Antonio · Since 1989</span><h2 class="hf">Build with the dirt you're standing on</h2><p>See how many blocks you need and what they'll cost. Free, in 2 minutes.</p><span class="btn">Plan my build →</span></div>
+      <div class="body"><span class="eyebrow" style="color:var(--sage)">How it works</span><h3 class="hf">From dirt to walls in four steps</h3><p>An AECT machine compresses local soil into dense, uniform blocks at 300 to 480 an hour.</p><div class="row"><span class="kit hf">3500 Kit</span><span class="price hf">Kits from $149,000</span></div></div>
+      <div class="why"><b>Why:</b> clean, polished and current. Reads like a high-end equipment or architecture brand. Works best in sentence case.</div>
+    </section>
+
+    <section class="opt f-barlow">
+      <div class="tag"><b>C · Barlow Semi Condensed</b><span>Industrial &amp; engineered</span></div>
+      <div class="hero"><span class="eyebrow">Hand-built in San Antonio · Since 1989</span><h2 class="hf">Build with the dirt you're standing on</h2><p>See how many blocks you need and what they'll cost. Free, in 2 minutes.</p><span class="btn">Plan my build →</span></div>
+      <div class="body"><span class="eyebrow" style="color:var(--sage)">How it works</span><h3 class="hf">From dirt to walls in four steps</h3><p>An AECT machine compresses local soil into dense, uniform blocks at 300 to 480 an hour.</p><div class="row"><span class="kit hf">3500 Kit</span><span class="price hf">Kits from $149,000</span></div></div>
+      <div class="why"><b>Why:</b> inspired by highway and equipment signage. Rugged and technical, fits heavy machinery, and fits long headlines in less space.</div>
+    </section>
+
+    <section class="opt f-dmserif">
+      <div class="tag"><b>D · DM Serif Display</b><span>Heritage &amp; craft</span></div>
+      <div class="hero"><span class="eyebrow">Hand-built in San Antonio · Since 1989</span><h2 class="hf">Build with the dirt you're standing on</h2><p>See how many blocks you need and what they'll cost. Free, in 2 minutes.</p><span class="btn">Plan my build →</span></div>
+      <div class="body"><span class="eyebrow" style="color:var(--sage)">How it works</span><h3 class="hf">From dirt to walls in four steps</h3><p>An AECT machine compresses local soil into dense, uniform blocks at 300 to 480 an hour.</p><div class="row"><span class="kit hf">3500 Kit</span><span class="price hf">Kits from $149,000</span></div></div>
+      <div class="why"><b>Why:</b> warm and editorial, echoes the serif "ESTD 1989" line in their logo. Feels established and handmade, more lifestyle than machinery.</div>
+    </section>
+
+    <section class="opt f-space">
+      <div class="tag"><b>E · Space Grotesk</b><span>Technical &amp; precise</span></div>
+      <div class="hero"><span class="eyebrow">Hand-built in San Antonio · Since 1989</span><h2 class="hf">Build with the dirt you're standing on</h2><p>See how many blocks you need and what they'll cost. Free, in 2 minutes.</p><span class="btn">Plan my build →</span></div>
+      <div class="body"><span class="eyebrow" style="color:var(--sage)">How it works</span><h3 class="hf">From dirt to walls in four steps</h3><p>An AECT machine compresses local soil into dense, uniform blocks at 300 to 480 an hour.</p><div class="row"><span class="kit hf">3500 Kit</span><span class="price hf">Kits from $149,000</span></div></div>
+      <div class="why"><b>Why:</b> engineered, slightly quirky details. Signals innovation and technology, good if they want to feel cutting-edge.</div>
+    </section>
+
+    <section class="opt current f-archivo">
+      <div class="tag"><b>Current · Archivo</b><span>For reference</span></div>
+      <div class="hero"><span class="eyebrow">Hand-built in San Antonio · Since 1989</span><h2 class="hf">Build with the dirt you're standing on</h2><p>See how many blocks you need and what they'll cost. Free, in 2 minutes.</p><span class="btn">Plan my build →</span></div>
+      <div class="body"><span class="eyebrow" style="color:var(--sage)">How it works</span><h3 class="hf">From dirt to walls in four steps</h3><p>An AECT machine compresses local soil into dense, uniform blocks at 300 to 480 an hour.</p><div class="row"><span class="kit hf">3500 Kit</span><span class="price hf">Kits from $149,000</span></div></div>
+      <div class="why">What the site uses today.</div>
+    </section>
+
+  </div>
+</body>
+</html>
