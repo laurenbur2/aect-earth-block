@@ -290,7 +290,7 @@ def page(m, head, footer):
 def main():
     idx = (ROOT / "index.html").read_text()
     head = idx[: idx.index("<main>")]
-    footer = idx[idx.index('<footer class="site-footer">'): idx.index('<script src="assets/js/main.js"></script>')]
+    footer = idx[idx.index('<footer class="site-footer">'): idx.index('<script src="assets/js/main.js')]
     for m in MACHINES:
         (ROOT / f"{m['slug']}.html").write_text(page(m, head, footer))
 

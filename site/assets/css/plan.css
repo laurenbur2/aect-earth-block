@@ -262,3 +262,6 @@ details.assumptions summary { cursor: pointer; }
 .opt.is-pick:not(.is-best) { border-color: var(--logo-green); }
 .opt .flag--pick { background: var(--sage); }
 .machine-rec .kit-includes { margin: 8px 0 12px; }
+.ico-badge { display: grid; place-items: center; width: 60px; height: 60px; margin-bottom: 10px; border-radius: 50%; background: var(--brand-tint); color: var(--brand); transition: background .15s ease, color .15s ease; }
+.ico-badge .ico { width: 30px; height: 30px; }
+.icon-choice[aria-checked="true"] .ico-badge { background: var(--brand); color: var(--logo-cream); }

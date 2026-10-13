@@ -691,8 +691,9 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 @media (max-width: 760px) { .ps-icon { width: 60px; height: 60px; } .ps-icon svg { width: 34px; height: 34px; } .ps-rail::before { top: 30px; } .ps-label { font-size: .92rem; } }
 .ps-panel { align-content: start; }
 
-/* ---------- Home page: tighter vertical rhythm ---------- */
-.page-home .section { padding: clamp(44px, 5.5vw, 76px) 0; }
+/* ---------- Tighter vertical rhythm (all pages) ---------- */
+.section { padding: clamp(44px, 5.5vw, 76px) 0; }
+.section--tight { padding: clamp(28px, 4vw, 44px) 0; }
 .page-home .section h2 { margin-bottom: .35em; }
 .page-home .eyebrow { margin-bottom: .7rem; }
 .page-home .lede { margin-bottom: 0; }
@@ -714,3 +715,53 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .page-home .cta-band p { margin-bottom: 22px; }
 @media (max-width: 760px) { .page-home .quote { grid-template-columns: 1fr; } .page-home .quote img { max-width: 160px; } }
 .page-home .process-section { padding-top: clamp(44px, 5.5vw, 68px); padding-bottom: clamp(36px, 4.5vw, 52px); }
+
+
+/* ---------- Inner pages: less dead space ---------- */
+.section h2 { margin-bottom: .35em; }
+.eyebrow { margin-bottom: .7rem; }
+.page-hero { padding: calc(var(--header-h) + clamp(40px, 6vw, 72px)) 0 clamp(36px, 5vw, 56px); }
+.page-hero h1 { font-size: clamp(2.3rem, 5vw, 3.8rem); margin-bottom: .3em; }
+.page-hero .lede { margin-bottom: 0; }
+.page-hero .btn-row { margin-top: 20px !important; }
+.included { margin-top: 20px; }
+.included div { padding: 16px 18px; }
+.product-grid { margin-top: 28px; }
+.product-body { padding: 18px 22px 20px; }
+.product-body p { margin-bottom: 12px; }
+.product-page { padding-top: calc(var(--header-h) + 8px); }
+.breadcrumb { margin: 8px 0 16px; }
+.product-hero { padding-bottom: clamp(28px, 4vw, 48px); }
+.product-statbar { margin: 18px 0; }
+.product-details { padding: clamp(28px, 4vw, 48px) 0; }
+.specs { margin: 14px 0 20px; }
+.split { gap: clamp(28px, 4.5vw, 56px); }
+.steps { margin-top: 28px; }
+.step { padding: 22px 20px; }
+.step::before { font-size: 2rem; margin-bottom: 10px; }
+.vs { margin-top: 24px; }
+.vs > div { padding: 22px 24px; }
+.block-sizes { margin-top: 24px; }
+.block-size { padding: 16px; }
+.gallery { margin-top: 28px; grid-auto-rows: 190px; }
+.partners { margin-top: 20px; }
+.partner-feature { margin-top: 28px; }
+.callout { margin: 18px 0 0; }
+.faq { margin-top: 24px; }
+.faq summary { padding: 18px 44px 18px 0; }
+.faq-group { margin: 32px 0 2px; }
+.machine-grid { margin-top: 24px; }
+.video-frame { margin-top: 24px; }
+.table-scroll { margin-top: 20px; }
+.cta-band p { margin-bottom: 22px; }
+.contact-form fieldset { margin-bottom: 28px; }
+.contact-form legend { margin-bottom: 14px; }
+.topic-box { padding: 16px 16px; }
+.quote { gap: clamp(24px, 4vw, 48px); }
+
+/* ---------- Line icons (replace emoji) ---------- */
+.ico { width: 26px; height: 26px; display: block; }
+.why-ico { display: grid; place-items: center; width: 56px; height: 56px; margin: 0 auto 12px; border-radius: 50%; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); color: var(--logo-green); font-size: 0; }
+.why-ico .ico { width: 28px; height: 28px; }
+.topic-ico { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 10px; border-radius: 12px; background: var(--brand-tint); color: var(--brand); font-size: 0; }
+.topic input:checked + .topic-box .topic-ico { background: var(--brand); color: var(--logo-cream); }
