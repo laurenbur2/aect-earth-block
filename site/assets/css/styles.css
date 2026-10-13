@@ -885,3 +885,18 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .section.cta-band { padding: clamp(36px, 4.5vw, 56px) 0; }
 .cta-band h2 { max-width: 24ch; }
 .section--sand .quote { align-items: center; }
+
+/* About v3: restore large video, fuller press, bigger Ryan photo; keep spacing tight */
+.video-frame--feature { max-width: 860px; margin: 20px auto 0; }
+#video .lede { margin: 0 auto; }
+#press { padding-bottom: clamp(36px, 4.5vw, 56px); }
+.press-card { padding: 18px 20px; }
+.press-card p { font-size: .94rem; line-height: 1.5; margin-bottom: 12px; }
+.mashable-feature { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(24px, 4vw, 48px); align-items: center; margin-top: 28px; }
+.mashable-feature h3 { margin: 0 0 6px; }
+.mashable-feature p { color: var(--muted); margin: 0 0 10px; }
+@media (max-width: 860px) { .mashable-feature { grid-template-columns: 1fr; } }
+.quote { grid-template-columns: 300px 1fr; }
+.quote img { aspect-ratio: 4/5; }
+.section--sand:has(.quote) { padding: clamp(36px, 4.5vw, 56px) 0; }
+@media (max-width: 760px) { .quote { grid-template-columns: 1fr; } .quote img { max-width: 220px; } }
