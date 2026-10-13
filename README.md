@@ -41,6 +41,7 @@ python3 tools/build_machines.py
 ## Before launch
 - Set `LEAD_ENDPOINT` in `site/assets/js/plan.js` and wire up the quote form in `contact.html`.
 - Confirm prices and open questions in `research/site-plan.md`.
+- Logo: `site/assets/img/logo-*.png` are generated from AECT's original (`logo-original.png`) by `python3 tools/make_logos.py site/assets/img/logo-original.png`. Swap in a vector/high-res original when AECT provides one and rerun.
 - Replace hotlinked GoDaddy CDN images with originals in `site/assets/img/`.
 - Header and footer are duplicated in each page. Edit `index.html` first, then copy the changes to the other pages.
 

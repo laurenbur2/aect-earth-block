@@ -47,7 +47,7 @@ The math is a faithful port of AECT's 2022 spreadsheet (`research/calculator-log
 7. **Booking:** keep GoDaddy's $75 consult booking, or move to Calendly/Cal.com? (We have no direct booking URL outside GoDaddy.)
 8. **Phone number:** older pages list 210-400-9831. Should it be public? (Hiding it supports the funnel goal.)
 9. **Media:** original high-res photos (the GoDaddy CDN copies are small; the Mega Mixer image is 346px wide) and a 15–30 s raw landscape clip for the hero. Today we loop YouTube video `78pPHrg9bQw`.
-10. **Logo:** vector logo file. The prototype uses a placeholder block mark.
+10. **Logo:** the site now uses AECT's real logo, taken from their current site (810×450 PNG). Ask for a vector (SVG/AI/EPS) or high-res original so it stays crisp on retina screens.
 11. **Inventory:** do they want an "Available now" section for used/new units in stock (the home page currently lists a BP714 and sold units)?
 12. **Domain/hosting:** who controls aectearthblock.com DNS? GoDaddy Website Builder can't host this; we'll deploy to GitHub Pages, Netlify or Vercel and point the domain.
 
