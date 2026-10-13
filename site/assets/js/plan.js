@@ -5,6 +5,7 @@
   // Where captured leads are POSTed as JSON (Formspree, HubSpot, Zapier/Make webhook, etc.).
   // Leave empty during development; leads are then only logged to the console.
   const LEAD_ENDPOINT = "";
+  const TERRA_MADRE = "https://terramadrebrickco.com/"; // AECT's brick company: sells finished blocks
   const IMG = "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/";
   const MACHINE_PAGES = {
     "AECT Impact 2001A": { page: "impact-2001a.html", img: IMG + "e48a0068-88d7-476c-a776-9f0a846ac278.jpg/:/rs=w:800", rate: "300 blocks/hr" },
@@ -256,7 +257,7 @@
         <h3>${title}</h3><div class="sub">${sub}</div>
         <div class="big">${money(total)}</div><div class="per">${per}</div>
         <details class="breakdown"><summary>See breakdown</summary><ul>${rows.map(([a, b]) => `<li><span>${a}</span><span>${b}</span></li>`).join("")}</ul></details>
-        <a class="btn ${best === key || pick === key ? "" : "btn--outline"}" href="${href}">${cta}</a>
+        <a class="btn ${best === key || pick === key ? "" : "btn--outline"}" href="${href}"${/^https?:/.test(href) ? ' target="_blank" rel="noopener"' : ""}>${cta}</a>
       </div>`;
     const cards = {
       own: card("own", `Buy the ${kitName}`, "Machine, soil analysis & training", own, `Includes the machine (${money(r.machineCost)})`,
@@ -265,9 +266,9 @@
       rent: intl ? "" : card("rent", "Rent our plant", "We bring it, with an operator", r.rentalTotal, `${money2(r.rentalCostPerBlock)} per block, all in`,
         [["Setup & delivery", money(r.mobilizationCost)], ["Rental ($1/block)", money(r.rentalMachineryCost)], ["Your materials & crew", money(r.rentalMaterialLaborIncidental)]],
         "rent.html", "How renting works"),
-      buy: intl ? "" : card("buy", "Buy blocks", "From our partner Terra Madre", r.purchaseTotal, `${money2(r.purchaseCostPerBlock)} per block, delivered`,
+      buy: intl ? "" : card("buy", "Buy blocks", "From Terra Madre Brick Co.", r.purchaseTotal, `${money2(r.purchaseCostPerBlock)} per block, delivered`,
         [[`${int(r.totalBlocks)} × ${money2(r.blockPrice)}`, money(r.purchaseCost)], [`Delivery (${up(r.truckloads)} trucks)`, money(r.deliveryCost)]],
-        "blocks.html#buy", "Block options"),
+        TERRA_MADRE, "Get a block quote ↗"),
     };
     const order = [pick, best, "own", "rent", "buy"].filter((k, idx, arr) => k && arr.indexOf(k) === idx);
     const fastNote = r.machine === "AECT Impact 2001A" && r.totalBlocks > 30000
@@ -307,9 +308,14 @@
       </div>
 
       <div class="res-section next-cta">
+        ${(pick || best) === "buy" ? `
+        <h2>Ready to order blocks?</h2>
+        <p>Finished blocks are made and sold by our brick company, Terra Madre Brick Co. Send them your block count (${int(r.totalBlocks)}) for a free quote.</p>
+        <a class="btn btn--cream btn--lg" href="${TERRA_MADRE}" target="_blank" rel="noopener">Get a block quote from Terra Madre <span class="arrow">↗</span></a>
+        <p class="fine" style="margin:14px 0 0;color:#b8c0ce">Thinking about making your own instead? <a href="contact.html?topic=quote&machine=${encodeURIComponent(kitName)}" style="color:var(--logo-cream)">Ask AECT about the ${kitName}</a></p>` : `
         <h2>Ready for real numbers?</h2>
         <p>Send us your plan and we'll reply with an official quote.</p>
-        <a class="btn btn--cream btn--lg" href="contact.html?topic=${topic}&machine=${encodeURIComponent(kitName)}">Get my official quote <span class="arrow">→</span></a>
+        <a class="btn btn--cream btn--lg" href="contact.html?topic=${topic}&machine=${encodeURIComponent(kitName)}">Get my official quote <span class="arrow">→</span></a>`}
       </div>
 
       <details class="res-section assumptions">

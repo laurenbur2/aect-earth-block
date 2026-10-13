@@ -765,3 +765,13 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .why-ico .ico { width: 28px; height: 28px; }
 .topic-ico { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 10px; border-radius: 12px; background: var(--brand-tint); color: var(--brand); font-size: 0; }
 .topic input:checked + .topic-box .topic-ico { background: var(--brand); color: var(--logo-cream); }
+
+/* ---------- Terra Madre Brick Co. ---------- */
+.pf-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; align-items: center; }
+.pf-contact { list-style: none; margin: 0; padding: 18px 20px; background: #eef1f6; border-radius: var(--radius); display: grid; gap: 12px; }
+.pf-contact span { display: block; font: 700 .7rem/1 var(--font-head); letter-spacing: .12em; text-transform: uppercase; color: var(--sage); margin-bottom: 4px; }
+.pf-contact a { font-weight: 600; word-break: break-word; }
+.redirect-card { background: var(--paper); border: 2px solid var(--brand); border-radius: var(--radius-lg); padding: clamp(22px, 4vw, 32px); margin-bottom: 28px; box-shadow: var(--shadow); animation: psIn .3s ease; }
+.redirect-card h3 { font-size: clamp(1.4rem, 2.6vw, 1.8rem); margin: 8px 0 8px; }
+.redirect-card p { color: var(--muted); max-width: 62ch; }
+@media (max-width: 760px) { .pf-grid { grid-template-columns: 1fr; } }

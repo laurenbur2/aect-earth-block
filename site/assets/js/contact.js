@@ -10,8 +10,13 @@
   const stateSel = document.getElementById("c-state");
   (window.AECTCalc?.OPTIONS.state || []).forEach((s) => stateSel.add(new Option(s, s), stateSel.options[1]));
 
+  const redirect = document.getElementById("blocksRedirect");
   function applyTopic(topic) {
-    details.disabled = !topic;
+    // Block orders go to Terra Madre Brick Co., not AECT's inbox.
+    const toTM = topic === "blocks";
+    redirect.hidden = !toTM;
+    details.hidden = toTM;
+    details.disabled = !topic || toTM;
     form.classList.toggle("has-topic", !!topic);
     form.querySelectorAll("[data-for]").forEach((el) => (el.hidden = !el.dataset.for.split(" ").includes(topic)));
     document.getElementById("topicError").style.display = "none";

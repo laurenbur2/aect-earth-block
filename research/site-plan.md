@@ -9,7 +9,7 @@ The current site has 25 pages under one "More" menu. Prospects can't find answer
 - Bring in more **rental** business. Screen with "Do you have a project?" and "Are you interested in buying or renting?"
 - **Sell kits, not one-off machines.** A kit = machine + soil analysis + training. Messaging: "Kits starting at…"
 - **Drive sales for the Impact 2001A and the 3500.** The 2500HD can stay on the site, but nothing should funnel people to it.
-- **Terra Madre** is where people buy finished blocks (brick).
+- **Terra Madre Brick Co.** (https://terramadrebrickco.com/, contact@terramadrebrickco.com, +1 682-553-3476) is the client's brick company and sells all finished blocks. AECT = machines, kits, training, rental. Their site is currently a single quote form and will be redesigned later.
 
 ## The fix: answer first, contact second
 Modeled on The Farmer's Dog: the home page leads into a short, one-question-per-screen quiz that ends in a personalized plan. Visitors get their real numbers before they ever contact AECT, and AECT gets a qualified lead with project details attached.
@@ -53,7 +53,7 @@ Farmer's Dog pattern: one tap per question (photo or icon answers, auto-advance)
 The math is a faithful port of AECT's 2022 spreadsheet (`research/calculator-logic.md`, `research/calculator.js`), verified against the live sheet. The only change: machine prices updated to what the site shows today.
 
 ## Questions for AECT before launch
-0. **New from the kickoff notes:** (a) What does a kit cost? We show "Kits from" the machine price. Is soil analysis extra? (b) Terra Madre's website, contact, block prices, and service area. (c) Which tool should send the automatic replies (see README)?
+0. **New from the kickoff notes:** (a) What does a kit cost? We show "Kits from" the machine price. Is soil analysis extra? (b) Terra Madre's block prices and service area (we still show the 2022 calculator's planning prices). (c) Which tool should send the automatic replies (see README)?
 1. **Machine prices in the calculator are stale.** The spreadsheet says Impact $39k, 2500HD $79k, BP714 $59k. The site says $59k, $89k, $69,625. We used the site prices. Confirm.
 2. **Does AECT sell blocks directly?** The calculator prices "buy CEBs from AECT, shipped" ($2.75–$3.50/block), but the Purchase CEBs page sends people to partners. Which is it?
 3. **Free delivery or FOB?** The home page says machines include free delivery; every product page says FOB San Antonio, shipping not included.
