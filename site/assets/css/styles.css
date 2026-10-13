@@ -853,3 +853,35 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .press-grid { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 900px) { .press-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .press-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Compact boxes & About page trims ---------- */
+.video-split { display: grid; grid-template-columns: 1fr 1.5fr; gap: clamp(24px, 4vw, 48px); align-items: center; }
+.video-split .video-frame { max-width: none; }
+@media (max-width: 860px) { .video-split { grid-template-columns: 1fr; } }
+.press-grid { gap: 12px; margin-top: 18px; }
+.press-card { padding: 16px 18px; }
+.press-src { margin-bottom: 6px; }
+.press-card h4 { font-size: 1.12rem; margin-bottom: 4px; }
+.press-card p { font-size: .9rem; line-height: 1.45; margin-bottom: 10px; }
+.quote { grid-template-columns: 200px 1fr; }
+.quote img { aspect-ratio: 1; }
+.quote blockquote { font-size: clamp(1.15rem, 1.9vw, 1.5rem); }
+.split img { max-height: 380px; }
+/* Boxes site-wide: less padding inside cards */
+.partner { padding: 18px 20px; }
+.partner p { margin-bottom: 8px; }
+.opt { padding: 22px 20px; }
+.next-step { padding: 22px; }
+.machine-rec { padding: 16px; }
+.kf-item { padding: 16px 14px; }
+.kit-box { padding: 16px 18px; }
+.product-buy { padding: 18px 20px; }
+.price-list li { padding: 10px 14px; }
+.summary-grid div { padding: 18px 20px; }
+.assumptions { padding: 16px 20px; }
+@media (max-width: 760px) { .quote { grid-template-columns: 1fr; } .quote img { max-width: 140px; } }
+.page-hero h1 { max-width: 22ch; }
+.page-hero .lede { max-width: 60ch; }
+.section.cta-band { padding: clamp(36px, 4.5vw, 56px) 0; }
+.cta-band h2 { max-width: 24ch; }
+.section--sand .quote { align-items: center; }
