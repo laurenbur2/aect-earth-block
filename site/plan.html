@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Plan Your CEB Build | AECT Earth Block</title>
-  <meta name="description" content="Get your compressed earth block count, materials list, recommended machine, and a side-by-side cost to make, rent, or buy. Free, about 2 minutes.">
+  <meta name="description" content="Get your compressed earth block count, materials, recommended machine, and the cheapest way to get your blocks. Free, about 2 minutes.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Fraunces:ital,opsz,wght@1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,6 +14,7 @@
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 </head>
 <body class="plan-body">
+<!-- Photos are hotlinked from AECT's current site CDN; swap for local originals before launch. -->
 
 <div class="plan-top">
   <div class="wrap">
@@ -30,193 +31,142 @@
 <form id="planner" novalidate onsubmit="return false">
 
   <!-- 1. Project -->
-  <section class="q" data-step="project" data-auto>
-    <div class="q-step">Question 1 of 8</div>
+  <section class="q is-wide" data-step="project" data-auto>
     <h1>What are you building?</h1>
-    <p class="q-help">This helps us size your plan and point you to the right equipment.</p>
-    <div class="choices choices--2" role="radiogroup">
-      <button type="button" class="choice" role="radio" data-name="project" data-value="home"><span class="ico">🏡</span><span>A home<small>New build or addition</small></span></button>
-      <button type="button" class="choice" role="radio" data-name="project" data-value="barn"><span class="ico">🛖</span><span>Barn, shop or garage<small>Outbuildings and studios</small></span></button>
-      <button type="button" class="choice" role="radio" data-name="project" data-value="commercial"><span class="ico">🏢</span><span>Commercial building<small>Office, retail, community, school</small></span></button>
-      <button type="button" class="choice" role="radio" data-name="project" data-value="outdoor"><span class="ico">🔥</span><span>Outdoor living<small>Garden walls, fire pits, ovens</small></span></button>
-      <button type="button" class="choice" role="radio" data-name="project" data-value="business" style="grid-column:1/-1"><span class="ico">🏗️</span><span>Several buildings, or a block-making business<small>Developers, builders, non-profits, block producers</small></span></button>
+    <p class="q-help">Pick one to get started.</p>
+    <div class="photo-choices" role="radiogroup">
+      <button type="button" class="photo-choice" role="radio" data-name="project" data-value="home"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/469338053_1951537935321157_2884396883102295335.jpg/:/rs=w:600" alt=""><span>A home</span></button>
+      <button type="button" class="photo-choice" role="radio" data-name="project" data-value="barn"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_2668.jpg/:/rs=w:600" alt=""><span>Barn or shop</span></button>
+      <button type="button" class="photo-choice" role="radio" data-name="project" data-value="commercial"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%202.jpg/:/rs=w:600" alt=""><span>Commercial</span></button>
+      <button type="button" class="photo-choice" role="radio" data-name="project" data-value="outdoor"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/fireplace_1.jpg/:/rs=w:600" alt=""><span>Outdoor living</span></button>
+      <button type="button" class="photo-choice" role="radio" data-name="project" data-value="business"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/blocks%20at%20HOPE.jpg/:/rs=w:600" alt=""><span>Several buildings</span></button>
     </div>
   </section>
 
-  <!-- 2. Location -->
+  <!-- 2. Name -->
+  <section class="q" data-step="name">
+    <h1>First, what's your name?</h1>
+    <p class="q-help">So we can personalize your plan.</p>
+    <div class="field"><label class="visually-hidden" for="name">First name</label><input class="input input--xl" id="name" name="name" autocomplete="given-name" placeholder="First name"></div>
+  </section>
+
+  <!-- 3. Location -->
   <section class="q" data-step="location">
-    <div class="q-step">Question 2 of 8</div>
-    <h1>Where's the build site?</h1>
-    <p class="q-help">Delivery and setup costs depend on distance from our shop in San Antonio, TX.</p>
+    <h1 data-tpl="Nice to meet you, {name}. Where are you building?">Where are you building?</h1>
+    <p class="q-help">Delivery and setup costs depend on the distance from our shop in San Antonio, TX.</p>
     <div class="field">
-      <label for="state">State</label>
-      <select class="select" id="state" name="state">
-        <option value="">Choose your state…</option>
-      </select>
+      <label class="visually-hidden" for="state">State</label>
+      <select class="select input--xl" id="state" name="state"><option value="">Choose your state</option></select>
     </div>
-    <div class="choices">
-      <button type="button" class="choice" role="radio" data-name="state" data-value="intl"><span class="ico">🌎</span><span>I'm outside the continental US<small>We've worked in 50+ countries. You'll get your block and material numbers, and we'll quote shipping separately.</small></span></button>
-    </div>
+    <button type="button" class="text-choice" data-name="state" data-value="intl">I'm outside the continental US →</button>
   </section>
 
-  <!-- 3. Size -->
+  <!-- 4. Size -->
   <section class="q" data-step="size">
-    <div class="q-step">Question 3 of 8</div>
-    <h1 data-text-outdoor="How long are your walls?">How big is it?</h1>
-    <p class="q-help" data-text-outdoor="Add up the total length of every wall, bench or border you're planning.">A rough number is fine. You can always adjust it later.</p>
-    <div class="tabs" role="tablist" data-hide-outdoor>
-      <button type="button" class="tab" role="tab" aria-selected="true" data-mode="sqft">I know the square footage</button>
-      <button type="button" class="tab" role="tab" aria-selected="false" data-mode="linear">I know my wall lengths</button>
-    </div>
-    <div data-panel="sqft">
-      <div class="field">
-        <label for="sqft">Building footprint</label>
-        <div class="input-unit"><input class="input" id="sqft" name="sqft" type="number" inputmode="numeric" min="50" step="50" placeholder="e.g. 1,800"><span>sq ft</span></div>
-        <div class="hint">Single-story footprint. For several buildings, enter the total.</div>
-      </div>
-      <div class="estimate" id="sizeEstimate" hidden></div>
-    </div>
-    <div data-panel="linear" hidden>
-      <div class="field-row">
-        <div class="field">
-          <label for="extFt">Exterior walls</label>
-          <div class="input-unit"><input class="input" id="extFt" name="extFt" type="number" inputmode="numeric" min="0" placeholder="e.g. 200"><span>linear ft</span></div>
-        </div>
-        <div class="field" data-hide-outdoor>
-          <label for="intFt">Interior walls <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-          <div class="input-unit"><input class="input" id="intFt" name="intFt" type="number" inputmode="numeric" min="0" placeholder="e.g. 120"><span>linear ft</span></div>
-          <div class="hint">Only walls you'll build from CEBs.</div>
-        </div>
-      </div>
+    <h1 data-tpl="How big is your {project}?" data-tpl-outdoor="How much wall are you building?">How big is it?</h1>
+    <p class="q-help" data-tpl="A rough guess is fine." data-tpl-outdoor="Add up the length of every wall, bench or border.">A rough guess is fine.</p>
+    <div class="chips chips--lg" role="radiogroup" id="sizeChips"></div>
+    <div class="field" style="margin-top:20px">
+      <label for="sizeCustom" class="size-label">Or enter your own</label>
+      <div class="input-unit"><input class="input" id="sizeCustom" type="number" inputmode="numeric" min="1" placeholder="e.g. 1800"><span id="sizeUnit">sq ft</span></div>
     </div>
   </section>
 
-  <!-- 4. Height -->
-  <section class="q" data-step="height" data-auto>
-    <div class="q-step">Question 4 of 8</div>
+  <!-- 5. Height -->
+  <section class="q is-wide" data-step="height" data-auto>
     <h1>How tall are the walls?</h1>
-    <p class="q-help">Measured from the top of the foundation to the bond beam. Most single-story homes are 8 to 10 feet.</p>
-    <div class="chips" role="radiogroup" id="heightChips"></div>
+    <p class="q-help" data-tpl="Most single-story homes are 8 to 10 feet." data-tpl-outdoor="Garden walls and benches are usually 3 to 4 feet.">Most single-story homes are 8 to 10 feet.</p>
+    <div class="icon-choices" role="radiogroup" id="heightChoices"></div>
   </section>
 
-  <!-- 5. Wall thickness / block -->
+  <!-- 6. Wall / block -->
   <section class="q is-wide" data-step="width" data-auto>
-    <div class="q-step">Question 5 of 8</div>
-    <h1>How thick should your exterior walls be?</h1>
-    <p class="q-help">Wall thickness sets your block size, and your block size sets which machine you need. Not sure? Pick 10". You can change it later.</p>
-    <div class="choices choices--3" role="radiogroup">
-      <button type="button" class="choice choice--stack" role="radio" data-name="width" data-value="7"><span class="tag">Code-friendly</span><span>7" interlocking<small>7"×14" holey, reinforceable blocks. Required in California and some other jurisdictions. Made on the BP714.</small></span></button>
-      <button type="button" class="choice choice--stack" role="radio" data-name="width" data-value="8"><span>8" wall<small>Single 8"×14" block. Good for interior and lighter walls. Made on the 3500.</small></span></button>
-      <button type="button" class="choice choice--stack" role="radio" data-name="width" data-value="10"><span class="tag">Used on AECT's HQ</span><span>10" wall<small>Single 10"×14" block, the 3500's standard size. Made on the 3500.</small></span></button>
-      <button type="button" class="choice choice--stack" role="radio" data-name="width" data-value="12"><span>12" wall<small>6"×12" blocks laid crosswise. Made on the Impact 2001A or 2500HD.</small></span></button>
-      <button type="button" class="choice choice--stack" role="radio" data-name="width" data-value="14"><span>14" wall<small>10"×14" blocks laid crosswise. Extra thermal mass. Made on the 3500.</small></span></button>
-      <button type="button" class="choice choice--stack" role="radio" data-name="width" data-value="18"><span>18" wall<small>Double wythe of 6"×12" blocks. Made on the Impact 2001A or 2500HD.</small></span></button>
-      <button type="button" class="choice choice--stack" role="radio" data-name="width" data-value="20" style="grid-column:1/-1"><span>20" wall<small>Double wythe of 10"×14" blocks. Maximum mass and insulation. Made on the 3500.</small></span></button>
+    <h1>Pick your wall</h1>
+    <p class="q-help">This sets your block size and which machine makes it. Not sure? Choose Standard.</p>
+    <div class="icon-choices icon-choices--4" role="radiogroup">
+      <button type="button" class="icon-choice" role="radio" data-name="width" data-value="10"><span class="tag">Recommended</span><span class="blk" style="width:84px;height:60px"></span><b>Standard</b><small>10" wall · 10"×14" blocks</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="width" data-value="14"><span class="blk-pair"><span class="blk" style="width:42px;height:60px"></span><span class="blk" style="width:42px;height:60px"></span></span><b>Extra thick</b><small>14" wall · best insulation</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="width" data-value="12"><span class="blk" style="width:84px;height:42px"></span><b>Smaller blocks</b><small>12" wall · 6"×12" blocks</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="width" data-value="7"><span class="blk blk--holey" style="width:84px;height:42px"></span><b>Interlocking</b><small>7" reinforced · required in CA</small></button>
     </div>
   </section>
 
-  <!-- 6. Block type -->
-  <section class="q" data-step="type">
-    <div class="q-step">Question 6 of 8</div>
-    <h1>Will your exterior walls face the weather?</h1>
-    <p class="q-help">This decides whether you need stabilized (cement or lime added) or un-stabilized (pure earth) blocks.</p>
-    <div class="choices" role="radiogroup">
-      <button type="button" class="choice" role="radio" data-name="extType" data-value="8% cement/lime stabilized"><span class="ico">🌧️</span><span>Yes, exposed to rain<small><b>Stabilized blocks.</b> About 92% earth and 8% cement or lime. Fully water resistant. Need to cure before laying.</small></span></button>
-      <button type="button" class="choice" role="radio" data-name="extType" data-value="Un-stabilized"><span class="ico">🏜️</span><span>No, protected by deep overhangs or a plaster coat<small><b>Un-stabilized blocks.</b> Pure earth. Cheapest, and they go on the wall straight from the machine.</small></span></button>
+  <!-- 7. Weather -->
+  <section class="q is-wide" data-step="type" data-auto>
+    <h1>Will the outside walls get rained on?</h1>
+    <p class="q-help">This decides if your blocks need cement added.</p>
+    <div class="photo-choices photo-choices--2" role="radiogroup">
+      <button type="button" class="photo-choice" role="radio" data-name="extType" data-value="8% cement/lime stabilized"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/463792773_880313204200913_6146045561359675091_.jpg/:/rs=w:800" alt=""><span>Yes, exposed walls<small>Stabilized blocks, 8% cement</small></span></button>
+      <button type="button" class="photo-choice" role="radio" data-name="extType" data-value="Un-stabilized"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/1%20-%20finished%20house.jpg/:/rs=w:800" alt=""><span>No, covered by porches or plaster<small>Pure-earth blocks, cheapest</small></span></button>
     </div>
-    <div data-hide-outdoor>
-      <h3 style="margin-top:36px">And your interior walls?</h3>
-      <div class="choices choices--3" role="radiogroup">
-        <button type="button" class="choice" role="radio" data-name="intType" data-value="Un-stabilized"><span>Un-stabilized<small>Most common inside</small></span></button>
-        <button type="button" class="choice" role="radio" data-name="intType" data-value="8% cement/lime stabilized"><span>Stabilized<small>Same as exterior</small></span></button>
-        <button type="button" class="choice" role="radio" data-name="intType" data-value="none"><span>No CEB interior walls<small>Framed or other</small></span></button>
-      </div>
-    </div>
-    <details class="why"><summary>Which one is right for me?</summary><p>Many AECT customers use stabilized blocks on the outside and un-stabilized blocks inside. Un-stabilized walls must be kept dry: think wide porch roofs, or a lime, earthen or stucco finish. If you're unsure, choose stabilized; it's the safer default.</p></details>
   </section>
 
-  <!-- 7. Labor -->
-  <section class="q" data-step="labor">
-    <div class="q-step">Question 7 of 8</div>
-    <h1>Who's making the blocks?</h1>
-    <p class="q-help">A typical production crew is 4 to 6 people: loading soil, running the mixer and machine, and stacking pallets.</p>
-    <div class="choices choices--2" role="radiogroup">
-      <button type="button" class="choice" role="radio" data-name="labor" data-value="volunteer"><span class="ico">🤝</span><span>Me, family and friends<small>No labor cost</small></span></button>
-      <button type="button" class="choice" role="radio" data-name="labor" data-value="hired"><span class="ico">👷</span><span>A hired crew<small>Paid by the hour</small></span></button>
+  <!-- 8. Dirt -->
+  <section class="q is-wide" data-step="dirt" data-auto>
+    <h1>Where will the dirt come from?</h1>
+    <p class="q-help">Using soil from your own land is the biggest money-saver.</p>
+    <div class="photo-choices photo-choices--2" role="radiogroup">
+      <button type="button" class="photo-choice" role="radio" data-name="dirt" data-value="own"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/block%20plant_2.jpg/:/rs=w:800" alt=""><span>My own land<small>Free dirt</small></span></button>
+      <button type="button" class="photo-choice" role="radio" data-name="dirt" data-value="delivered"><img src="https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_7193.jpg/:/rs=w:800" alt=""><span>Delivered<small>About $15 a cubic yard</small></span></button>
     </div>
-    <div id="laborDetail" style="margin-top:28px">
-      <div class="field">
-        <label>Crew size</label>
-        <div class="chips" role="radiogroup">
-          <button type="button" class="chip" role="radio" data-name="crew" data-value="3">3</button>
-          <button type="button" class="chip" role="radio" data-name="crew" data-value="4">4</button>
-          <button type="button" class="chip" role="radio" data-name="crew" data-value="5">5</button>
-          <button type="button" class="chip" role="radio" data-name="crew" data-value="6">6</button>
-          <button type="button" class="chip" role="radio" data-name="crew" data-value="7">7</button>
+  </section>
+
+  <!-- 9. Labor -->
+  <section class="q is-wide" data-step="labor" data-auto>
+    <h1>Who's doing the work?</h1>
+    <p class="q-help">Making blocks takes a crew of about 4 to 6.</p>
+    <div class="icon-choices icon-choices--2" role="radiogroup">
+      <button type="button" class="icon-choice" role="radio" data-name="labor" data-value="volunteer"><span class="emoji">🤝</span><b>Family and friends</b><small>No labor cost</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="labor" data-value="hired"><span class="emoji">👷</span><b>A hired crew</b><small>5 people at about $18/hr</small></button>
+    </div>
+  </section>
+
+  <!-- 10. Timeline -->
+  <section class="q is-wide" data-step="timeline" data-auto>
+    <h1>When do you want to start?</h1>
+    <p class="q-help">Last question.</p>
+    <div class="icon-choices icon-choices--4" role="radiogroup">
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="0-6"><span class="emoji">🚀</span><b>Within 6 months</b></button>
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="6-12"><span class="emoji">📅</span><b>6 to 12 months</b></button>
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="12+"><span class="emoji">🗓️</span><b>A year or more</b></button>
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="research"><span class="emoji">🔎</span><b>Just researching</b></button>
+    </div>
+  </section>
+
+  <!-- 11. Building the plan (interstitial) -->
+  <section class="q" data-step="building">
+    <div class="building">
+      <div class="spinner" aria-hidden="true"></div>
+      <h1 data-tpl="Building your plan, {name}…">Building your plan…</h1>
+      <ul class="build-list" id="buildList">
+        <li>Counting your blocks</li>
+        <li>Matching your machine</li>
+        <li>Pricing delivery to your state</li>
+        <li>Comparing make, rent and buy</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 12. Email gate -->
+  <section class="q is-wide" data-step="gate">
+    <div class="gate">
+      <div class="gate-form">
+        <span class="gate-check" aria-hidden="true">✓</span>
+        <h1 data-tpl="{name}, your plan is ready!">Your plan is ready!</h1>
+        <p class="q-help">Enter your email to see your block count, materials and costs. We'll send you a copy too.</p>
+        <div class="field" id="f-email">
+          <label class="visually-hidden" for="email">Email</label>
+          <input class="input input--xl" id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="Email address">
+          <div class="error">Please enter a valid email so we can send your plan.</div>
         </div>
+        <button class="btn btn--lg btn--block" type="button" id="reveal">See my plan <span class="arrow">→</span></button>
+        <p class="privacy">We'll send your plan and occasional CEB building tips. Unsubscribe anytime. We never share your email.</p>
       </div>
-      <div class="range-wrap" id="rateWrap">
-        <div class="range-head"><label for="rate">Average hourly wage</label><output id="rateOut">$18/hr</output></div>
-        <input type="range" id="rate" name="rate" min="10" max="30" step="1" value="18">
-        <div class="range-scale"><span>$10</span><span>$30</span></div>
-      </div>
+      <div class="gate-preview" aria-hidden="true" id="gatePreview"></div>
     </div>
   </section>
 
-  <!-- 8. Local costs -->
-  <section class="q" data-step="costs">
-    <div class="q-step">Question 8 of 8</div>
-    <h1>What do materials cost where you are?</h1>
-    <p class="q-help">Not sure? Keep our defaults. They're typical for Texas.</p>
-    <div class="range-wrap" style="margin-bottom:16px">
-      <div class="range-head"><label for="earth">Earth, delivered</label><output id="earthOut">$15/yd³</output></div>
-      <input type="range" id="earth" name="earth" min="0" max="35" step="1" value="15">
-      <div class="range-scale"><span>$0 · my own site dirt</span><span>$35</span></div>
-    </div>
-    <div class="range-wrap" id="cementWrap">
-      <div class="range-head"><label for="cement">Cement or lime</label><output id="cementOut">$350/yd³</output></div>
-      <input type="range" id="cement" name="cement" min="250" max="430" step="20" value="350">
-      <div class="range-scale"><span>$250</span><span>$430</span></div>
-    </div>
-    <details class="why"><summary>Advanced: pallets and consumables</summary>
-      <div class="field-row" style="margin-top:14px">
-        <div class="field"><label for="pallets">Pallets, per block</label><div class="input-unit"><input class="input" id="pallets" type="number" step="0.01" min="0.01" max="0.23" value="0.15"><span>$/block</span></div><div class="hint">Typically about $0.15</div></div>
-        <div class="field"><label for="incid">Wrap, fuel, oil, water, upkeep</label><div class="input-unit"><input class="input" id="incid" type="number" step="0.01" min="0.01" max="0.23" value="0.12"><span>$/block</span></div><div class="hint">Typically about $0.12</div></div>
-      </div>
-    </details>
-  </section>
-
-  <!-- 9. About you -->
-  <section class="q" data-step="contact">
-    <div class="q-step">Last step</div>
-    <h1>Where should we send your plan?</h1>
-    <p class="q-help">Your plan is ready. We'll show it on the next screen and email you a copy to share with your builder or lender.</p>
-    <div class="field">
-      <label>When do you want to start building?</label>
-      <div class="chips" role="radiogroup">
-        <button type="button" class="chip" role="radio" data-name="timeline" data-value="0-6">Within 6 months</button>
-        <button type="button" class="chip" role="radio" data-name="timeline" data-value="6-12">6–12 months</button>
-        <button type="button" class="chip" role="radio" data-name="timeline" data-value="12+">1 year +</button>
-        <button type="button" class="chip" role="radio" data-name="timeline" data-value="research">Just researching</button>
-      </div>
-    </div>
-    <div class="field">
-      <label>Have you tested your soil?</label>
-      <div class="chips" role="radiogroup">
-        <button type="button" class="chip" role="radio" data-name="soil" data-value="yes">Yes</button>
-        <button type="button" class="chip" role="radio" data-name="soil" data-value="no">Not yet</button>
-        <button type="button" class="chip" role="radio" data-name="soil" data-value="buying">I'll buy blocks</button>
-      </div>
-    </div>
-    <div class="field-row">
-      <div class="field" id="f-name"><label for="name">First name</label><input class="input" id="name" name="name" autocomplete="given-name"><div class="error">Please add your name.</div></div>
-      <div class="field" id="f-email"><label for="email">Email</label><input class="input" id="email" name="email" type="email" autocomplete="email" inputmode="email"><div class="error">Please add a valid email.</div></div>
-    </div>
-    <div class="field"><label for="phone">Phone <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input class="input" id="phone" name="phone" type="tel" autocomplete="tel"></div>
-    <p class="privacy">We'll only use this to send your plan and follow up if you ask us to. No spam, ever.</p>
-  </section>
-
-  <!-- 10. Results -->
+  <!-- 13. Results -->
   <section class="q results" data-step="results" id="results"></section>
 
 </form>

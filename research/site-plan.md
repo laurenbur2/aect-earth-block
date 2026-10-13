@@ -6,9 +6,12 @@ The current site has 25 pages under one "More" menu. Prospects can't find answer
 ## The fix: answer first, contact second
 Modeled on The Farmer's Dog: the home page leads into a short, one-question-per-screen quiz that ends in a personalized plan. Visitors get their real numbers before they ever contact AECT, and AECT gets a qualified lead with project details attached.
 
-### Navigation (3 items + 1 button)
-`Machines` · `Blocks` · `Rent Equipment` · **[Plan my build]**
-Everything else (FAQ, build videos, about, press, projects, consulting, contact) lives in the footer and is linked from planner results.
+### Navigation (4 items + 1 button)
+`Machines` · `Blocks` · `Rent Equipment` · `About` · **[Plan my build]**
+FAQ, build videos, consulting and contact live in the footer. The $75 consult is not promoted on the home page; the only goal there is starting the planner.
+
+### Brand
+Colors come from the AECT logo: navy #45536C, cream #FBF8CC, globe green #ADBB89.
 
 ### Pages
 | Page | Purpose | Replaces |
@@ -24,16 +27,20 @@ Everything else (FAQ, build videos, about, press, projects, consulting, contact)
 | *(deleted)* | | Shop ("coming soon"), Blog (move to a later phase if they post) |
 
 ### The planner funnel
-1. What are you building? (home / barn / commercial / outdoor / multi-building or business). **Asked on the home page**, so one click puts the visitor into the quiz.
-2. State (drives delivery and rental mobilization), or outside the US
-3. Size: square footage (we estimate wall lengths) or exact linear feet
-4. Wall height
-5. Wall thickness, which sets block size and machine (plain-English cards)
-6. Weather exposure → stabilized vs un-stabilized (exterior + interior)
-7. Labor: volunteer or hired crew (crew size, wage)
-8. Local material costs (sensible defaults)
-9. Timeline, soil tested?, name, email, phone (optional) → **lead captured here**
-10. **Results:** block count, earth/cement yd³, pallets, trucks, run hours; cost to buy a machine vs rent vs buy blocks with "best value" flagged and break-even math; recommended machine; next step chosen by timeline (quote / $75 consult / soil testing); print or email the plan.
+Farmer's Dog pattern: one tap per question (photo or icon answers, auto-advance), the visitor's name used throughout, a "building your plan" moment, then **email required to see the plan**.
+1. What are you building? (photo cards; also on the home page, so one click starts the quiz)
+2. First name
+3. State, or outside the US
+4. Size (quick-pick chips or custom)
+5. Wall height (3 options)
+6. Wall type (4 visual block options), which sets block size and machine
+7. Rain exposure (2 photos) → stabilized or not
+8. Dirt source: own land or delivered
+9. Labor: family and friends or hired crew
+10. Timeline (lead qualification)
+11. "Building your plan…" animation
+12. **Email gate** with a blurred preview of their real numbers → **lead captured here**
+13. **Results:** block count, machine, earth, cement, pallets; cheapest of make, rent or buy (breakdowns tucked away); recommended machine; one CTA: get an official quote.
 
 The math is a faithful port of AECT's 2022 spreadsheet (`research/calculator-logic.md`, `research/calculator.js`), verified against the live sheet. The only change: machine prices updated to what the site shows today.
 
