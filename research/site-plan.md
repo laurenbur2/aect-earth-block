@@ -3,6 +3,14 @@
 ## The problem
 The current site has 25 pages under one "More" menu. Prospects can't find answers, so they call and email AECT with the same questions (Will my dirt work? How many blocks? Which machine? What will it cost?). That eats Ryan's time.
 
+## Client goals (from the kickoff call, 2026-10-13)
+- Too many inbound questions. Wants automatic replies and an initial screening form.
+- **Block calculator is the most important piece.** Every plan must capture the person's name and email.
+- Bring in more **rental** business. Screen with "Do you have a project?" and "Are you interested in buying or renting?"
+- **Sell kits, not one-off machines.** A kit = machine + soil analysis + training. Messaging: "Kits starting at…"
+- **Drive sales for the Impact 2001A and the 3500.** The 2500HD can stay on the site, but nothing should funnel people to it.
+- **Terra Madre** is where people buy finished blocks (brick).
+
 ## The fix: answer first, contact second
 Modeled on The Farmer's Dog: the home page leads into a short, one-question-per-screen quiz that ends in a personalized plan. Visitors get their real numbers before they ever contact AECT, and AECT gets a qualified lead with project details attached.
 
@@ -45,6 +53,7 @@ Farmer's Dog pattern: one tap per question (photo or icon answers, auto-advance)
 The math is a faithful port of AECT's 2022 spreadsheet (`research/calculator-logic.md`, `research/calculator.js`), verified against the live sheet. The only change: machine prices updated to what the site shows today.
 
 ## Questions for AECT before launch
+0. **New from the kickoff notes:** (a) What does a kit cost? We show "Kits from" the machine price. Is soil analysis extra? (b) Terra Madre's website, contact, block prices, and service area. (c) Which tool should send the automatic replies (see README)?
 1. **Machine prices in the calculator are stale.** The spreadsheet says Impact $39k, 2500HD $79k, BP714 $59k. The site says $59k, $89k, $69,625. We used the site prices. Confirm.
 2. **Does AECT sell blocks directly?** The calculator prices "buy CEBs from AECT, shipped" ($2.75–$3.50/block), but the Purchase CEBs page sends people to partners. Which is it?
 3. **Free delivery or FOB?** The home page says machines include free delivery; every product page says FOB San Antonio, shipping not included.

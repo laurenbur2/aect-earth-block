@@ -25,7 +25,7 @@
     building: [[8, "8 ft", "Standard"], [10, "10 ft", "Tall"], [12, "12 ft", "Extra tall"]],
     outdoor: [[3, "3 ft", "Bench or border"], [4, "4 ft", "Garden wall"], [6, "6 ft", "Privacy wall"]],
   };
-  const STORE_KEY = "aect-plan-v2";
+  const STORE_KEY = "aect-plan-v3";
 
   const { calculate, OPTIONS } = window.AECTCalc;
   const $ = (s, el = document) => el.querySelector(s);
@@ -35,7 +35,7 @@
   const backBtn = $("#back");
   const progress = $("#progress");
 
-  const state = { project: null, name: "", state: null, size: "", height: null, width: null, extType: null, dirt: null, labor: null, timeline: null, email: "" };
+  const state = { project: null, name: "", state: null, size: "", height: null, width: null, extType: null, dirt: null, labor: null, intent: null, timeline: null, email: "" };
   try { Object.assign(state, JSON.parse(localStorage.getItem(STORE_KEY) || "{}")); } catch (e) {}
   const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {} };
   const params = new URLSearchParams(location.search);
@@ -109,6 +109,7 @@
       case "type": return !!state.extType;
       case "dirt": return !!state.dirt;
       case "labor": return !!state.labor;
+      case "intent": return !!state.intent;
       case "timeline": return !!state.timeline;
       default: return true;
     }
@@ -218,7 +219,7 @@
     const payload = {
       submittedAt: new Date().toISOString(), source: "aect-ceb-planner",
       contact: { name: firstName(), email: state.email },
-      qualify: { project: state.project, timeline: state.timeline, state: state.state, dirt: state.dirt, labor: state.labor },
+      qualify: { project: state.project, intent: state.intent, timeline: state.timeline, state: state.state, dirt: state.dirt, labor: state.labor },
       answers: i,
       plan: { totalBlocks: Math.round(r.totalBlocks), blockSize: r.blockSize, machine: r.machine, makeOwnTotal: Math.round(own), rentTotal: Math.round(r.rentalTotal), buyTotal: Math.round(r.purchaseTotal) },
     };
@@ -231,23 +232,47 @@
     const { i, r, intl, own, best } = plan();
     const m = MACHINE_PAGES[r.machine] || {};
     const n = firstName();
+    const kitName = `${short(r.machine)} Kit`;
+    const pick = state.intent && state.intent !== "unsure" && !(intl && state.intent !== "own") ? state.intent : null;
     const saving = r.purchaseCostPerBlock - r.produceCostPerBlock;
     const breakeven = !intl && saving > 0 ? r.machineCost / saving : 0;
     const multiple = breakeven && r.totalBlocks ? breakeven / r.totalBlocks : 0;
-    const bestLabel = { own: "buying a machine", rent: "renting our plant", buy: "buying finished blocks" }[best];
+    const LABEL = { own: "a machine kit", rent: "renting our plant", buy: "buying finished blocks" };
+    const TOTAL = { own, rent: r.rentalTotal, buy: r.purchaseTotal };
     const why = {
-      own: "At this volume a machine pays for itself, and you keep it for future builds.",
+      own: "At this volume a kit pays for itself, and you keep the machine for future builds.",
       rent: "You get our full plant and an operator without buying equipment.",
-      buy: multiple > 1 ? `A machine only pays off at about ${int(breakeven)} blocks, roughly ${multiple.toFixed(1)}× this project.` : "No equipment to buy, store or learn.",
+      buy: multiple > 1 ? `A kit pays off at about ${int(breakeven)} blocks, roughly ${multiple.toFixed(1)}× this project.` : "No equipment to buy, store or learn.",
     }[best];
+    const heading = pick && pick !== best
+      ? `You asked about ${LABEL[pick]}: ${money(TOTAL[pick])}`
+      : `Your best option: ${LABEL[best]}`;
+    const sub = pick && pick !== best
+      ? `For this project, ${LABEL[best]} comes in lower at ${money(TOTAL[best])}. ${why}`
+      : why;
 
     const card = (key, title, sub, total, per, rows, href, cta) => `
-      <div class="opt ${best === key ? "is-best" : ""}">${best === key ? '<span class="flag">Best value</span>' : ""}
+      <div class="opt ${best === key ? "is-best" : ""} ${pick === key ? "is-pick" : ""}">${best === key ? '<span class="flag">Best value</span>' : pick === key ? '<span class="flag flag--pick">Your pick</span>' : ""}
         <h3>${title}</h3><div class="sub">${sub}</div>
         <div class="big">${money(total)}</div><div class="per">${per}</div>
         <details class="breakdown"><summary>See breakdown</summary><ul>${rows.map(([a, b]) => `<li><span>${a}</span><span>${b}</span></li>`).join("")}</ul></details>
-        <a class="btn ${best === key ? "" : "btn--outline"}" href="${href}">${cta}</a>
+        <a class="btn ${best === key || pick === key ? "" : "btn--outline"}" href="${href}">${cta}</a>
       </div>`;
+    const cards = {
+      own: card("own", `Buy the ${kitName}`, "Machine, soil analysis & training", own, `Includes the machine (${money(r.machineCost)})`,
+        [[`${short(r.machine)} kit`, money(r.machineCost)], ["Materials", money(r.materialCost)], ["Labor", r.laborCost ? money(r.laborCost) : "Volunteer"], ["Pallets & supplies", money(r.incidentalCost)]],
+        m.page || "machines.html", `See the ${kitName}`),
+      rent: intl ? "" : card("rent", "Rent our plant", "We bring it, with an operator", r.rentalTotal, `${money2(r.rentalCostPerBlock)} per block, all in`,
+        [["Setup & delivery", money(r.mobilizationCost)], ["Rental ($1/block)", money(r.rentalMachineryCost)], ["Your materials & crew", money(r.rentalMaterialLaborIncidental)]],
+        "rent.html", "How renting works"),
+      buy: intl ? "" : card("buy", "Buy blocks", "From our partner Terra Madre", r.purchaseTotal, `${money2(r.purchaseCostPerBlock)} per block, delivered`,
+        [[`${int(r.totalBlocks)} × ${money2(r.blockPrice)}`, money(r.purchaseCost)], [`Delivery (${up(r.truckloads)} trucks)`, money(r.deliveryCost)]],
+        "blocks.html#buy", "Block options"),
+    };
+    const order = [pick, best, "own", "rent", "buy"].filter((k, idx, arr) => k && arr.indexOf(k) === idx);
+    const fastNote = r.machine === "AECT Impact 2001A" && r.totalBlocks > 30000
+      ? `<p class="fine" style="margin-top:10px">Big project? Ask us about the <a href="2500hd.html">2500HD</a>, which makes the same 6"×12" block at 480 an hour.</p>` : "";
+    const topic = { own: "quote", rent: "rental", buy: "blocks" }[pick || best];
 
     $("#results").innerHTML = `
       <div class="results-hero">
@@ -257,42 +282,34 @@
       </div>
 
       <div class="summary-grid summary-grid--4">
-        <div><b>${short(r.machine)}</b><span>machine that makes them</span></div>
+        <div><b>${kitName}</b><span>recommended kit</span></div>
         <div><b>${int(r.earthYd)} yd³</b><span>of earth</span></div>
         <div><b>${r.cementYd ? int(r.cementYd) + " yd³" : "None"}</b><span>of cement</span></div>
         <div><b>${up(r.palletsNeeded)}</b><span>pallets</span></div>
       </div>
 
       <div class="res-section">
-        <h2>Your cheapest option: ${bestLabel}</h2>
-        <p class="q-help">${why}</p>
-        <div class="options3">
-          ${card("own", "Buy a machine", "Make your own blocks", own, `Includes the ${short(r.machine)} (${money(r.machineCost)})`,
-            [[`${short(r.machine)} machine`, money(r.machineCost)], ["Materials", money(r.materialCost)], ["Labor", r.laborCost ? money(r.laborCost) : "Volunteer"], ["Pallets & supplies", money(r.incidentalCost)]],
-            m.page || "machines.html", `See the ${short(r.machine)}`)}
-          ${intl ? "" : card("rent", "Rent our plant", "We bring it, with an operator", r.rentalTotal, `${money2(r.rentalCostPerBlock)} per block, all in`,
-            [["Setup & delivery", money(r.mobilizationCost)], ["Rental ($1/block)", money(r.rentalMachineryCost)], ["Your materials & crew", money(r.rentalMaterialLaborIncidental)]],
-            "rent.html", "How renting works")}
-          ${intl ? "" : card("buy", "Buy blocks", "Delivered to your site", r.purchaseTotal, `${money2(r.purchaseCostPerBlock)} per block, delivered`,
-            [[`${int(r.totalBlocks)} × ${money2(r.blockPrice)}`, money(r.purchaseCost)], [`Delivery (${up(r.truckloads)} trucks)`, money(r.deliveryCost)]],
-            "blocks.html#buy", "Block options")}
-        </div>
+        <h2>${heading}</h2>
+        <p class="q-help">${sub}</p>
+        <div class="options3">${order.map((k) => cards[k]).join("")}</div>
       </div>
 
       <div class="res-section machine-rec">
         ${m.img ? `<img src="${m.img}" alt="${r.machine}">` : ""}
         <div>
-          <span class="eyebrow">Your machine</span>
-          <h3>${r.machine} · ${money(r.machineCost)}</h3>
-          <p>${m.rate || ""}. Makes your ${r.blockSize} blocks. Includes a week of on-site training, a 1-year warranty and lifetime support.</p>
-          <a class="btn btn--outline" href="${m.page || "machines.html"}">View machine</a>
+          <span class="eyebrow">Your kit</span>
+          <h3>${kitName} · from ${money(r.machineCost)}</h3>
+          <ul class="kit-includes"><li>${short(r.machine)} machine</li><li>Soil analysis</li><li>1 week on-site training</li><li>Warranty & lifetime support</li></ul>
+          <p>${m.rate || ""}. Makes your ${r.blockSize} blocks.</p>
+          <a class="btn btn--outline" href="${m.page || "machines.html"}">View kit</a>
+          ${fastNote}
         </div>
       </div>
 
       <div class="res-section next-cta">
         <h2>Ready for real numbers?</h2>
         <p>Send us your plan and we'll reply with an official quote.</p>
-        <a class="btn btn--cream btn--lg" href="contact.html?topic=${best === "rent" ? "rental" : best === "buy" ? "blocks" : "quote"}&machine=${encodeURIComponent(short(r.machine))}">Get my official quote <span class="arrow">→</span></a>
+        <a class="btn btn--cream btn--lg" href="contact.html?topic=${topic}&machine=${encodeURIComponent(kitName)}">Get my official quote <span class="arrow">→</span></a>
       </div>
 
       <details class="res-section assumptions">
@@ -301,7 +318,7 @@
           ${outdoor() ? "" : `<li>Wall lengths estimated from ${int(parseFloat(state.size))} sq ft (rectangular, single story), plus un-stabilized interior walls.</li>`}
           <li>${state.labor === "hired" ? `Crew of ${DEFAULTS.crew} at $${DEFAULTS.rate}/hr.` : "Volunteer labor."} ${state.dirt === "own" ? "Free site dirt." : `Earth at $${DEFAULTS.earthDelivered}/yd³.`} Cement at $${DEFAULTS.cement}/yd³.</li>
           <li>Wall volume reduced 20% (exterior) and 15% (interior) for doors, windows and mortar.</li>
-          <li>Machine prices FOB San Antonio, TX; shipping extra. Prices change with 30 days' notice.</li>
+          <li>Kit prices FOB San Antonio, TX; shipping extra. Prices change with 30 days' notice.</li>
           <li>Estimates are for planning only, not a quote.</li>
         </ul>
       </details>

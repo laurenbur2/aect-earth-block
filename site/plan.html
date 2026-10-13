@@ -114,26 +114,38 @@
   <!-- 9. Labor -->
   <section class="q is-wide" data-step="labor" data-auto>
     <h1>Who's doing the work?</h1>
-    <p class="q-help">Making blocks takes a crew of about 4 to 6.</p>
+    <p class="q-help">Making blocks takes a crew of about 4 to 6. (Renting? You still provide the crew.)</p>
     <div class="icon-choices icon-choices--2" role="radiogroup">
       <button type="button" class="icon-choice" role="radio" data-name="labor" data-value="volunteer"><span class="emoji">🤝</span><b>Family and friends</b><small>No labor cost</small></button>
       <button type="button" class="icon-choice" role="radio" data-name="labor" data-value="hired"><span class="emoji">👷</span><b>A hired crew</b><small>5 people at about $18/hr</small></button>
     </div>
   </section>
 
-  <!-- 10. Timeline -->
-  <section class="q is-wide" data-step="timeline" data-auto>
-    <h1>When do you want to start?</h1>
-    <p class="q-help">Last question.</p>
+  <!-- 10. Buy or rent (screening) -->
+  <section class="q is-wide" data-step="intent" data-auto>
+    <h1>Are you looking to buy or rent?</h1>
+    <p class="q-help">We'll price all three options either way. This tells us where to focus your plan.</p>
     <div class="icon-choices icon-choices--4" role="radiogroup">
-      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="0-6"><span class="emoji">🚀</span><b>Within 6 months</b></button>
-      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="6-12"><span class="emoji">📅</span><b>6 to 12 months</b></button>
-      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="12+"><span class="emoji">🗓️</span><b>A year or more</b></button>
-      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="research"><span class="emoji">🔎</span><b>Just researching</b></button>
+      <button type="button" class="icon-choice" role="radio" data-name="intent" data-value="own"><span class="emoji">🏗️</span><b>Buy a kit</b><small>Make my own blocks</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="intent" data-value="rent"><span class="emoji">🚛</span><b>Rent equipment</b><small>AECT brings the plant</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="intent" data-value="buy"><span class="emoji">🧱</span><b>Buy blocks</b><small>Delivered, ready to lay</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="intent" data-value="unsure"><span class="emoji">🤔</span><b>Not sure yet</b><small>Show me what's cheapest</small></button>
     </div>
   </section>
 
-  <!-- 11. Building the plan (interstitial) -->
+  <!-- 11. Project status (screening) -->
+  <section class="q is-wide" data-step="timeline" data-auto>
+    <h1>Do you have a project lined up?</h1>
+    <p class="q-help">Last question.</p>
+    <div class="icon-choices icon-choices--4" role="radiogroup">
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="0-6"><span class="emoji">🚀</span><b>Yes, starting soon</b><small>Within 6 months</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="6-12"><span class="emoji">📅</span><b>Yes, in planning</b><small>6 to 12 months out</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="12+"><span class="emoji">🗺️</span><b>I have land</b><small>A year or more out</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="research"><span class="emoji">🔎</span><b>Not yet</b><small>Just exploring</small></button>
+    </div>
+  </section>
+
+  <!-- 12. Building the plan (interstitial) -->
   <section class="q" data-step="building">
     <div class="building">
       <div class="spinner" aria-hidden="true"></div>
@@ -147,7 +159,7 @@
     </div>
   </section>
 
-  <!-- 12. Email gate -->
+  <!-- 13. Email gate -->
   <section class="q is-wide" data-step="gate">
     <div class="gate">
       <div class="gate-form">
@@ -166,7 +178,7 @@
     </div>
   </section>
 
-  <!-- 13. Results -->
+  <!-- 14. Results -->
   <section class="q results" data-step="results" id="results"></section>
 
 </form>

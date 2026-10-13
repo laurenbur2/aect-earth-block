@@ -259,3 +259,6 @@ select.input--xl { text-align: left; width: 100%; padding: 18px 20px; font: 500 
 .next-cta p { color: #b8c0ce; margin-bottom: 24px; }
 details.assumptions summary { cursor: pointer; }
 @media (max-width: 560px) { .photo-choices .photo-choice:last-child:nth-child(odd) { grid-column: 1 / -1; } .photo-choices .photo-choice:last-child:nth-child(odd) img { aspect-ratio: 16/9; } }
+.opt.is-pick:not(.is-best) { border-color: var(--logo-green); }
+.opt .flag--pick { background: var(--sage); }
+.machine-rec .kit-includes { margin: 8px 0 12px; }

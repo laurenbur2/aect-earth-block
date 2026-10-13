@@ -12,10 +12,10 @@ import re
 ROOT = pathlib.Path(__file__).resolve().parent.parent / "site"
 IMG = "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/"
 
-MACHINES = [
+MACHINES_RAW = [
     {
-        "slug": "impact-2001a", "name": "Impact 2001A", "group": "machine",
-        "badge": "Smallest · Most affordable",
+        "slug": "impact-2001a", "name": "Impact 2001A", "group": "kit",
+        "badge": "Best for 1 to 5 homes", "kit_price": "Kits from $59,000",
         "img": "e48a0068-88d7-476c-a776-9f0a846ac278.jpg", "video": "xWIc9XZthN0",
         "short": "Our lightest, most affordable machine. Tows behind any vehicle. Perfect for 1 to 5 houses.",
         "best_for": "1 to 5 houses and first-time block producers",
@@ -31,7 +31,7 @@ MACHINES = [
             ("Size", "8'6\" L × 5'8\" W × 4'3\" H · ~6\" road clearance"),
         ],
         "prices": [
-            ('Impact 2001A with standard 6"×12" plate', "$59,000"),
+            ("Impact 2001A kit: machine, soil analysis & on-site training", "From $59,000"),
             ("Holey block plate set", "$4,000"),
             ('4"×12" veneer block plate set', "$4,000"),
             ("Spare parts package", "$7,640"),
@@ -39,10 +39,10 @@ MACHINES = [
         "cta": "quote",
     },
     {
-        "slug": "2500hd", "name": "2500HD", "group": "machine",
+        "slug": "2500hd", "name": "2500HD", "group": "equipment",
         "badge": "Same block · 60% faster",
         "img": "bf5b7c80-8d03-46af-8d3b-ffebd057b135.jpg", "video": "-tpm1_4PtUE",
-        "short": "The Impact's 6\"×12\" block at 480 an hour, with a tractor-loaded one-yard hopper.",
+        "short": "The Impact's 6\"×12\" block at 480 an hour, with a tractor-loaded one-yard hopper. Available as a kit on request.",
         "best_for": 'Tens of thousands of 6"×12" blocks, fast',
         "intro": "The same 6\"×12\" block as the Impact, at 480 blocks an hour, with a one-yard hopper you load with a tractor. If you like 6\"×12\" blocks and need to make tens of thousands of them fast and without much effort, this is your machine.",
         "stats": [("480", "blocks/hr"), ('6"×12"', "block"), ("1 yd³", "hopper")],
@@ -59,8 +59,8 @@ MACHINES = [
         "cta": "quote",
     },
     {
-        "slug": "3500", "name": "3500", "group": "machine",
-        "badge": "Flagship",
+        "slug": "3500", "name": "3500", "group": "kit",
+        "badge": "Flagship · High volume", "kit_price": "Kits from $149,000",
         "img": "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg", "video": "IcNAe3-oyAg",
         "short": "The Cadillac of CEB machines. Big 10\"×14\" blocks at 480 an hour. Built for millions of blocks.",
         "best_for": "Big blocks, high volume and block businesses",
@@ -76,14 +76,14 @@ MACHINES = [
             ("Size", "13'8\" L × 7'5\" W × 6'10\" H (8'11\" hopper open) · ~12\" clearance"),
         ],
         "prices": [
-            ('3500 with standard 10"×14" plate set', "$149,000"),
+            ("3500 kit: machine, soil analysis & on-site training", "From $149,000"),
             ('Optional 7"×14" or 8"×14" plate set', "$4,920"),
             ("Spare parts package", "$11,251"),
         ],
         "cta": "quote",
     },
     {
-        "slug": "bp714", "name": "BP714", "group": "machine",
+        "slug": "bp714", "name": "BP714", "group": "equipment",
         "badge": "Interlocking · Reinforceable", "badge_class": "badge--sage",
         "img": "889d4a57-f36f-4da9-8b17-e691db617e06.png", "img_contain": True, "video": None,
         "short": "Interlocking, holey 7\"×14\" blocks you can reinforce with rebar. Built for strict building codes.",
@@ -119,7 +119,7 @@ MACHINES = [
         "stats": [("10 yd³", "per hour"), ("2", "hoppers"), ("47.5 HP", "diesel")],
         "price": "$149,000",
         "specs": [
-            ("Output", "Up to 10 yd³ of material per hour: enough to feed one 3500, two 2500s, three Impacts or four BP714s"),
+            ("Output", "Up to 10 yd³ of material per hour: enough to feed one 3500, three Impacts, two 2500s or four BP714s"),
             ("Engine", "47.5 HP water-cooled Yanmar diesel"),
             ("Hoppers", "Earth 1 yd³ · stabilizer 10 ft³"),
             ("Trough", "Rubber, with bolt-on replaceable paddles"),
@@ -157,6 +157,16 @@ MACHINES = [
     },
 ]
 
+ORDER = ["impact-2001a", "3500", "2500hd", "bp714", "mega-mixer", "small-block-press", "block-cutter"]
+MACHINES = sorted(MACHINES_RAW, key=lambda m: ORDER.index(m["slug"]))
+# What every kit includes (AECT sells kits, not one-off machines).
+KIT_ITEMS = [
+    ("Machine", "Your AECT {name}, hand-built and tested in San Antonio"),
+    ("Soil analysis", "We test your site's dirt and dial in the right mix"),
+    ("On-site training", "A full week, one-on-one, with AECT President Ryan Runge"),
+    ("Support", "1-year warranty and lifetime support"),
+]
+
 e = html.escape
 
 
@@ -164,23 +174,29 @@ def img_url(m, w):
     return f"{IMG}{m['img']}/:/rs=w:{w}"
 
 
-def card(m):
+def card(m, big=False):
     stats = "".join(f"<li><b>{e(v)}</b> {e(l)}</li>" for v, l in m["stats"][:2])
     contain = ' style="object-fit:contain;background:#fff"' if m.get("img_contain") else ""
-    return f"""        <a class="product-card reveal" href="{m['slug']}.html">
-          <div class="product-img"><img src="{img_url(m, 900)}" alt="AECT {e(m['name'])}" loading="lazy"{contain}></div>
+    kit = m["group"] == "kit"
+    title = f"{m['name']} Kit" if kit else m["name"]
+    includes = ('<ul class="kit-includes"><li>Machine</li><li>Soil analysis</li><li>On-site training</li></ul>' if kit else "")
+    price = m.get("kit_price") if kit else m["price"]
+    return f"""        <a class="product-card{' product-card--kit' if big else ''} reveal" href="{m['slug']}.html">
+          <div class="product-img"><img src="{img_url(m, 1100 if big else 900)}" alt="AECT {e(m['name'])}" loading="lazy"{contain}></div>
           <div class="product-body">
             <span class="badge {m.get('badge_class', '')}">{e(m['badge'])}</span>
-            <h3>{e(m['name'])}</h3>
+            <h3>{e(title)}</h3>
             <p>{e(m['short'])}</p>
-            <ul class="product-stats">{stats}</ul>
-            <div class="product-foot"><span class="product-price">{e(m['price'])}</span><span class="product-link">View machine <span class="arrow">→</span></span></div>
+            {includes}<ul class="product-stats">{stats}</ul>
+            <div class="product-foot"><span class="product-price">{e(price)}</span><span class="product-link">{'View kit' if kit else 'View details'} <span class="arrow">→</span></span></div>
           </div>
         </a>"""
 
 
 def page(m, head, footer):
-    title = f"AECT {m['name']} | Specs, Pricing & Video | AECT Earth Block"
+    kit = m["group"] == "kit"
+    display = f"{m['name']} Kit" if kit else m["name"]
+    title = f"AECT {display} | Specs, Pricing & Video | AECT Earth Block"
     desc = f"AECT {m['name']}: {m['short']} Specs, pricing and video."
     h = re.sub(r"<title>.*?</title>", f"<title>{e(title)}</title>", head)
     h = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{e(desc)}">', h)
@@ -193,21 +209,27 @@ def page(m, head, footer):
     prices = "".join(
         f'<li{main_cls if i == 0 else ""}><span>{e(k)}</span><b>{e(v)}</b></li>' for i, (k, v) in enumerate(m["prices"])
     )
-    q = m["name"].replace(" ", "%20")
+    q = (display).replace(" ", "%20")
     primary = (f'<a class="btn btn--lg" href="contact.html?topic=quote&machine={q}">Request a quote</a>'
                if m["cta"] == "quote" else f'<a class="btn btn--lg" href="contact.html?topic=order&machine={q}">Order one</a>')
     video = (f'<a class="video-thumb" href="https://youtu.be/{m["video"]}" data-yt="{m["video"]}" aria-label="AECT {e(m["name"])} in action"></a>'
              if m.get("video") else "")
-    included = "" if m["group"] != "machine" else """
+    if kit:
+        rows = "".join(f'<li><span class="kit-n">{i+1}</span><div><b>{e(a)}</b><span>{e(b.format(name=m["name"]))}</span></div></li>' for i, (a, b) in enumerate(KIT_ITEMS))
+        included = f"""
+          <div class="kit-box"><h3>What's in the kit</h3><ul class="kit-list">{rows}</ul></div>"""
+    else:
+        included = """
           <ul class="product-included">
             <li>1 week of on-site training</li><li>1-year warranty</li><li>Lifetime support</li><li>Built in San Antonio, TX</li>
           </ul>"""
-    others = [o for o in MACHINES if o["slug"] != m["slug"] and o["group"] == m["group"]][:3]
-    if len(others) < 3:
-        others += [o for o in MACHINES if o["slug"] != m["slug"] and o not in others][: 3 - len(others)]
+    # Cross-sell: everything points back to the two featured kits first.
+    kits = [o for o in MACHINES if o["group"] == "kit" and o["slug"] != m["slug"]]
+    rest = [o for o in MACHINES if o["slug"] != m["slug"] and o not in kits and o["slug"] in ("mega-mixer", "small-block-press")]
+    others = (kits + rest)[:3]
     return f"""{h}<main class="product-page">
   <div class="wrap">
-    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="machines.html">Machines</a> <span>/</span> {e(m['name'])}</nav>
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="machines.html">Machines</a> <span>/</span> {e(display)}</nav>
     <section class="product-hero">
       <div class="product-media">
         <img src="{img_url(m, 1400)}" alt="AECT {e(m['name'])}"{contain}>
@@ -215,12 +237,12 @@ def page(m, head, footer):
       </div>
       <div class="product-info">
         <span class="badge {m.get('badge_class', '')}">{e(m['badge'])}</span>
-        <h1>{e(m['name'])}</h1>
+        <h1>{e(display)}</h1>
         <p class="product-best">Best for: {e(m['best_for'])}</p>
         <p class="lede">{e(m['intro'])}</p>
         <div class="product-statbar">{stats}</div>
         <div class="product-buy">
-          <div class="product-price-lg">{e(m['price'])}</div>
+          <div class="product-price-lg">{e(m.get("kit_price") if kit else m["price"])}</div>
           <p class="fine">FOB San Antonio, TX. Shipping and loading not included.</p>
           <div class="btn-row">{primary}<a class="btn btn--outline btn--lg" href="plan.html">Will it fit my project?</a></div>
         </div>{included}
@@ -233,7 +255,7 @@ def page(m, head, footer):
         <dl class="specs">{specs}</dl>
       </div>
       <div>
-        <h2>Pricing & options</h2>
+        <h2>{"Kit pricing & options" if kit else "Pricing & options"}</h2>
         <ul class="price-list">{prices}</ul>
         <p class="fine">All prices USD, FOB San Antonio, TX. Prices may change with 30 days' notice due to steel, oil and transportation costs.</p>
       </div>
@@ -243,7 +265,7 @@ def page(m, head, footer):
   <section class="section section--sand">
     <div class="wrap">
       <span class="eyebrow">Keep shopping</span>
-      <h2>You might also need</h2>
+      <h2>{"Compare kits and add-ons" if kit else "Most customers choose a complete kit"}</h2>
       <div class="product-grid product-grid--3">
 {chr(10).join(card(o) for o in others)}
       </div>
@@ -252,7 +274,7 @@ def page(m, head, footer):
 
   <section class="section cta-band">
     <div class="wrap">
-      <h2>Is the {e(m['name'])} right for your build?</h2>
+      <h2>Is the {e(display)} right for your build?</h2>
       <p>The planner matches your block size and volume to the right machine, and shows whether buying even makes sense versus renting or buying blocks.</p>
       <div class="btn-row" style="justify-content:center"><a class="btn btn--lg" href="plan.html">Plan my build <span class="arrow">→</span></a></div>
     </div>
@@ -275,8 +297,8 @@ def main():
     # Refresh the product grids on machines.html between the GENERATED markers.
     mp = ROOT / "machines.html"
     s = mp.read_text()
-    for group in ("machine", "equipment"):
-        cards = "\n".join(card(m) for m in MACHINES if m["group"] == group)
+    for group in ("kit", "equipment"):
+        cards = "\n".join(card(m, big=(group == "kit")) for m in MACHINES if m["group"] == group)
         s = re.sub(
             rf"(<!-- GENERATED:{group} -->).*?(\n\s*<!-- /GENERATED:{group} -->)",
             lambda mm: mm.group(1) + "\n" + cards + mm.group(2), s, flags=re.S)

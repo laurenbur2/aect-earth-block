@@ -64,7 +64,8 @@ const MACHINE_BLOCK_THRESHOLD = 30000;
  */
 const MACHINE_BY_BLOCK_SIZE = {
   '4" x 12"': { over: 'AECT Impact 2001A', atOrUnder: 'AECT Impact 2001A' },
-  '6" x 12"': { over: 'AECT 2500HD', atOrUnder: 'AECT Impact 2001A' },
+  // Site change: AECT funnels 6"×12" projects to the Impact 2001A kit (the 2022 sheet picked the 2500HD above 30,000 blocks).
+  '6" x 12"': { over: 'AECT Impact 2001A', atOrUnder: 'AECT Impact 2001A' },
   '7" x 14"': { over: 'AECT 3500', atOrUnder: 'AECT 3500' },
   '7" x 14" holey, interlocking': { over: 'AECT BP714', atOrUnder: 'AECT BP714' },
   '8" x 14"': { over: 'AECT 3500', atOrUnder: 'AECT 3500' },
