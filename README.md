@@ -6,9 +6,9 @@ Plain HTML, CSS and JS. No build step, no dependencies.
 
 ## Run locally
 ```bash
-cd site && python3 -m http.server 4173
+python3 tools/serve.py
 ```
-Then open http://localhost:4173. The hero video needs `http://`; it won't play from a `file://` URL.
+Then open http://localhost:4173. This server disables browser caching so edits show up on a normal refresh. After editing CSS/JS, run `python3 tools/bust_cache.py` so deployed pages also pick up fresh files. The hero video needs `http://`; it won't play from a `file://` URL.
 
 ## Structure
 ```

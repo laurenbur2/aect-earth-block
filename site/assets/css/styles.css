@@ -691,3 +691,27 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .ps-aside { padding: 16px 18px; }
 @media (max-width: 760px) { .ps-icon { width: 60px; height: 60px; } .ps-icon svg { width: 34px; height: 34px; } .ps-rail::before { top: 30px; } .ps-label { font-size: .92rem; } }
 .ps-panel { align-content: start; }
+
+/* ---------- Home page: tighter vertical rhythm ---------- */
+.page-home .section { padding: clamp(44px, 5.5vw, 76px) 0; }
+.page-home .section h2 { margin-bottom: .35em; }
+.page-home .eyebrow { margin-bottom: .7rem; }
+.page-home .lede { margin-bottom: 0; }
+.page-home .picker { margin-top: 28px; }
+.page-home .pick { aspect-ratio: 4/5; }
+.page-home .paths { margin-top: 32px; }
+.page-home .path-img { aspect-ratio: 16/10; }
+.page-home .path-body { padding: 20px 22px 22px; }
+.page-home .path-body p { margin-bottom: 12px; }
+.page-home .why { margin-top: 32px; gap: 24px; }
+.page-home .why-ico { font-size: 1.8rem; margin-bottom: 8px; }
+.page-home .stats { margin-top: 32px; }
+.page-home .stat { padding: 20px 22px; }
+.page-home .faq { margin-top: 24px; }
+.page-home .faq summary { padding: 18px 44px 18px 0; }
+.page-home .quote { grid-template-columns: 220px 1fr; }
+.page-home .quote img { aspect-ratio: 1; }
+.page-home .quote blockquote { font-size: clamp(1.2rem, 2vw, 1.6rem); }
+.page-home .cta-band p { margin-bottom: 22px; }
+@media (max-width: 760px) { .page-home .quote { grid-template-columns: 1fr; } .page-home .quote img { max-width: 160px; } }
+.page-home .process-section { padding-top: clamp(44px, 5.5vw, 68px); padding-bottom: clamp(36px, 4.5vw, 52px); }
