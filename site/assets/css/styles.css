@@ -664,3 +664,9 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 @media (max-width: 760px) { .topic-grid { grid-template-columns: 1fr 1fr; } .contact-form .field-row { grid-template-columns: 1fr; } }
 @media (max-width: 340px) { .topic-grid { grid-template-columns: 1fr; } }
 @media (max-width: 560px) { .topic-box { padding: 16px 14px; } .topic-box small { font-size: .8rem; } }
+
+/* Tighter rhythm between "How it works" and the planner picker */
+.process-section { padding-bottom: clamp(48px, 6vw, 72px); }
+.start-section { background: var(--cream); border-top: 1px solid var(--line); padding-top: clamp(48px, 6vw, 72px); }
+.start-section .lede { margin-bottom: 0; }
+.start-section .picker { margin-top: 32px; }
