@@ -1,0 +1,41 @@
+# AECT Earth Block website
+
+Redesign of [aectearthblock.com](https://aectearthblock.com) for Advanced Earthen Construction Technologies (San Antonio, TX). The site is built around one funnel: a step-by-step **CEB planner** that gives visitors their block count, materials and costs before they contact AECT.
+
+Plain HTML, CSS and JS. No build step, no dependencies.
+
+## Run locally
+```bash
+cd site && python3 -m http.server 4173
+```
+Then open http://localhost:4173. The hero video needs `http://`; it won't play from a `file://` URL.
+
+## Structure
+```
+site/
+  index.html        Home: hero video, planner entry, 3 paths, CEB 101, FAQ preview
+  plan.html         The CEB planner (funnel)
+  machines.html     All machines, comparison table, specs, pricing
+  blocks.html       Block sizes, stabilized vs un-stabilized, buying blocks
+  rent.html         Equipment rental with operator + consulting
+  learn.html        Full FAQ + build videos
+  about.html        Story, press, projects
+  contact.html      Consult booking + quote form
+  assets/css/       styles.css (site), plan.css (planner)
+  assets/js/        main.js (shared), calculator.js (CEB math), plan.js (planner flow)
+research/
+  content-inventory.md   Everything pulled from the current site
+  site-plan.md           IA, funnel design, open questions for AECT
+  calculator-logic.md    Reverse-engineered spreadsheet formulas + test cases
+  calculator.js          Faithful port of the original spreadsheet (2022 prices)
+  raw/                   Raw text and image lists for every current page
+```
+
+## Before launch
+- Set `LEAD_ENDPOINT` in `site/assets/js/plan.js` and wire up the quote form in `contact.html`.
+- Confirm prices and open questions in `research/site-plan.md`.
+- Replace hotlinked GoDaddy CDN images with originals in `site/assets/img/`.
+- Header and footer are duplicated in each page. Edit `index.html` first, then copy the changes to the other pages.
+
+## Deploy
+Any static host works. Netlify or Vercel: set the publish directory to `site`. GitHub Pages only serves from the repo root or `/docs`, so use a Pages Actions workflow that uploads `site/`. Then point the domain's DNS at the host.

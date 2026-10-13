@@ -1,0 +1,91 @@
+--- BEGIN UNTRUSTED EXTERNAL CONTENT (source: https://aectearthblock.com/aect-blog) ---
+{
+  "images": [
+    {
+      "index": 0,
+      "src": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=h:120,cg:true,m/qt=q:95",
+      "srcset": "//isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:216,h:120,cg:true,m/cr=w:216,h:120/qt=q:95, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:432,h:240,cg:true,m/cr=w:432,h:240/qt=q:95 2x, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:648,h:360,cg:true,m/cr=w:648,h:360/qt=q:95 3x",
+      "currentSrc": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:216,h:120,cg:true,m/cr=w:216,h:120/qt=q:95",
+      "alt": "",
+      "width": 216,
+      "height": 120,
+      "naturalWidth": 216,
+      "naturalHeight": 120,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    }
+  ],
+  "videos": [],
+  "audio": [],
+  "backgroundImages": [
+    {
+      "index": 0,
+      "url": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/13%20-%20finished%20kitchen.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1535,m",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-13.c2-34.c2-35.c2-36.c2-37.c2-3.c2-4.c2-38.c2-39.c2-3a.c2-3b.c2-3c.c2-3d.c2-3e.c2-3f.c2-3g.c2-3h.c2-3i.c2-3j.c2-3k.c2-3l.c2-3m.c2-3n.c2-3o.c2-3p.c2-3q.c2-3r.c2-3s.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 1,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/IMG_4234%5B1%5D.JPG/:/rs=w:245",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-58.c2-59.c2-35.c2-36.c2-37.c2-5a.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 2,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/Screenshot%202024-12-18%20151549.png/:/rs=w:245",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-58.c2-59.c2-35.c2-36.c2-37.c2-5t.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 3,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/marfa%20ceb%20home.png/:/rs=w:245",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-58.c2-59.c2-35.c2-36.c2-37.c2-5u.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 4,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_9656%20(1",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-58.c2-59.c2-35.c2-36.c2-37.c2-5v.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 5,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/IMG_9608.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:245",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-58.c2-59.c2-35.c2-36.c2-37.c2-5w.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 6,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_6358%20(2",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-58.c2-59.c2-35.c2-36.c2-37.c2-5x.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 7,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/IMG_7642.JPG/:/rs=w:245",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-58.c2-59.c2-35.c2-36.c2-37.c2-5y.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 8,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/IMG_4234%5B1%5D.JPG/:/rs=w:245",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-58.c2-59.c2-35.c2-36.c2-37.c2-5a.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 9,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/Screenshot%202024-12-18%20151549.png/:/rs=w:245",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-58.c2-59.c2-35.c2-36.c2-37.c2-5t.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 10,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/marfa%20ceb%20home.png/:/rs=w:245",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-33.c2-58.c2-59.c2-35.c2-36.c2-37.c2-5u.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    }
+  ],
+  "total": 12
+}
+--- END UNTRUSTED EXTERNAL CONTENT ---

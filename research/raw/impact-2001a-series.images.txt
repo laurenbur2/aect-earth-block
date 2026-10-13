@@ -1,0 +1,38 @@
+--- BEGIN UNTRUSTED EXTERNAL CONTENT (source: https://aectearthblock.com/impact-2001a-series) ---
+{
+  "images": [
+    {
+      "index": 0,
+      "src": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=h:120,cg:true,m/qt=q:95",
+      "srcset": "//isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:216,h:120,cg:true,m/cr=w:216,h:120/qt=q:95, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:432,h:240,cg:true,m/cr=w:432,h:240/qt=q:95 2x, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:648,h:360,cg:true,m/cr=w:648,h:360/qt=q:95 3x",
+      "currentSrc": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:216,h:120,cg:true,m/cr=w:216,h:120/qt=q:95",
+      "alt": "",
+      "width": 216,
+      "height": 120,
+      "naturalWidth": 216,
+      "naturalHeight": 120,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    },
+    {
+      "index": 1,
+      "src": "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=",
+      "srcset": "//img1.wsimg.com/isteam/ip/static/transparent_placeholder.png/:/rs=w:400,h:295,cg:true,m,i:true/qt=q:1/ll=n:true 451w, //img1.wsimg.com/isteam/ip/static/transparent_placeholder.png/:/rs=w:400,h:295,cg:true,m,i:true/qt=q:1/ll=n:true 768w, //img1.wsimg.com/isteam/ip/static/transparent_placeholder.png/:/rs=w:400,h:295,cg:true,m,i:true/qt=q:1/ll=n:true 1024w, //img1.wsimg.com/isteam/ip/static/transparent_placeholder.png/:/rs=w:400,h:295,cg:true,m,i:true/qt=q:1/ll=n:true 1280w, //img1.wsimg.com/isteam/ip/static/transparent_placeholder.png/:/rs=w:400,h:295,cg:true,m,i:true/qt=q:1/ll=n:true 1536w",
+      "currentSrc": "https://img1.wsimg.com/isteam/ip/static/transparent_placeholder.png/:/rs=w:400,h:295,cg:true,m,i:true/qt=q:1/ll=n:true",
+      "alt": "Impact 2001A compressed earth block machine",
+      "width": 323,
+      "height": 234,
+      "naturalWidth": 399,
+      "naturalHeight": 294,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    }
+  ],
+  "videos": [],
+  "audio": [],
+  "backgroundImages": [],
+  "total": 2
+}
+--- END UNTRUSTED EXTERNAL CONTENT ---

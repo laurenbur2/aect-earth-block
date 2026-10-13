@@ -1,0 +1,38 @@
+--- BEGIN UNTRUSTED EXTERNAL CONTENT (source: https://aectearthblock.com/contact-us) ---
+{
+  "images": [
+    {
+      "index": 0,
+      "src": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=h:120,cg:true,m/qt=q:95",
+      "srcset": "//isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:216,h:120,cg:true,m/cr=w:216,h:120/qt=q:95, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:432,h:240,cg:true,m/cr=w:432,h:240/qt=q:95 2x, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:648,h:360,cg:true,m/cr=w:648,h:360/qt=q:95 3x",
+      "currentSrc": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:216,h:120,cg:true,m/cr=w:216,h:120/qt=q:95",
+      "alt": "",
+      "width": 216,
+      "height": 120,
+      "naturalWidth": 216,
+      "naturalHeight": 120,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    },
+    {
+      "index": 1,
+      "src": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%201.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:400,cg:true",
+      "srcset": "//isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%201.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:400,cg:true, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%201.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:800,cg:true 2x, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%201.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1200,cg:true 3x",
+      "currentSrc": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%201.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:400,cg:true",
+      "alt": "White building with A.E.C.T. sign and plants in front under cloudy sky.",
+      "width": 323,
+      "height": 238,
+      "naturalWidth": 400,
+      "naturalHeight": 300,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    }
+  ],
+  "videos": [],
+  "audio": [],
+  "backgroundImages": [],
+  "total": 2
+}
+--- END UNTRUSTED EXTERNAL CONTENT ---

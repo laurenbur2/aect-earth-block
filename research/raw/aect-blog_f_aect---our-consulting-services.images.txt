@@ -1,0 +1,85 @@
+--- BEGIN UNTRUSTED EXTERNAL CONTENT (source: https://aectearthblock.com/aect-blog/f/aect---our-consulting-services) ---
+{
+  "images": [
+    {
+      "index": 0,
+      "src": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=h:120,cg:true,m/qt=q:95",
+      "srcset": "//isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:216,h:120,cg:true,m/cr=w:216,h:120/qt=q:95, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:432,h:240,cg:true,m/cr=w:432,h:240/qt=q:95 2x, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:648,h:360,cg:true,m/cr=w:648,h:360/qt=q:95 3x",
+      "currentSrc": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:216,h:120,cg:true,m/cr=w:216,h:120/qt=q:95",
+      "alt": "",
+      "width": 216,
+      "height": 120,
+      "naturalWidth": 216,
+      "naturalHeight": 120,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": false
+    },
+    {
+      "index": 1,
+      "src": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_4233.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280",
+      "srcset": "",
+      "currentSrc": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_4233.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280",
+      "alt": "",
+      "width": 596,
+      "height": 795,
+      "naturalWidth": 960,
+      "naturalHeight": 1280,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    },
+    {
+      "index": 2,
+      "src": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_0854.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280",
+      "srcset": "",
+      "currentSrc": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_0854.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280",
+      "alt": "",
+      "width": 596,
+      "height": 795,
+      "naturalWidth": 1280,
+      "naturalHeight": 1707,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    },
+    {
+      "index": 3,
+      "src": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_0859.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280",
+      "srcset": "",
+      "currentSrc": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_0859.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280",
+      "alt": "",
+      "width": 596,
+      "height": 795,
+      "naturalWidth": 1280,
+      "naturalHeight": 1707,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    }
+  ],
+  "videos": [],
+  "audio": [],
+  "backgroundImages": [
+    {
+      "index": 0,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/marfa%20ceb%20home.png/:/rs=h:110,m,cg:true/cr=w:110",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-31.c2-82.c2-83.c2-84.c2-85.c2-7e.c2-86.c2-33.c2-34.c2-35.c2-87.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 1,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/thumbnail_IMG_9656%20(1",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-31.c2-82.c2-83.c2-84.c2-85.c2-7e.c2-86.c2-33.c2-34.c2-35.c2-8c.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    },
+    {
+      "index": 2,
+      "url": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/IMG_9608.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=h:110,m,cg:true/cr=w:110",
+      "selector": "div.x-el.x-el-div.c2-1.c2-2.c2-31.c2-82.c2-83.c2-84.c2-85.c2-7e.c2-86.c2-33.c2-34.c2-35.c2-8d.c2-3.c2-4.c2-5.c2-6.c2-7.c2-8",
+      "element": "div"
+    }
+  ],
+  "total": 7
+}
+--- END UNTRUSTED EXTERNAL CONTENT ---

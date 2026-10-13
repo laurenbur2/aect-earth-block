@@ -1,0 +1,108 @@
+--- BEGIN UNTRUSTED EXTERNAL CONTENT (source: https://aectearthblock.com/hand-made-ceb-machines) ---
+{
+  "images": [
+    {
+      "index": 0,
+      "src": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=h:120,cg:true,m/qt=q:95",
+      "srcset": "//isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:216,h:120,cg:true,m/cr=w:216,h:120/qt=q:95, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:432,h:240,cg:true,m/cr=w:432,h:240/qt=q:95 2x, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:648,h:360,cg:true,m/cr=w:648,h:360/qt=q:95 3x",
+      "currentSrc": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/4ee417a1-312f-415f-a065-8411efd2ed69.png/:/rs=w:216,h:120,cg:true,m/cr=w:216,h:120/qt=q:95",
+      "alt": "",
+      "width": 216,
+      "height": 120,
+      "naturalWidth": 216,
+      "naturalHeight": 120,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    },
+    {
+      "index": 1,
+      "src": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/twente%20welding.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true",
+      "srcset": "//img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/twente%20welding.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true, //img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/twente%20welding.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:776,h:388,cg:true 2x, //img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/twente%20welding.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1164,h:582,cg:true 3x",
+      "currentSrc": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/twente%20welding.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true",
+      "alt": "Welding on a BP714",
+      "width": 323,
+      "height": 181,
+      "naturalWidth": 345,
+      "naturalHeight": 194,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    },
+    {
+      "index": 2,
+      "src": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%203500.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true",
+      "srcset": "//img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%203500.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true, //img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%203500.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:776,h:388,cg:true 2x, //img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%203500.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1164,h:582,cg:true 3x",
+      "currentSrc": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%203500.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true",
+      "alt": "Fabricating an AECT 3500 compressed earth block machine",
+      "width": 323,
+      "height": 243,
+      "naturalWidth": 258,
+      "naturalHeight": 194,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    },
+    {
+      "index": 3,
+      "src": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%20machines-0001.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true",
+      "srcset": "//img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%20machines-0001.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true, //img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%20machines-0001.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:776,h:388,cg:true 2x, //img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%20machines-0001.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1164,h:582,cg:true 3x",
+      "currentSrc": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%20machines-0001.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true",
+      "alt": "Welding on an AECT 3500 compressed earth block machine",
+      "width": 323,
+      "height": 243,
+      "naturalWidth": 258,
+      "naturalHeight": 194,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    },
+    {
+      "index": 4,
+      "src": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%20BP714.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true",
+      "srcset": "//img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%20BP714.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true, //img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%20BP714.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:776,h:388,cg:true 2x, //img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%20BP714.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1164,h:582,cg:true 3x",
+      "currentSrc": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/working%20on%20BP714.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true",
+      "alt": "Fabricating a BP714 compressed earth block machine",
+      "width": 323,
+      "height": 243,
+      "naturalWidth": 258,
+      "naturalHeight": 194,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    },
+    {
+      "index": 5,
+      "src": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/George%20testing%20machine.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true",
+      "srcset": "//img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/George%20testing%20machine.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true, //img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/George%20testing%20machine.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:776,h:388,cg:true 2x, //img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/George%20testing%20machine.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1164,h:582,cg:true 3x",
+      "currentSrc": "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/George%20testing%20machine.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:388,h:194,cg:true",
+      "alt": "Testing a BP714",
+      "width": 323,
+      "height": 181,
+      "naturalWidth": 345,
+      "naturalHeight": 194,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    },
+    {
+      "index": 6,
+      "src": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%202.jpg/:/cr=t:21.91%25,l:7.87%25,w:84.27%25,h:56.18%25/rs=w:388,h:194,cg:true,m",
+      "srcset": "//isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%202.jpg/:/cr=t:21.91%25,l:7.87%25,w:84.27%25,h:56.18%25/rs=w:388,h:194,cg:true,m, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%202.jpg/:/cr=t:21.91%25,l:7.87%25,w:84.27%25,h:56.18%25/rs=w:776,h:388,cg:true,m 2x, //isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%202.jpg/:/cr=t:21.91%25,l:7.87%25,w:84.27%25,h:56.18%25/rs=w:1164,h:582,cg:true,m 3x",
+      "currentSrc": "https://isteam.wsimg.com/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/building%20complete%202.jpg/:/cr=t:21.91%25,l:7.87%25,w:84.27%25,h:56.18%25/rs=w:388,h:194,cg:true,m",
+      "alt": "AECT headquarters",
+      "width": 323,
+      "height": 153,
+      "naturalWidth": 388,
+      "naturalHeight": 194,
+      "loading": "auto",
+      "dataSrc": "",
+      "visible": true
+    }
+  ],
+  "videos": [],
+  "audio": [],
+  "backgroundImages": [],
+  "total": 7
+}
+--- END UNTRUSTED EXTERNAL CONTENT ---
