@@ -82,6 +82,14 @@
     heroMedia.appendChild(f);
   }
 
+  // Exclusive accordions (<details name="...">): native in modern browsers, this covers older ones.
+  document.querySelectorAll("details[name]").forEach((d) => {
+    d.addEventListener("toggle", () => {
+      if (!d.open) return;
+      document.querySelectorAll(`details[name="${d.getAttribute("name")}"]`).forEach((o) => { if (o !== d) o.open = false; });
+    });
+  });
+
   // Year in footer
   document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 })();
