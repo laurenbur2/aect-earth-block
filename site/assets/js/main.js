@@ -101,6 +101,18 @@
         document.getElementById(x.getAttribute("aria-controls")).hidden = !on;
       });
     };
+    // Lock panels to the tallest one so switching tabs doesn't make the page jump.
+    const panels = tabs.map((t) => document.getElementById(t.getAttribute("aria-controls")));
+    const equalize = () => {
+      panels.forEach((p) => (p.style.minHeight = ""));
+      if (window.innerWidth < 760) return; // on phones, let each panel be its natural height
+      const hs = panels.map((p) => { const was = p.hidden; p.hidden = false; const h = p.offsetHeight; p.hidden = was; return h; });
+      const max = Math.max(...hs);
+      panels.forEach((p) => (p.style.minHeight = max + "px"));
+    };
+    equalize();
+    window.addEventListener("resize", equalize);
+    if (document.fonts) document.fonts.ready.then(equalize);
     tabs.forEach((t, i) => {
       t.addEventListener("click", () => select(t));
       t.addEventListener("keydown", (e) => {
