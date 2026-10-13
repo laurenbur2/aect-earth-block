@@ -90,6 +90,29 @@
     });
   });
 
+  // Tabs ([data-tabs]): click or arrow keys switch the visible panel.
+  document.querySelectorAll("[data-tabs]").forEach((root) => {
+    const tabs = [...root.querySelectorAll('[role="tab"]')];
+    const select = (t) => {
+      tabs.forEach((x) => {
+        const on = x === t;
+        x.setAttribute("aria-selected", String(on));
+        x.tabIndex = on ? 0 : -1;
+        document.getElementById(x.getAttribute("aria-controls")).hidden = !on;
+      });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(t));
+      t.addEventListener("keydown", (e) => {
+        const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        const n = tabs[(i + d + tabs.length) % tabs.length];
+        select(n); n.focus();
+      });
+    });
+  });
+
   // Year in footer
   document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 })();
