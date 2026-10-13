@@ -775,3 +775,21 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .redirect-card h3 { font-size: clamp(1.4rem, 2.6vw, 1.8rem); margin: 8px 0 8px; }
 .redirect-card p { color: var(--muted); max-width: 62ch; }
 @media (max-width: 760px) { .pf-grid { grid-template-columns: 1fr; } }
+
+/* Block sizes: 1-2-3 pyramid, like a stack of blocks */
+.pyramid { margin-top: 28px; display: flex; flex-direction: column; gap: 14px; }
+.py-row { display: flex; justify-content: center; gap: 14px; }
+.py-row .block-size { flex: 0 0 calc((100% - 28px) / 3); max-width: 340px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 20px 16px; }
+.shape-box { height: 88px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+.shape-box .shape { margin: 0; }
+.shape-pair { display: flex; gap: 8px; }
+.py-row b { font-size: 1.3rem; text-align: center; }
+.bs-sub { font-size: .78rem !important; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--sage) !important; }
+@media (max-width: 760px) {
+  .pyramid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .py-row { display: contents; }
+  .py-row:first-child .block-size, .py-row:last-child .block-size:last-child { grid-column: 1 / -1; max-width: none; }
+  .py-row .block-size { max-width: none; padding: 16px 10px; }
+  .shape-box { height: 72px; }
+  .py-row b { font-size: 1.1rem; }
+}
