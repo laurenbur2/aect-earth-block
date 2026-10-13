@@ -125,6 +125,28 @@
     });
   });
 
+  // Carousels ([data-carousel]): arrow buttons scroll by one card; swipe/trackpad scroll natively.
+  document.querySelectorAll("[data-carousel]").forEach((root) => {
+    const track = root.querySelector(".car-track");
+    const [prev, next] = root.querySelectorAll(".car-btn");
+    const step = () => {
+      const item = track.querySelector(".car-item");
+      return item ? item.getBoundingClientRect().width + parseFloat(getComputedStyle(track).gap || 0) : track.clientWidth;
+    };
+    const update = () => {
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+    };
+    root.querySelectorAll(".car-btn").forEach((b) =>
+      b.addEventListener("click", () => track.scrollBy({ left: Number(b.dataset.dir) * step(), behavior: "smooth" })));
+    track.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); track.scrollBy({ left: (e.key === "ArrowRight" ? 1 : -1) * step() }); }
+    });
+    track.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  });
+
   // Year in footer
   document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 })();
