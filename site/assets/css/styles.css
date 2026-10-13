@@ -517,3 +517,27 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 /* Header CTA: cream over the hero video, navy once the header turns solid */
 .site-header:not(.is-solid):not(.site-header--solid):not(.menu-open) .nav .btn { --bg: var(--logo-cream); --fg: var(--earth); }
 @media (max-width: 560px) { .picker .pick:last-child:nth-child(odd) { grid-column: 1 / -1; aspect-ratio: 2/1; } }
+
+/* ---------- Hero sizing (v3: a bit shorter, text set lower) ---------- */
+.hero--center { min-height: 86svh; }
+.hero--center .wrap { padding-top: calc(var(--header-h) + 96px); padding-bottom: 72px; }
+.hero--center h1 { font-size: clamp(2.3rem, 5.4vw, 4.4rem); max-width: 15ch; }
+.hero-sub { font-size: clamp(1.05rem, 1.7vw, 1.25rem); margin-bottom: 28px; }
+.hero--center .hero-meta { justify-content: center; margin-top: 36px; }
+.hero-meta span::before { color: var(--logo-green); }
+@media (max-width: 600px) { .hero--center { min-height: 92svh; } .hero--center .wrap { padding-top: calc(var(--header-h) + 56px); } .hero--center .hero-meta { flex-direction: column; align-items: center; gap: 6px; } }
+
+/* ---------- Process illustration ---------- */
+.process { list-style: none; padding: 0; margin: 48px 0 0; display: grid; grid-template-columns: 1fr 64px 1fr 64px 1fr 64px 1fr; align-items: start; }
+.proc { text-align: center; }
+.proc-art { width: 100%; max-width: 190px; height: auto; margin: 0 auto 14px; display: block; }
+.proc h3 { font-size: 1.35rem; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.proc-num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: var(--logo-cream); font-size: .85rem; }
+.proc p { color: var(--muted); font-size: .96rem; max-width: 24ch; margin: 0 auto; }
+.proc-link { color: #9aa6ba; padding-top: 48px; }
+.proc-arrow { width: 64px; height: 32px; }
+@media (max-width: 900px) {
+  .process { grid-template-columns: 1fr 1fr; gap: 36px 20px; }
+  .proc-link { display: none; }
+}
+@media (max-width: 480px) { .proc-art { max-width: 150px; } }
