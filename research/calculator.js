@@ -119,6 +119,7 @@ const STATES = {
   "Colorado": { setup: 25000, shipping: 2600 },
   "Connecticut": { setup: 30000, shipping: 3200 },
   "Delaware": { setup: 30000, shipping: 3200 },
+  "District of Columbia": { setup: 30000, shipping: 3200 }, // not in the sheet; uses Maryland/Virginia rates
   "Florida": { setup: 30000, shipping: 3200 },
   "Georgia": { setup: 30000, shipping: 3200 },
   "Idaho": { setup: 30000, shipping: 3200 },

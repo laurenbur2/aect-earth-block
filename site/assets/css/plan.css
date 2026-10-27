@@ -180,6 +180,7 @@ input[type="range"] { width: 100%; accent-color: var(--brand); }
 .photo-choices--2 .photo-choice img { aspect-ratio: 16/10; }
 .photo-choice > span { padding: 14px 16px 16px; font: 700 1.05rem/1.25 var(--font-head); color: var(--earth); }
 .photo-choice small { display: block; font: 500 .88rem/1.3 var(--font-body); color: var(--muted); margin-top: 4px; }
+.photo-choice .tag { position: absolute; top: 10px; left: 10px; padding: 6px 9px; font: 700 .68rem/1 var(--font-head); letter-spacing: .1em; text-transform: uppercase; color: var(--sage); background: #e6ebda; border-radius: 5px; box-shadow: 0 1px 4px rgba(0,0,0,.18); }
 .photo-choice[aria-checked="true"] { border-color: var(--brand); }
 .photo-choice[aria-checked="true"]::after {
   content: "✓"; position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border-radius: 50%;
