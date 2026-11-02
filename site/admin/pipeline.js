@@ -5,6 +5,10 @@
 // Public site address, used for links and the logo in emails. Change to https://aectearthblock.com/ at launch.
 export const SITE_URL = "https://laurenbur2.github.io/aect-earth-block/";
 export const AECT_EMAIL = "info@AECTearthblock.com";
+// Paid video call with Ryan. Swap BOOK_CALL_URL for the real booking link (GoDaddy, Calendly, etc.) when there is one;
+// until then it opens the consult request on the contact form.
+export const CONSULT = { price: "$75", length: "30-minute", with: "Ryan Runge" };
+export const BOOK_CALL_URL = SITE_URL + "contact.html?topic=consult";
 
 // The funnel, in board order. Wants us to reach out, Ready to build and Not ready yet (last, out of the
 // way) are set automatically from the quiz and contact form; the rest are moved by AECT as they work the lead.
@@ -246,6 +250,32 @@ function layout({ preheader, body, audience = "customer" }) {
 </td></tr></table></body></html>`;
 }
 
+/**
+ * "Have a team member reach out", like the question on the planner results. The link goes to a page
+ * that records the yes on their lead; the server adds a signed lead link as lead.reachUrl.
+ */
+function reachOut(lead) {
+  const n = firstName(lead.name);
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.blue};border-radius:16px;margin:4px 0 16px"><tr>
+    <td class="pad" style="padding:28px 30px">
+      <div style="${HEAD}font-size:24px;font-weight:800;line-height:1.1;color:#fff;margin:0 0 6px">${n ? esc(n) + ", want" : "Want"} a team member to reach out?</div>
+      <div style="${BODY}font-size:15px;line-height:1.5;color:${C.soft};margin:0 0 18px">One click and someone from our team will email you within 2 business days to talk through your plan and get you real numbers.</div>
+      ${button(lead.reachUrl || url("reach-out.html"), "Have a team member reach out")}
+    </td></tr></table>`;
+}
+
+/** "Have questions? Book a call", the paid video consult with Ryan. */
+function bookCall() {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${C.line};border-radius:16px;margin:0 0 4px"><tr>
+    <td class="stack" style="padding:22px 24px;vertical-align:middle">
+      <div style="${HEAD}font-size:20px;font-weight:800;color:${C.navy}">Have questions? Book a call.</div>
+      <div style="${BODY}font-size:14px;line-height:1.5;color:${C.muted};margin-top:4px">A ${CONSULT.length} video call with ${CONSULT.with}, AECT's president. Soil, machines, cost, design: anything about your build. <b style="color:${C.ink}">${CONSULT.price}</b></div></td>
+    <td class="stack" align="right" style="padding:0 24px 22px 24px;vertical-align:middle;white-space:nowrap">
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px"><tr><td style="border:2px solid ${C.blue};border-radius:999px">
+        <a href="${BOOK_CALL_URL}" style="${HEAD}display:inline-block;padding:12px 22px;color:${C.blue};font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none">Book a call &middot; ${CONSULT.price}</a></td></tr></table></td>
+  </tr></table>`;
+}
+
 // ---- The emails ----
 
 /** Sent to a visitor when they finish the planner: their plan, their kit, and a way to see everything else. */
@@ -255,10 +285,10 @@ export function planEmail(lead) {
   const intl = lead.state === "Outside the US";
   const kit = productFor(s.machine) || PRODUCTS.k3500;
   const options = [
-    { key: "own", label: `Buy the ${kit.name}`, sub: "Machine, soil analysis and on-site training", total: s.makeOwnTotal },
+    { key: "own", label: `Buy the ${kit.name}`, sub: "Machine, soil analysis and on-site training", total: s.makeOwnTotal, link: [kit.page, `See the ${kit.name}`] },
     ...(intl ? [] : [
-      { key: "rent", label: "Rent our plant", sub: "We bring it, with an operator", total: s.rentTotal },
-      { key: "buy", label: "Buy finished blocks", sub: "Made on AECT machines, delivered", total: s.buyTotal },
+      { key: "rent", label: "Rent our plant", sub: "We bring it, with an operator", total: s.rentTotal, link: ["rent.html", "How renting works"] },
+      { key: "buy", label: "Buy finished blocks", sub: "Made on AECT machines, delivered", total: s.buyTotal, link: ["blocks.html", "How buying blocks works"] },
     ]),
   ];
   const best = s.best || options.reduce((a, b) => (b.total < a.total ? b : a)).key;
@@ -266,9 +296,9 @@ export function planEmail(lead) {
     <tr><td style="padding:18px 20px;${i ? `border-top:1px solid ${C.line};` : ""}${o.key === best ? `background:${C.cream};` : ""}">
       ${o.key === best ? `<div style="margin:0 0 6px"><span style="${BODY}display:inline-block;white-space:nowrap;background:${C.accent};color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;border-radius:999px;padding:3px 9px">BEST VALUE</span></div>` : ""}
       <div style="${HEAD}font-size:19px;font-weight:800;color:${C.navy}">${esc(o.label)}</div>
-      <div style="${BODY}color:${C.muted};font-size:13px;margin-top:2px">${esc(o.sub)}</div></td>
+      <div style="${BODY}color:${C.muted};font-size:13px;margin-top:2px">${esc(o.sub)}</div>
+      <a href="${url(o.link[0])}" style="${HEAD}display:inline-block;margin-top:8px;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${C.accent};text-decoration:none">${esc(o.link[1])} &rarr;</a></td>
       <td align="right" style="${HEAD}padding:18px 20px;${i ? `border-top:1px solid ${C.line};` : ""}${o.key === best ? `background:${C.cream};` : ""}font-weight:800;font-size:24px;color:${C.navy};white-space:nowrap">${money(o.total)}</td></tr>`).join("");
-  const quote = lead.path === "blocks" ? "contact.html?topic=blocks" : `contact.html?topic=${lead.path === "rent" ? "rental" : "quote"}&machine=${encodeURIComponent(kit.name)}`;
   const feature = lead.path === "blocks" ? featureCard(PRODUCTS.blocks, "Your best fit") : lead.path === "rent" ? featureCard(PRODUCTS.rent, "Your best fit") : featureCard(kit, "Your recommended kit");
   const others = ["impact", "k3500", "rent", "blocks"].filter((k) => PRODUCTS[k] !== kit && !(lead.path === "rent" && k === "rent") && !(lead.path === "blocks" && k === "blocks")).slice(0, lead.path === "kit" ? 2 : 4);
   const body = `
@@ -279,8 +309,8 @@ export function planEmail(lead) {
     ${h2("Three ways to get your blocks")}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${C.line};border-radius:14px;overflow:hidden;border-collapse:separate;margin:0 0 14px">${rows}</table>
     ${para("Planning estimates, not a quote. Kit prices FOB San Antonio, TX; shipping extra.", `font-size:12px;color:${C.muted};margin-bottom:26px`)}
-    ${para("Ready for real numbers? Send us your plan and our team will reply with an official quote, usually within 2 business days.")}
-    ${button(url(quote), "Get my official quote")}
+    ${reachOut(lead)}
+    ${bookCall()}
     ${rule()}
     ${feature}
     ${showcase(others, "Explore more from AECT")}`;
@@ -327,6 +357,7 @@ export function contactEmail(lead) {
     ${s.message ? `<div style="border-left:3px solid ${C.accent};padding:4px 0 4px 18px;margin:0 0 30px"><div style="${BODY}font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:${C.muted};margin-bottom:6px">Your message</div><div style="${BODY}font-size:16px;line-height:1.55;color:${C.ink};font-style:italic;white-space:pre-wrap">${esc(s.message)}</div></div>` : ""}
     ${h2("What happens next")}
     ${steps(r.next)}
+    ${lead.path === "consult" ? "" : bookCall()}
     ${rule()}
     ${r.feature ? featureCard(PRODUCTS[r.feature], "While you wait") : ""}
     ${showcase(r.more.filter((k) => k !== r.feature), "Explore the AECT lineup")}

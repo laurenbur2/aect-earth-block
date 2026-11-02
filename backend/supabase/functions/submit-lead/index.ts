@@ -1,4 +1,4 @@
-// submit-lead: the planner (plan.js) and contact form (contact.js) POST here.
+// submit-lead: the planner (plan.js), contact form (contact.js) and reach-out page (reach-out.js) POST here.
 // Saves or updates the lead, emails the visitor (their plan, or an auto-reply), emails AECT a
 // heads-up, and logs both emails on the lead's timeline so the dashboard can show exactly what was sent.
 //
@@ -8,9 +8,10 @@
 //   NOTIFY_EMAIL     AECT inbox(es) for new-lead alerts, comma separated
 //   ALLOWED_ORIGINS  comma separated, e.g. "https://aectearthblock.com,https://laurenbur2.github.io"
 //   DASHBOARD_URL    link used in the alert email, e.g. "https://aectearthblock.com/admin/"
+//   LINK_SECRET      any long random string; signs the "Have a team member reach out" link in plan emails
 // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by Supabase.
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { customerEmail, initialStage, interestStage, internalEmail, mergeStage, normalize } from "../_shared/pipeline.js";
+import { customerEmail, initialStage, interestStage, internalEmail, mergeStage, normalize, SITE_URL } from "../_shared/pipeline.js";
 
 const env = (k: string) => Deno.env.get(k) ?? "";
 const db = createClient(env("SUPABASE_URL"), env("SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
@@ -39,6 +40,16 @@ async function send(to: string[], subject: string, html: string, replyTo?: strin
   return res.ok ? { status: "sent", id: body.id } : { status: "failed", error: body.message || res.statusText };
 }
 
+// The plan email's "Have a team member reach out" button links to reach-out.html?l=<lead id>&s=<sig>.
+// The signature stops anyone from marking someone else's lead by guessing ids.
+async function sign(leadId: string) {
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(env("LINK_SECRET") || env("SUPABASE_SERVICE_ROLE_KEY")),
+    { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const mac = new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(leadId)));
+  return [...mac.slice(0, 16)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+const reachUrl = async (leadId: string) => `${SITE_URL}reach-out.html?l=${leadId}&s=${await sign(leadId)}`;
+
 Deno.serve(async (req) => {
   const headers = { ...cors(req.headers.get("origin")), "Content-Type": "application/json" };
   if (req.method === "OPTIONS") return new Response(null, { headers });
@@ -50,7 +61,24 @@ Deno.serve(async (req) => {
   if (payload.website) return new Response(JSON.stringify({ ok: true }), { headers });
 
   // "Are you still interested?" on the planner results: update the lead they just created.
-  if (payload.source === "aect-ceb-planner-interest") return interest(payload, headers);
+  if (payload.source === "aect-ceb-planner-interest") {
+    const email = String(payload.email || "").toLowerCase();
+    if (!emailOk(email)) return new Response(JSON.stringify({ error: "Invalid email" }), { status: 400, headers });
+    const { data: lead } = await db.from("leads").select("*").ilike("email", email)
+      .order("created_at", { ascending: false }).limit(1).maybeSingle();
+    if (!lead) return new Response(JSON.stringify({ error: "No lead" }), { status: 404, headers });
+    await interest(lead, payload.interested === true, "planner");
+    return new Response(JSON.stringify({ ok: true }), { headers });
+  }
+  // "Have a team member reach out" clicked in the plan email.
+  if (payload.source === "aect-email-interest") {
+    const id = String(payload.lead || "");
+    if (!id || payload.sig !== await sign(id)) return new Response(JSON.stringify({ error: "Bad link" }), { status: 403, headers });
+    const { data: lead } = await db.from("leads").select("*").eq("id", id).maybeSingle();
+    if (!lead) return new Response(JSON.stringify({ error: "No lead" }), { status: 404, headers });
+    if (lead.wants_contact !== true) await interest(lead, true, "email"); // clicking twice does nothing new
+    return new Response(JSON.stringify({ ok: true }), { headers });
+  }
 
   let lead;
   try { lead = normalize(payload); } catch (e) { return new Response(JSON.stringify({ error: String(e.message) }), { status: 400, headers }); }
@@ -90,7 +118,7 @@ Deno.serve(async (req) => {
   }
 
   // Emails go out after the lead is saved, so a mail outage never loses a lead.
-  const mine = customerEmail({ ...lead, summary: row.summary });
+  const mine = customerEmail({ ...lead, summary: row.summary, reachUrl: await reachUrl(row.id) });
   const notify = env("NOTIFY_EMAIL").split(",").map((s) => s.trim()).filter(Boolean);
   const alert = internalEmail(row, row.stage, env("DASHBOARD_URL") ? `${env("DASHBOARD_URL")}#lead=${row.id}` : undefined);
   const [r1, r2] = await Promise.all([
@@ -105,18 +133,14 @@ Deno.serve(async (req) => {
   return new Response(JSON.stringify({ ok: true }), { headers });
 });
 
-async function interest(payload: Record<string, unknown>, headers: Record<string, string>) {
-  const email = String(payload.email || "").toLowerCase();
-  if (!emailOk(email)) return new Response(JSON.stringify({ error: "Invalid email" }), { status: 400, headers });
-  const yes = payload.interested === true;
-  const { data: lead } = await db.from("leads").select("*").ilike("email", email)
-    .order("created_at", { ascending: false }).limit(1).maybeSingle();
-  if (!lead) return new Response(JSON.stringify({ error: "No lead" }), { status: 404, headers });
+/** Records a yes/no to "a team member reaching out" and, on yes, alerts AECT right away. */
+async function interest(lead: Record<string, any>, yes: boolean, via: "planner" | "email") {
   const { data: row } = await db.from("leads").update({ wants_contact: yes, stage: interestStage(lead.stage, yes) })
     .eq("id", lead.id).select().single();
   await db.from("lead_events").insert({
     lead_id: lead.id, kind: "interest", author: "system",
-    title: yes ? "Still interested: wants a team member to reach out" : "Not interested right now",
+    title: !yes ? "Not interested right now"
+      : via === "email" ? "Clicked \"Have a team member reach out\" in their plan email" : "Still interested: wants a team member to reach out",
   });
   if (yes && row) { // a hot lead: tell AECT right away
     const notify = env("NOTIFY_EMAIL").split(",").map((s) => s.trim()).filter(Boolean);
@@ -126,5 +150,4 @@ async function interest(payload: Record<string, unknown>, headers: Record<string
     await db.from("lead_events").insert({ lead_id: row.id, kind: "email", author: "system", title: subject, body: alert.html,
       meta: { to: notify.join(", "), subject, audience: "aect", ...r } });
   }
-  return new Response(JSON.stringify({ ok: true }), { headers });
 }

@@ -37,7 +37,7 @@ Until Supabase is connected, `/admin/` runs on sample leads stored in your brows
    cd backend && supabase login && supabase link --project-ref YOUR_REF && cd ..
    ```
    ```bash
-   supabase secrets set --workdir backend RESEND_API_KEY=re_xxx EMAIL_FROM="AECT Earth Block <plans@aectearthblock.com>" NOTIFY_EMAIL=info@AECTearthblock.com ALLOWED_ORIGINS=https://aectearthblock.com,https://laurenbur2.github.io DASHBOARD_URL=https://aectearthblock.com/admin/
+   supabase secrets set --workdir backend RESEND_API_KEY=re_xxx EMAIL_FROM="AECT Earth Block <plans@aectearthblock.com>" NOTIFY_EMAIL=info@AECTearthblock.com ALLOWED_ORIGINS=https://aectearthblock.com,https://laurenbur2.github.io DASHBOARD_URL=https://aectearthblock.com/admin/ LINK_SECRET=$(openssl rand -hex 32)
    ```
    ```bash
    tools/deploy_backend.sh
@@ -49,7 +49,8 @@ Until Supabase is connected, `/admin/` runs on sample leads stored in your brows
    Under Authentication > URL Configuration, add the dashboard URL (e.g. `https://aectearthblock.com/admin/`) to the redirect URLs.
 5. **Connect the site**:
    - `site/admin/config.js`: paste the project URL and anon key (Project Settings > API).
-   - `site/assets/js/plan.js` `LEAD_ENDPOINT` and `site/assets/js/contact.js` `CONTACT_ENDPOINT`: `https://YOUR_REF.supabase.co/functions/v1/submit-lead`
+   - `site/assets/js/plan.js` `LEAD_ENDPOINT`, `site/assets/js/contact.js` `CONTACT_ENDPOINT` and `site/assets/js/reach-out.js` `ENDPOINT`: `https://YOUR_REF.supabase.co/functions/v1/submit-lead`
+   - `site/admin/pipeline.js` `BOOK_CALL_URL`: the real booking link for the $75 call with Ryan (it opens the contact form until then).
    - Run `python3 tools/bust_cache.py`, commit and push.
 6. Test: run the planner with your own email, check the inbox, then open `/admin/`.
 
