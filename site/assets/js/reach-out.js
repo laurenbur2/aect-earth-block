@@ -2,7 +2,7 @@
 // We tell the lead backend, which moves the lead to "Wants us to reach out" and alerts AECT.
 (function () {
   // The Worker's /api/submit, same as plan.js LEAD_ENDPOINT. Leave empty during development.
-  const ENDPOINT = "";
+  const ENDPOINT = "https://aect-leads.casadanovavida.workers.dev/api/submit";
   const p = new URLSearchParams(location.search);
   const lead = p.get("l"), sig = p.get("s");
   if (!lead || !sig) return; // opened directly: the thank-you message still shows

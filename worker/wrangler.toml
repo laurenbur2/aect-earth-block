@@ -2,6 +2,8 @@
 name = "aect-leads"
 main = "src/index.js"
 compatibility_date = "2025-09-01"
+workers_dev = true   # https://aect-leads.casadanovavida.workers.dev
+preview_urls = false
 
 # Serves the whole site too, so the dashboard (/admin/) shares an origin with the API and its
 # sign-in cookie. /api/* goes to the Worker; everything else is a static file from ../site.
@@ -13,7 +15,7 @@ run_worker_first = ["/api/*"]
 [[d1_databases]]
 binding = "DB"
 database_name = "aect-leads"
-database_id = "REPLACE_WITH_ID_FROM_wrangler_d1_create"
+database_id = "6222c227-32b0-49ff-b14d-23c9b16b73f7"
 
 [vars]
 # Testing: Resend's test sender only delivers to the address you signed up to Resend with.

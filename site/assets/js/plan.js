@@ -4,7 +4,7 @@
   // ---- Config -------------------------------------------------------------
   // The Cloudflare Worker's /api/submit (worker/README.md): saves the lead for the admin dashboard
   // and emails the visitor their plan. Leave empty during development; leads are then only logged.
-  const LEAD_ENDPOINT = "";
+  const LEAD_ENDPOINT = "https://aect-leads.casadanovavida.workers.dev/api/submit";
   const IMG = "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/";
   const MACHINE_PAGES = {
     // intro: same copy as the machine pages (tools/build_machines.py), shown in the results pop-up.

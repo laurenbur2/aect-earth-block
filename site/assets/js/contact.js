@@ -2,7 +2,7 @@
 // This screens out open-ended "just a question" emails and routes each request.
 (function () {
   // Where requests are POSTed as JSON: the Worker's /api/submit, same as the planner (plan.js LEAD_ENDPOINT).
-  const CONTACT_ENDPOINT = "";
+  const CONTACT_ENDPOINT = "https://aect-leads.casadanovavida.workers.dev/api/submit";
   const form = document.getElementById("contactForm");
   const details = document.getElementById("details");
   const $ = (s) => form.querySelector(s);
