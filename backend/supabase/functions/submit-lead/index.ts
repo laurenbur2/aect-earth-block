@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
       timeline: lead.timeline || existing.timeline, path: lead.path || existing.path,
       summary: { ...existing.summary, ...lead.summary },
       raw: payload,
-      // Only ever move a returning lead up (e.g. Just curious -> Wants a call), never down.
+      // Only ever move a returning lead up (e.g. Not ready yet -> Wants us to reach out), never down.
       stage: mergeStage(existing.stage, stage),
     }).eq("id", existing.id).select().single();
     if (error) return new Response(JSON.stringify({ error: "Save failed" }), { status: 500, headers });
@@ -121,7 +121,7 @@ async function interest(payload: Record<string, unknown>, headers: Record<string
   if (yes && row) { // a hot lead: tell AECT right away
     const notify = env("NOTIFY_EMAIL").split(",").map((s) => s.trim()).filter(Boolean);
     const alert = internalEmail(row, row.stage, env("DASHBOARD_URL") ? `${env("DASHBOARD_URL")}#lead=${row.id}` : undefined);
-    const subject = `Wants a call: ${row.name || row.email}`;
+    const subject = `Wants us to reach out: ${row.name || row.email}`;
     const r = await send(notify, subject, alert.html, row.email);
     await db.from("lead_events").insert({ lead_id: row.id, kind: "email", author: "system", title: subject, body: alert.html,
       meta: { to: notify.join(", "), subject, audience: "aect", ...r } });

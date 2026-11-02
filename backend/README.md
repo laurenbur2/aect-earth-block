@@ -4,17 +4,16 @@ Every planner submission and contact request becomes a **lead** on a private das
 
 | Stage | Who lands here automatically | Team action |
 |---|---|---|
-| Wants a call | Clicked "Yes, have someone reach out" on their results, or sent the contact form | Call within 2 business days (overdue after 2 days) |
-| Ready to build | Quiz: "Ready to build", hasn't answered "still interested?" | Reach out (overdue after 3 days) |
-| Planning | Quiz: "Planning to build" or "I have land", or was Ready but clicked "Not right now" | Check in later |
-| Just curious | Quiz or contact form: "Just curious" | Email only, no calls |
+| Wants us to reach out | Clicked "Yes, have someone reach out" on their results, or sent the contact form | Email them within 2 business days (overdue after 2 days) |
+| Ready to build | Quiz: "Ready to build", hasn't answered "still interested?" | Email them (overdue after 3 days) |
+| Not ready yet | Quiz: "Planning to build", "I have land" or "Just curious", or clicked "Not right now" | No outreach; they have their plan by email |
 | In conversation | Moved by AECT | Send a quote when ready |
 | Quote sent | Moved by AECT | Follow up (overdue after 7 days) |
 | Won / Lost | Moved by AECT | |
 
-The site only ever moves a lead *up* (Just curious → Planning → Ready to build → Wants a call), and never moves a lead once it's In conversation or later. A person who comes back is updated on the same card, not duplicated. **How leads are sorted** on the dashboard shows these rules to the team.
+"Still interested?" decides it: yes moves a lead to Wants us to reach out, no moves it to Not ready yet. Otherwise the site only moves a lead *up* (Not ready yet → Ready to build → Wants us to reach out), and it never moves a lead once it's In conversation or later. A person who comes back is updated on the same card, not duplicated. **How leads are sorted** on the dashboard shows these rules to the team.
 
-Each lead shows their answers, plan numbers, whether they said yes to a call, their message, a timeline of every email sent (click **View email** to see exactly what they got), stage changes, and notes from the team.
+Each lead shows their answers, plan numbers, whether they said yes to being contacted, their message, a timeline of every email sent (click **View email** to see exactly what they got), stage changes, and notes from the team.
 
 ## How it fits together
 ```

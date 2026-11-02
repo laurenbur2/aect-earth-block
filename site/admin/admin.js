@@ -45,7 +45,7 @@ async function supabaseApi() {
 }
 
 // ---- Data: demo (sample leads in localStorage) ------------------------------------------------
-const DEMO_KEY = "aect-admin-demo-v6";
+const DEMO_KEY = "aect-admin-demo-v7";
 const day = 864e5;
 const DEMO_SEED = [
   { days: 0.1, stage: null, interested: true, p: { source: "aect-ceb-planner", contact: { name: "Sam Ortiz", email: "sam.ortiz@example.com" },
@@ -152,7 +152,7 @@ function cardHtml(l) {
     <span class="card-top"><b>${esc(l.name || l.email)}</b><span class="path path--${esc(l.path)}">${esc(PATHS[l.path] || l.source)}</span></span>
     <span class="card-what">${esc(what)}</span>
     <span class="card-meta">${esc(l.state || "")}${l.timeline ? ` · ${esc(TIMELINES[l.timeline])}` : ""}</span>
-    <span class="tags">${late ? `<span class="call call--late">Overdue · ${ago(l.stage_changed_at || l.created_at).replace(" ago", "")}</span>` : ""}${l.wants_contact === true ? `<span class="call call--yes">Said yes</span>` : l.wants_contact === false ? `<span class="call">Said not right now</span>` : ""}</span>
+    <span class="tags">${late ? `<span class="chip chip--late">Overdue · ${ago(l.stage_changed_at || l.created_at).replace(" ago", "")}</span>` : ""}${l.wants_contact === true ? `<span class="chip chip--yes">Said yes</span>` : l.wants_contact === false ? `<span class="chip">Said not right now</span>` : ""}</span>
     <span class="card-foot"><span>${l.source === "planner" ? "Planner" : "Contact form"}</span><span>${ago(l.created_at)}</span></span>
   </button>`;
 }
@@ -212,7 +212,7 @@ const EVENT_ICON = { created: "★", resubmitted: "↺", interest: "?", email: "
 function facts(l) {
   const s = l.summary || {};
   const rows = [
-    ["Wants", PATHS[l.path]], ["Wants a call", l.wants_contact === true ? "Yes" : l.wants_contact === false ? "Not right now" : l.source === "planner" ? "Didn't answer" : null],
+    ["Wants", PATHS[l.path]], ["Wants us to reach out", l.wants_contact === true ? "Yes" : l.wants_contact === false ? "Not right now" : l.source === "planner" ? "Didn't answer" : null],
     ["Location", l.state], ["Project", PROJECTS[l.project]], ["Size", s.size && `${int(s.size)} ${l.project === "outdoor" ? "ft of wall" : "sq ft"}`],
     ["Buy or rent", INTENTS[l.intent]], ["Timeline", TIMELINES[l.timeline]],
     ["Dirt", s.dirt && (s.dirt === "own" ? "From their land" : "Delivered")], ["Labor", s.labor && (s.labor === "hired" ? "Hired crew" : "Volunteers")],
@@ -330,11 +330,10 @@ $("#rulesBtn").onclick = () => {
     <table cellpadding="8" style="border-collapse:collapse;width:100%">
       <tr style="background:#f1efe3"><th align="left">When someone…</th><th align="left">They go to</th></tr>
       ${row("Finishes the quiz: <i>Ready to build</i>", "Ready to build")}
-      ${row("Finishes the quiz: <i>Planning to build</i> or <i>I have land</i>", "Planning")}
-      ${row("Finishes the quiz: <i>Just curious</i>", "Just curious")}
-      ${row("Clicks <i>Yes, have someone reach out</i> on their results", "Wants a call")}
-      ${row("Clicks <i>Not right now</i> (was Ready to build)", "Planning")}
-      ${row("Sends the contact form", "Wants a call (Just curious if they picked that)")}
+      ${row("Finishes the quiz: <i>Planning to build</i>, <i>I have land</i> or <i>Just curious</i>", "Not ready yet")}
+      ${row("Clicks <i>Yes, have someone reach out</i> on their results", "Wants us to reach out")}
+      ${row("Clicks <i>Not right now</i> on their results", "Not ready yet")}
+      ${row("Sends the contact form", "Wants us to reach out (Not ready yet if they picked <i>Just curious</i>)")}
     </table>
     <p><b>What to do</b></p>
     <ul style="padding-left:20px">${STAGES.filter((s) => s.todo).map((s) => `<li><b>${s.label}:</b> ${s.todo}${s.due ? ` (marked overdue after ${s.due} days)` : ""}</li>`).join("")}</ul>

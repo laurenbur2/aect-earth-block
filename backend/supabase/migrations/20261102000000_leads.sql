@@ -8,8 +8,8 @@ create table public.leads (
   updated_at timestamptz not null default now(),
   source text not null check (source in ('planner', 'contact')),
   -- Funnel stages; see STAGES in site/admin/pipeline.js for what each one means.
-  stage text not null default 'planning'
-    check (stage in ('call', 'ready', 'planning', 'curious', 'talking', 'quoted', 'won', 'lost')),
+  stage text not null default 'later'
+    check (stage in ('reach', 'ready', 'later', 'talking', 'quoted', 'won', 'lost')),
   stage_changed_at timestamptz not null default now(), -- for "overdue" flags on the dashboard
   -- What they're after: kit | rent | blocks | consulting | consult | tools
   path text,
