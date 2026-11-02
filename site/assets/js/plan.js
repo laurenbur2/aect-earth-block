@@ -139,6 +139,7 @@
     if (id === "building") runBuilding();
     if (id === "gate") { renderPreview(); setTimeout(() => $("#email").focus(), 50); }
     if (id === "results") renderResults();
+    if (bar) updateBar();
     history.replaceState(null, "", `#${id}`);
   }
   function go(d) {
@@ -299,20 +300,28 @@
         <div><b>${up(r.palletsNeeded)}</b><span>pallets</span></div>
       </div>
 
+      <!-- Asked right under the numbers so people answer before scrolling; a sticky bar repeats it until they do. -->
+      <div class="interest-card" id="interest">
+        <span class="eyebrow">One quick question</span>
+        <h2>${n ? `${n}, are` : "Are"} you still interested?</h2>
+        <p>Say yes and a member of our team will reach out within 2 business days to talk through your plan.</p>
+        <div class="interest-choices" role="radiogroup">
+          <button type="button" class="interest-choice interest-choice--yes" role="radio" data-interest="yes">
+            <span class="ic-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+            <span><b>Yes, have someone reach out</b><small>We'll contact you within 2 business days</small></span>
+          </button>
+          <button type="button" class="interest-choice" role="radio" data-interest="no">
+            <span class="ic-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg></span>
+            <span><b>Not right now</b><small>Just keep my plan</small></span>
+          </button>
+        </div>
+        <p class="interest-msg" id="interestMsg" role="status"></p>
+      </div>
+
       <div class="res-section">
         <h2>${heading}</h2>
         <p class="q-help">${sub}</p>
         <div class="options3">${order.map((k) => cards[k]).join("")}</div>
-      </div>
-
-      <div class="res-section next-cta" id="interest">
-        <h2>${n ? `${n}, are` : "Are"} you still interested?</h2>
-        <p>Say yes and a member of our team will reach out within 2 business days to talk through your plan and get you real numbers.</p>
-        <div class="btn-row" style="justify-content:center">
-          <button type="button" class="btn btn--cream btn--lg" data-interest="yes">Yes, have someone reach out</button>
-          <button type="button" class="btn btn--ghost btn--lg" data-interest="no">Not right now</button>
-        </div>
-        <p class="interest-msg" id="interestMsg" role="status"></p>
       </div>
 
       <div class="res-section machine-rec">
@@ -344,17 +353,27 @@
       </div>`;
     $("#restart").onclick = () => show(0);
     showInterest();
+    watchCard();
   }
 
   // ---- "Still interested?" ----------------------------------------------------------
   // The answer goes to the same lead: yes moves it to Ready to buy on AECT's dashboard.
   function showInterest() {
-    $$("[data-interest]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.interest === state.interested)));
+    $$("[data-interest]").forEach((b) => b.setAttribute(b.getAttribute("role") === "radio" ? "aria-checked" : "aria-pressed", String(b.dataset.interest === state.interested)));
+    $("#interest")?.classList.toggle("is-answered", !!state.interested);
+    updateBar();
     const n = firstName();
     $("#interestMsg").textContent = state.interested === "yes"
       ? `Thanks${n ? ", " + n : ""}! A member of our team will reach out at ${state.email} within 2 business days.`
       : state.interested === "no" ? "No problem. Your plan is in your inbox whenever you're ready." : "";
   }
+  // Sticky reminder at the bottom once they've scrolled past the question without answering.
+  const bar = $("#interestBar");
+  let cardAbove = false;
+  function updateBar() { bar.hidden = !(current === steps.length - 1 && !state.interested && cardAbove); }
+  const io = new IntersectionObserver(([e]) => { cardAbove = !e.isIntersecting && e.boundingClientRect.top < 0; updateBar(); });
+  function watchCard() { io.disconnect(); cardAbove = false; const c = $("#interest"); if (c) io.observe(c); }
+
   function setInterest(v) {
     if (state.interested === v) return;
     state.interested = v; save(); showInterest();
@@ -399,6 +418,7 @@
     if (pop) { $("#infoBody").innerHTML = popContent(pop.dataset.pop); modal.showModal(); return; }
     const yes = e.target.closest("[data-interest]");
     if (yes) setInterest(yes.dataset.interest);
+    if (yes && yes.closest("#interestBar")) $("#interest").scrollIntoView({ behavior: "smooth", block: "center" });
     if (e.target.closest("[data-close]") || e.target === modal) {
       modal.close();
       if (yes) $("#interest").scrollIntoView({ behavior: "smooth", block: "center" });
