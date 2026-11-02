@@ -50,9 +50,21 @@
     <div class="field"><label class="visually-hidden" for="name">First name</label><input class="input input--xl" id="name" name="name" autocomplete="given-name" placeholder="First name"></div>
   </section>
 
-  <!-- 3. Location -->
+  <!-- 3. Project stage (screening): sets where the lead lands in the dashboard -->
+  <section class="q is-wide" data-step="timeline" data-auto>
+    <h1 data-tpl="Nice to meet you, {name}. Where are you in your project?">Where are you in your project?</h1>
+    <p class="q-help">So we can point you to the right next step.</p>
+    <div class="icon-choices icon-choices--4" role="radiogroup">
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="0-6"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3L5 13h6l-1 8 8-10h-6l1-8z"/></svg></span><b>Ready to build</b><small>Starting within 6 months</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="6-12"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><b>Planning to build</b><small>6 to 12 months out</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="12+"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><b>I have land</b><small>Building in a year or more</small></button>
+      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="research"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></span><b>Just curious</b><small>Researching for now</small></button>
+    </div>
+  </section>
+
+  <!-- 4. Location -->
   <section class="q" data-step="location">
-    <h1 data-tpl="Nice to meet you, {name}. Where are you building?">Where are you building?</h1>
+    <h1>Where are you building?</h1>
     <p class="q-help">Delivery and setup costs depend on the distance from our shop in San Antonio, TX.</p>
     <div class="field">
       <label class="visually-hidden" for="state">State</label>
@@ -61,7 +73,7 @@
     <button type="button" class="text-choice" data-name="state" data-value="intl">I'm outside the continental US →</button>
   </section>
 
-  <!-- 4. Size -->
+  <!-- 5. Size -->
   <section class="q" data-step="size">
     <h1 data-tpl="How big is your {project}?" data-tpl-outdoor="How much wall are you building?">How big is it?</h1>
     <p class="q-help" data-tpl="A rough guess is fine." data-tpl-outdoor="Add up the length of every wall, bench or border.">A rough guess is fine.</p>
@@ -72,14 +84,14 @@
     </div>
   </section>
 
-  <!-- 5. Height -->
+  <!-- 6. Height -->
   <section class="q is-wide" data-step="height" data-auto>
     <h1>How tall are the walls?</h1>
     <p class="q-help" data-tpl="Most single-story homes are 8 to 10 feet." data-tpl-outdoor="Garden walls and benches are usually 3 to 4 feet.">Most single-story homes are 8 to 10 feet.</p>
     <div class="icon-choices" role="radiogroup" id="heightChoices"></div>
   </section>
 
-  <!-- 6. Wall / block -->
+  <!-- 7. Wall / block -->
   <section class="q is-wide" data-step="width" data-auto>
     <h1>Pick your wall</h1>
     <p class="q-help">This sets your block size and which machine makes it. Not sure? Choose Standard.</p>
@@ -91,7 +103,7 @@
     </div>
   </section>
 
-  <!-- 7. Weather -->
+  <!-- 8. Weather -->
   <section class="q is-wide" data-step="type" data-auto>
     <h1>Will the outside walls get rained on?</h1>
     <p class="q-help">This decides if your blocks need cement added.</p>
@@ -102,7 +114,7 @@
     <div class="callout q-note"><p><b>We recommend stabilized for most builds.</b> It's fully water resistant, so walls can be left exposed, and it works anywhere masonry does. Choose pure earth only when every outside wall will be fully protected by deep porch roofs or plaster. Not sure? Choose stabilized.</p></div>
   </section>
 
-  <!-- 8. Dirt -->
+  <!-- 9. Dirt -->
   <section class="q is-wide" data-step="dirt" data-auto>
     <h1>Where will the dirt come from?</h1>
     <p class="q-help">Using soil from your own land is the biggest money-saver.</p>
@@ -112,7 +124,7 @@
     </div>
   </section>
 
-  <!-- 9. Labor -->
+  <!-- 10. Labor -->
   <section class="q is-wide" data-step="labor" data-auto>
     <h1>Who's doing the work?</h1>
     <p class="q-help">Making blocks takes a crew of about 4 to 6. (Renting? You still provide the crew.)</p>
@@ -122,27 +134,15 @@
     </div>
   </section>
 
-  <!-- 10. Buy or rent (screening) -->
+  <!-- 11. Buy or rent (screening) -->
   <section class="q is-wide" data-step="intent" data-auto>
     <h1>Are you looking to buy or rent?</h1>
-    <p class="q-help">We'll price all three options either way. This tells us where to focus your plan.</p>
+    <p class="q-help">Last question. We'll price all three options either way; this tells us where to focus your plan.</p>
     <div class="icon-choices icon-choices--4" role="radiogroup">
       <button type="button" class="icon-choice" role="radio" data-name="intent" data-value="own"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/><path d="M7.5 5.5l9 5"/></svg></span><b>Buy a kit</b><small>Make my own blocks</small></button>
       <button type="button" class="icon-choice" role="radio" data-name="intent" data-value="rent"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h12v10H2z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></span><b>Rent equipment</b><small>AECT brings the plant</small></button>
       <button type="button" class="icon-choice" role="radio" data-name="intent" data-value="buy"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 9.7h18M3 14.3h18M9 5v4.7M15 9.7v4.6M9 14.3V19"/></svg></span><b>Buy blocks</b><small>Delivered, ready to lay</small></button>
       <button type="button" class="icon-choice" role="radio" data-name="intent" data-value="unsure"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7"/><path d="M12 17h.01"/></svg></span><b>Not sure yet</b><small>Show me what's cheapest</small></button>
-    </div>
-  </section>
-
-  <!-- 11. Project status (screening) -->
-  <section class="q is-wide" data-step="timeline" data-auto>
-    <h1>Do you have a project lined up?</h1>
-    <p class="q-help">Last question.</p>
-    <div class="icon-choices icon-choices--4" role="radiogroup">
-      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="0-6"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3L5 13h6l-1 8 8-10h-6l1-8z"/></svg></span><b>Yes, starting soon</b><small>Within 6 months</small></button>
-      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="6-12"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><b>Yes, in planning</b><small>6 to 12 months out</small></button>
-      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="12+"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><b>I have land</b><small>A year or more out</small></button>
-      <button type="button" class="icon-choice" role="radio" data-name="timeline" data-value="research"><span class="ico-badge"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></span><b>Not yet</b><small>Just exploring</small></button>
     </div>
   </section>
 
@@ -172,6 +172,7 @@
           <input class="input input--xl" id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="Email address">
           <div class="error">Please enter a valid email so we can send your plan.</div>
         </div>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
         <button class="btn btn--lg btn--block" type="button" id="reveal">See my plan <span class="arrow">→</span></button>
         <p class="privacy">We'll send your plan and occasional CEB building tips. Unsubscribe anytime. We never share your email.</p>
       </div>
@@ -190,6 +191,6 @@
 </div>
 
 <script src="assets/js/calculator.js?v=a8cc3e25"></script>
-<script src="assets/js/plan.js?v=90d33e0f"></script>
+<script src="assets/js/plan.js?v=8f4edda7"></script>
 </body>
 </html>

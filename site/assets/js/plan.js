@@ -2,8 +2,8 @@
 // name, then an email gate before the plan is revealed (the email is the lead).
 (function () {
   // ---- Config -------------------------------------------------------------
-  // Where captured leads are POSTed as JSON (Formspree, HubSpot, Zapier/Make webhook, etc.).
-  // Leave empty during development; leads are then only logged to the console.
+  // The submit-lead Supabase Edge Function (backend/README.md): saves the lead for the admin
+  // dashboard and emails the visitor their plan. Leave empty during development; leads are then only logged.
   const LEAD_ENDPOINT = "";
   const TERRA_MADRE = "https://terramadrebrickco.com/"; // AECT's brick company: sells finished blocks
   const IMG = "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/";
@@ -217,13 +217,14 @@
   });
 
   function submitLead() {
-    const { i, r, own } = plan();
+    const { i, r, own, best } = plan();
     const payload = {
       submittedAt: new Date().toISOString(), source: "aect-ceb-planner",
       contact: { name: firstName(), email: state.email },
-      qualify: { project: state.project, intent: state.intent, timeline: state.timeline, state: state.state, dirt: state.dirt, labor: state.labor },
+      qualify: { project: state.project, intent: state.intent, timeline: state.timeline, state: state.state, dirt: state.dirt, labor: state.labor, size: state.size },
       answers: i,
-      plan: { totalBlocks: Math.round(r.totalBlocks), blockSize: r.blockSize, machine: r.machine, makeOwnTotal: Math.round(own), rentTotal: Math.round(r.rentalTotal), buyTotal: Math.round(r.purchaseTotal) },
+      plan: { totalBlocks: Math.round(r.totalBlocks), blockSize: r.blockSize, machine: r.machine, earthYd: Math.round(r.earthYd), makeOwnTotal: Math.round(own), rentTotal: Math.round(r.rentalTotal), buyTotal: Math.round(r.purchaseTotal), best },
+      website: $("#website").value, // spam trap, always empty for people
     };
     if (!LEAD_ENDPOINT) { console.info("[planner] lead captured (no endpoint configured):", payload); return; }
     fetch(LEAD_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(payload) })

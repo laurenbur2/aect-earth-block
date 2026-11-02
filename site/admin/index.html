@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>AECT Leads</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="icon" href="../assets/img/favicon-32.png" type="image/png" sizes="32x32">
+</head>
+<body>
+
+<header class="bar">
+  <img src="../assets/img/logo-badge.png" alt="AECT" class="bar-logo" width="464" height="238">
+  <h1>Leads</h1>
+  <span class="demo-badge" id="demoBadge" hidden title="Supabase isn't connected yet. These are sample leads stored in this browser.">Demo data</span>
+  <div class="bar-tools" id="tools" hidden>
+    <input class="search" id="search" type="search" placeholder="Search name, email, state…" aria-label="Search leads">
+    <select id="pathFilter" aria-label="Filter by what they want"><option value="">Everything</option></select>
+    <button class="btn-plain" type="button" id="emailsBtn">Email previews</button>
+    <button class="btn-plain" type="button" id="refreshBtn" title="Refresh">↻</button>
+    <button class="btn-plain" type="button" id="signOutBtn" hidden>Sign out</button>
+  </div>
+</header>
+
+<!-- Sign in (only when Supabase is configured) -->
+<main class="signin" id="signin" hidden>
+  <form class="signin-card" id="signinForm">
+    <h2>Sign in to AECT Leads</h2>
+    <p>We'll email you a sign-in link. Only AECT staff on the admin list can get in.</p>
+    <input class="input" id="signinEmail" type="email" required placeholder="you@aectearthblock.com" autocomplete="email">
+    <button class="btn" type="submit">Email me a link</button>
+    <p class="signin-msg" id="signinMsg" role="status"></p>
+  </form>
+</main>
+
+<main class="board" id="board" hidden aria-label="Lead stages"></main>
+
+<!-- Lead detail -->
+<aside class="drawer" id="drawer" hidden aria-label="Lead details">
+  <div class="drawer-inner" id="drawerBody"></div>
+</aside>
+<div class="scrim" id="scrim" hidden></div>
+
+<!-- Email viewer -->
+<dialog class="modal" id="emailModal">
+  <div class="modal-head">
+    <div><div class="modal-sub" id="emailMeta"></div><h3 id="emailSubject"></h3></div>
+    <button class="btn-plain" type="button" data-close>Close</button>
+  </div>
+  <div class="modal-tabs" id="emailTabs" hidden></div>
+  <iframe id="emailFrame" title="Email preview" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+</dialog>
+
+<script type="module" src="admin.js"></script>
+</body>
+</html>

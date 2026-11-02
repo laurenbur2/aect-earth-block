@@ -22,6 +22,7 @@ site/
   learn.html        Full FAQ + build videos
   about.html        Story, press, projects
   contact.html      Consult booking + quote form
+  admin/            Private lead dashboard (stages, emails sent, notes); see backend/README.md
   assets/css/       styles.css (site), plan.css (planner)
   assets/js/        main.js (shared), calculator.js (CEB math), plan.js (planner flow)
 research/
@@ -39,7 +40,7 @@ python3 tools/build_machines.py
 ```
 
 ## Before launch
-- Set `LEAD_ENDPOINT` in `site/assets/js/plan.js` and `CONTACT_ENDPOINT` in `site/assets/js/contact.js` (same service). Contact requests require a topic; there is intentionally no "other" option.
+- Connect the lead backend (Supabase + Resend): see [backend/README.md](backend/README.md). It sets `LEAD_ENDPOINT` in `plan.js`, `CONTACT_ENDPOINT` in `contact.js` and the dashboard at `site/admin/`. Contact requests require a topic; there is intentionally no "other" option.
 - Confirm prices and open questions in `research/site-plan.md`.
 - Logo: `site/assets/img/logo-*.png` are generated from AECT's original (`logo-original.png`) by `python3 tools/make_logos.py site/assets/img/logo-original.png`. Swap in a vector/high-res original when AECT provides one and rerun.
 - Replace hotlinked GoDaddy CDN images with originals in `site/assets/img/`.

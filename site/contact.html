@@ -67,6 +67,7 @@
         </div>
 
         <fieldset class="details" id="details" disabled>
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
           <legend><span class="step-n">2</span>Tell us about your project</legend>
           <div class="field-row">
             <div class="field"><label for="c-name">Name</label><input class="input" id="c-name" name="name" autocomplete="name" required><p class="error">Please add your name.</p></div>
@@ -74,7 +75,7 @@
           </div>
           <div class="field-row">
             <div class="field"><label for="c-state">Project location</label><select class="input" id="c-state" name="state" required><option value="">Choose your state</option><option value="Outside the US">Outside the continental US</option></select><p class="error">Please choose a location.</p></div>
-            <div class="field"><label for="c-status">Do you have a project lined up?</label><select class="input" id="c-status" name="status" required><option value="">Choose one</option><option>Yes, starting within 6 months</option><option>Yes, 6 to 12 months out</option><option>I have land, a year or more out</option><option>Not yet, just exploring</option></select><p class="error">Please choose one.</p></div>
+            <div class="field"><label for="c-status">Where are you in your project?</label><select class="input" id="c-status" name="status" required><option value="">Choose one</option><option>Ready to build: starting within 6 months</option><option>Planning to build: 6 to 12 months out</option><option>I have land: building in a year or more</option><option>Just curious: researching for now</option></select><p class="error">Please choose one.</p></div>
           </div>
           <div class="field" data-for="kit"><label for="c-kit">Which kit?</label><select class="input" id="c-kit" name="kit"><option>Impact 2001A kit</option><option>3500 kit</option><option>Not sure, recommend one</option></select></div>
           <div class="field" data-for="kit rental blocks"><label for="c-blocks">Estimated block count</label><input class="input" id="c-blocks" name="blocks" type="number" inputmode="numeric" min="0" placeholder="From your plan, e.g. 6,000"><p class="hint">Don't know yet? <a href="plan.html">Get your number in 2 minutes</a>.</p></div>
@@ -143,6 +144,6 @@
 
 <script src="assets/js/main.js?v=37f1a7d8"></script>
 <script src="assets/js/calculator.js?v=a8cc3e25"></script>
-<script src="assets/js/contact.js?v=d053317d"></script>
+<script src="assets/js/contact.js?v=b2000f3d"></script>
 </body>
 </html>
