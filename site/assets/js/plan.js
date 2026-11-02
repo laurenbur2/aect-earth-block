@@ -300,7 +300,14 @@
         <div><b>${up(r.palletsNeeded)}</b><span>pallets</span></div>
       </div>
 
-      <!-- Asked right under the numbers so people answer before scrolling; a sticky bar repeats it until they do. -->
+
+      <div class="res-section">
+        <h2>${heading}</h2>
+        <p class="q-help">${sub}</p>
+        <div class="options3">${order.map((k) => cards[k]).join("")}</div>
+      </div>
+
+      <!-- Asked right under the three options; a sticky bar repeats it if they scroll past without answering. -->
       <div class="interest-card" id="interest">
         <span class="eyebrow">One quick question</span>
         <h2>${n ? `${n}, are` : "Are"} you still interested?</h2>
@@ -316,12 +323,6 @@
           </button>
         </div>
         <p class="interest-msg" id="interestMsg" role="status"></p>
-      </div>
-
-      <div class="res-section">
-        <h2>${heading}</h2>
-        <p class="q-help">${sub}</p>
-        <div class="options3">${order.map((k) => cards[k]).join("")}</div>
       </div>
 
       <div class="res-section machine-rec">
@@ -386,7 +387,7 @@
     const { r } = plan();
     const m = MACHINE_PAGES[r.machine] || {};
     const kitName = `${short(r.machine)} Kit`;
-    const cta = `<div class="btn-row" style="margin-top:24px"><button type="button" class="btn" data-interest="yes" data-close>Yes, have someone reach out</button><button type="button" class="btn btn--outline" data-close>Close</button></div>`;
+    const cta = `<div class="btn-row" style="margin-top:24px"><button type="button" class="btn btn--accent" data-interest="yes" data-close>Yes, have someone reach out</button><button type="button" class="btn btn--outline" data-close>Close</button></div>`;
     if (key === "kit") return `
       ${m.img ? `<img class="pop-img" src="${m.img}" alt="${r.machine}">` : ""}
       <span class="eyebrow">Your kit</span>

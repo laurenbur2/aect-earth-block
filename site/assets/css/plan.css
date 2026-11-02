@@ -269,25 +269,30 @@ details.assumptions summary { cursor: pointer; }
 .icon-choice[aria-checked="true"] .ico-badge { background: var(--brand); color: var(--logo-cream); }
 
 /* ===== Results: "still interested?" and info pop-ups (nothing on the results page leaves the page) ===== */
-.interest-card { margin-top: 32px; background: var(--earth); color: #dfe3ea; border-radius: var(--radius-lg); padding: clamp(28px, 5vw, 48px); text-align: center; }
-.interest-card .eyebrow { color: var(--logo-green); }
-.interest-card h2 { color: #fff; font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 6px 0 8px; }
-.interest-card > p { color: #b8c0ce; margin: 0 auto 24px; max-width: 52ch; }
-.interest-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 760px; margin: 0 auto; }
-.interest-choice { display: flex; align-items: center; gap: 16px; text-align: left; padding: 20px 22px; border-radius: 16px; cursor: pointer;
+/* Orange accent: only for "yes, reach out", so it's the one thing that pops on the page. */
+:root { --accent: #c4561c; --accent-dark: #a44614; --accent-tint: #fbe9dd; }
+.btn--accent { --bg: var(--accent); --fg: #fff; }
+.btn--accent:hover { --bg: var(--accent-dark); --fg: #fff; }
+.interest-card { margin: 36px auto 0; max-width: 720px; background: var(--earth); color: #dfe3ea; border-radius: var(--radius-lg); padding: 28px clamp(20px, 4vw, 36px); text-align: center;
+  border: 3px solid var(--accent); box-shadow: 0 14px 40px rgba(196,86,28,.22); }
+.interest-card .eyebrow { color: #f2a774; }
+.interest-card h2 { color: #fff; font-size: clamp(1.5rem, 3vw, 2rem); margin: 4px 0 6px; }
+.interest-card > p { color: #b8c0ce; margin: 0 auto 20px; max-width: 46ch; font-size: .98rem; }
+.interest-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.interest-choice { display: flex; align-items: center; gap: 14px; text-align: left; padding: 16px 18px; border-radius: 14px; cursor: pointer;
   border: 2px solid rgba(255,255,255,.35); background: rgba(255,255,255,.06); color: #fff; transition: transform .15s, background .15s, border-color .15s, opacity .15s; }
 .interest-choice:hover { transform: translateY(-2px); border-color: #fff; }
-.interest-choice b { display: block; font: 700 1.25rem/1.2 var(--font-head); }
-.interest-choice small { display: block; color: #b8c0ce; font-size: .92rem; margin-top: 3px; }
-.ic-ico { flex: 0 0 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.12); }
-.ic-ico svg { width: 26px; height: 26px; }
-.interest-choice--yes { background: var(--logo-cream); border-color: var(--logo-cream); color: var(--earth); box-shadow: 0 8px 24px rgba(0,0,0,.25); }
-.interest-choice--yes small { color: var(--earth-2); }
-.interest-choice--yes .ic-ico { background: var(--earth); color: var(--logo-cream); }
-.interest-choice--yes:hover { border-color: #fff; }
-.interest-choice[aria-checked="true"] { outline: 3px solid var(--logo-green); outline-offset: 3px; }
+.interest-choice b { display: block; font: 700 1.15rem/1.2 var(--font-head); }
+.interest-choice small { display: block; color: #b8c0ce; font-size: .88rem; margin-top: 3px; }
+.ic-ico { flex: 0 0 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.12); }
+.ic-ico svg { width: 22px; height: 22px; }
+.interest-choice--yes { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 8px 22px rgba(0,0,0,.3); }
+.interest-choice--yes small { color: #ffe3d1; }
+.interest-choice--yes .ic-ico { background: #fff; color: var(--accent); }
+.interest-choice--yes:hover { background: var(--accent-dark); border-color: #fff; }
+.interest-choice[aria-checked="true"] { outline: 3px solid #fff; outline-offset: 3px; }
 .interest-card.is-answered .interest-choice[aria-checked="false"] { opacity: .45; }
-.interest-msg { min-height: 1.5em; margin: 20px 0 0; color: var(--logo-cream); font-weight: 600; font-size: 1.05rem; }
+.interest-msg { min-height: 1.5em; margin: 16px 0 0; color: var(--logo-cream); font-weight: 600; font-size: 1.05rem; }
 .interest-bar { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 40; width: min(760px, calc(100% - 24px));
   display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px 18px; border-radius: 16px;
   background: var(--earth); color: #fff; box-shadow: 0 12px 36px rgba(0,0,0,.3); animation: barIn .25s ease; }
@@ -297,6 +302,7 @@ details.assumptions summary { cursor: pointer; }
 @media (max-width: 640px) {
   .interest-choices { grid-template-columns: 1fr; }
   .interest-bar { justify-content: center; text-align: center; }
+  .interest-card { margin-left: 0; margin-right: 0; }
   .interest-bar-btns { width: 100%; } .interest-bar-btns .btn { flex: 1; padding-left: 10px; padding-right: 10px; }
 }
 @media print { .interest-bar, .interest-card { display: none !important; } }
@@ -314,3 +320,4 @@ details.assumptions summary { cursor: pointer; }
 .pop-steps li { margin-bottom: 10px; }
 .info-modal .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
 .q.results { padding-bottom: 96px; } /* room for the sticky "still interested?" bar */
+.interest-msg:empty { display: none; }
