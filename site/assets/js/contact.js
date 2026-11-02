@@ -1,7 +1,7 @@
 // Contact form: visitors must choose a request type before the rest of the form unlocks.
 // This screens out open-ended "just a question" emails and routes each request.
 (function () {
-  // Where requests are POSTed as JSON: the same submit-lead function as the planner (plan.js LEAD_ENDPOINT).
+  // Where requests are POSTed as JSON: the Worker's /api/submit, same as the planner (plan.js LEAD_ENDPOINT).
   const CONTACT_ENDPOINT = "";
   const form = document.getElementById("contactForm");
   const details = document.getElementById("details");

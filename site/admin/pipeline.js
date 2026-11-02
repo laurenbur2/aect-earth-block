@@ -1,6 +1,5 @@
-// Shared by the admin dashboard (browser) and the submit-lead Edge Function (Deno), so the stage
+// Shared by the admin dashboard (browser) and the Cloudflare Worker (worker/src/index.js), so the stage
 // a lead lands in and the emails it gets are defined in one place. No dependencies.
-// tools/deploy_backend.sh copies this file into backend/supabase/functions/_shared/ before deploying.
 
 // Public site address, used for links and the logo in emails. Change to https://aectearthblock.com/ at launch.
 export const SITE_URL = "https://laurenbur2.github.io/aect-earth-block/";

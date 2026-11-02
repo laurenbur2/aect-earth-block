@@ -22,7 +22,7 @@ site/
   learn.html        Full FAQ + build videos
   about.html        Story, press, projects
   contact.html      Consult booking + quote form
-  admin/            Private lead dashboard (stages, emails sent, notes); see backend/README.md
+  admin/            Private lead dashboard (stages, emails sent, notes); see worker/README.md
   assets/css/       styles.css (site), plan.css (planner)
   assets/js/        main.js (shared), calculator.js (CEB math), plan.js (planner flow)
 research/
@@ -40,7 +40,7 @@ python3 tools/build_machines.py
 ```
 
 ## Before launch
-- Connect the lead backend (Supabase + Resend): see [backend/README.md](backend/README.md). It sets `LEAD_ENDPOINT` in `plan.js`, `CONTACT_ENDPOINT` in `contact.js` and the dashboard at `site/admin/`. Contact requests require a topic; there is intentionally no "other" option.
+- Connect the lead backend (Cloudflare Worker + D1 + Resend, all free): see [worker/README.md](worker/README.md) and [worker/TESTING.md](worker/TESTING.md). It sets `LEAD_ENDPOINT` in `plan.js`, `CONTACT_ENDPOINT` in `contact.js` and `ENDPOINT` in `reach-out.js`. Contact requests require a topic; there is intentionally no "other" option.
 - Confirm prices and open questions in `research/site-plan.md`.
 - Logo: `site/assets/img/logo-*.png` are generated from AECT's original (`logo-original.png`) by `python3 tools/make_logos.py site/assets/img/logo-original.png`. Swap in a vector/high-res original when AECT provides one and rerun.
 - Replace hotlinked GoDaddy CDN images with originals in `site/assets/img/`.
@@ -59,7 +59,7 @@ Today "Book a call" opens GoDaddy Online Appointments on the old site (`aecteart
    - Booking questions: phone (optional); "What are you building, and where?"; "Your block count from the planner, if you have one".
 4. **Link:** copy the event's link (e.g. `https://calendly.com/aect/ceb-consultation`) and paste it in two places:
    - `site/assets/js/main.js` → `BOOK_CALL_URL` (every "Book a call" on the website)
-   - `site/admin/pipeline.js` → `BOOK_CALL_URL` (the emails), then rerun `tools/deploy_backend.sh`
+   - `site/admin/pipeline.js` → `BOOK_CALL_URL` (the emails), then redeploy the Worker (`cd worker && npx wrangler deploy`)
 5. **Test:** book a call end to end with a real card and refund it, then check the confirmation email and calendar invite.
 6. **Optional, later:** a Calendly webhook can add bookings to the lead dashboard as "Booked a call" (needs a Calendly plan with webhooks).
 

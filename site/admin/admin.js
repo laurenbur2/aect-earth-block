@@ -1,7 +1,6 @@
 // AECT lead dashboard: a board of leads by stage, a detail drawer with the lead's answers, plan
-// numbers, every email we sent them and notes. Talks to Supabase when config.js is filled in;
-// otherwise runs on sample leads kept in this browser (demo mode).
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
+// numbers, every email we sent them and notes. Served by the Cloudflare Worker, it uses real leads;
+// on a plain static host (GitHub Pages, local preview) it runs on sample leads kept in this browser (demo mode).
 import {
   STAGES, PATHS, PROJECTS, INTENTS, TIMELINES, normalize, initialStage, interestStage, isOverdue, customerEmail, internalEmail, planEmail, contactEmail,
 } from "./pipeline.js";
@@ -22,27 +21,30 @@ function ago(iso) {
 }
 const when = (iso) => new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 
-// ---- Data: Supabase ------------------------------------------------------------------------
-async function supabaseApi() {
-  const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm");
-  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const must = ({ data, error }) => { if (error) throw error; return data; };
-  return {
-    demo: false,
-    async session() { return (await sb.auth.getSession()).data.session; },
-    async signIn(email) {
-      const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: location.href.split("#")[0] } });
-      if (error) throw error;
-    },
-    async signOut() { await sb.auth.signOut(); },
-    async isAdmin(email) { return (must(await sb.from("admin_users").select("email").eq("email", email.toLowerCase()))).length > 0; },
-    async list() { return must(await sb.from("leads").select("*").order("updated_at", { ascending: false })); },
-    async events(id) { return must(await sb.from("lead_events").select("*").eq("lead_id", id).order("created_at")); },
-    async setStage(id, stage) { must(await sb.from("leads").update({ stage }).eq("id", id)); }, // trigger logs the change
-    async addNote(id, body, author) { must(await sb.from("lead_events").insert({ lead_id: id, kind: "note", body, author })); },
-    async remove(id) { must(await sb.from("leads").delete().eq("id", id)); },
-  };
+// ---- Data: the Cloudflare Worker (worker/src/index.js), same origin as this page ------------------
+async function call(path, opts = {}) {
+  const r = await fetch(`/api/${path}`, { credentials: "same-origin", headers: { "Content-Type": "application/json" }, ...opts });
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.statusText);
+  return r.json();
 }
+const workerApi = {
+  demo: false,
+  /** Signed-in email, "signin" if the Worker is here but nobody's signed in, or null when there's no Worker (demo). */
+  async whoami() {
+    try {
+      const r = await fetch("/api/me", { credentials: "same-origin" });
+      if (!(r.headers.get("content-type") || "").includes("json")) return null; // static host (GitHub Pages, local server)
+      return r.ok ? (await r.json()).email : "signin";
+    } catch { return null; }
+  },
+  signIn: (email) => call("login", { method: "POST", body: JSON.stringify({ email }) }),
+  signOut: () => call("logout", { method: "POST" }),
+  list: () => call("leads"),
+  events: (id) => call(`leads/${id}/events`),
+  setStage: (id, stage) => call(`leads/${id}`, { method: "PATCH", body: JSON.stringify({ stage }) }), // the Worker logs the change
+  addNote: (id, body) => call(`leads/${id}/notes`, { method: "POST", body: JSON.stringify({ body }) }),
+  remove: (id) => call(`leads/${id}`, { method: "DELETE" }),
+};
 
 // ---- Data: demo (sample leads in localStorage) ------------------------------------------------
 const DEMO_KEY = "aect-admin-demo-v11";
@@ -372,31 +374,25 @@ async function showApp() {
 }
 
 (async function boot() {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  const who = await workerApi.whoami();
+  if (!who) {
     api = demoApi();
     $("#demoBadge").hidden = false;
     $("#demoBadge").onclick = () => { if (confirm("Reset the sample leads?")) { api.reset(); closeLead(); load(); } };
     return showApp();
   }
-  api = await supabaseApi();
-  const session = await api.session();
-  if (!session) {
+  api = workerApi;
+  if (who === "signin") {
     $("#signin").hidden = false;
     $("#signinForm").onsubmit = async (e) => {
       e.preventDefault();
       const msg = $("#signinMsg");
-      try { await api.signIn($("#signinEmail").value.trim()); msg.textContent = "Check your email for the sign-in link."; }
-      catch (err) { msg.textContent = "That email isn't set up for the dashboard. Ask Lauren to add you."; }
+      try { await api.signIn($("#signinEmail").value.trim()); msg.textContent = "If that email is on the AECT admin list, a sign-in link is on its way."; }
+      catch { msg.textContent = "Couldn't send the link. Try again in a minute."; }
     };
     return;
   }
-  me = session.user.email;
-  if (!(await api.isAdmin(me))) {
-    $("#signin").hidden = false;
-    $("#signinForm").innerHTML = `<h2>No access</h2><p>${esc(me)} isn't on the AECT admin list.</p><button class="btn" type="button" id="so">Sign out</button>`;
-    $("#so").onclick = async () => { await api.signOut(); location.reload(); };
-    return;
-  }
+  me = who;
   $("#signOutBtn").hidden = false;
   $("#signOutBtn").onclick = async () => { await api.signOut(); location.reload(); };
   showApp();

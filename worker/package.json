@@ -1,0 +1,13 @@
+{
+  "name": "aect-leads",
+  "private": true,
+  "description": "AECT lead backend: Cloudflare Worker + D1. See README.md.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "schema": "wrangler d1 execute aect-leads --remote --file=schema.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

@@ -1,7 +1,7 @@
 // "Have a team member reach out" from the plan email lands here with ?l=<lead id>&s=<signature>.
 // We tell the lead backend, which moves the lead to "Wants us to reach out" and alerts AECT.
 (function () {
-  // Same submit-lead function as plan.js LEAD_ENDPOINT. Leave empty during development.
+  // The Worker's /api/submit, same as plan.js LEAD_ENDPOINT. Leave empty during development.
   const ENDPOINT = "";
   const p = new URLSearchParams(location.search);
   const lead = p.get("l"), sig = p.get("s");

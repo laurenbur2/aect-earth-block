@@ -16,7 +16,7 @@
 <header class="bar">
   <img src="../assets/img/logo-badge.png" alt="AECT" class="bar-logo" width="464" height="238">
   <h1>Leads</h1>
-  <span class="demo-badge" id="demoBadge" hidden title="Supabase isn't connected yet. These are sample leads stored in this browser.">Demo data</span>
+  <span class="demo-badge" id="demoBadge" hidden title="No lead backend here (this copy is on a static host). These are sample leads stored in this browser.">Demo data</span>
   <div class="bar-tools" id="tools" hidden>
     <input class="search" id="search" type="search" placeholder="Search name, email, state…" aria-label="Search leads">
     <select id="pathFilter" aria-label="Filter by what they want"><option value="">Everything</option></select>
@@ -27,7 +27,7 @@
   </div>
 </header>
 
-<!-- Sign in (only when Supabase is configured) -->
+<!-- Sign in (only when served by the Cloudflare Worker) -->
 <main class="signin" id="signin" hidden>
   <form class="signin-card" id="signinForm">
     <h2>Sign in to AECT Leads</h2>

@@ -1,6 +1,3 @@
 .DS_Store
 .claude/settings.local.json
 .gstack/
-backend/supabase/functions/_shared/
-backend/supabase/.temp/
-backend/supabase/.branches/

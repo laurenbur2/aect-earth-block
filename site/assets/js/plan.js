@@ -2,8 +2,8 @@
 // name, then an email gate before the plan is revealed (the email is the lead).
 (function () {
   // ---- Config -------------------------------------------------------------
-  // The submit-lead Supabase Edge Function (backend/README.md): saves the lead for the admin
-  // dashboard and emails the visitor their plan. Leave empty during development; leads are then only logged.
+  // The Cloudflare Worker's /api/submit (worker/README.md): saves the lead for the admin dashboard
+  // and emails the visitor their plan. Leave empty during development; leads are then only logged.
   const LEAD_ENDPOINT = "";
   const IMG = "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/";
   const MACHINE_PAGES = {
