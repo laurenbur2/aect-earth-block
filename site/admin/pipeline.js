@@ -103,99 +103,236 @@ export function isOverdue(lead, now = Date.now()) {
 }
 
 // ---- Emails ------------------------------------------------------------------------------
+// Table-based HTML with inline styles so it holds up in Gmail, Apple Mail and Outlook. Photos come from
+// AECT's image host, cropped to fit (swap for self-hosted copies at launch, like the rest of the site).
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const money = (n) => "$" + Math.round(+n || 0).toLocaleString("en-US");
 const int = (n) => Math.round(+n || 0).toLocaleString("en-US");
 const short = (m) => String(m || "").replace("AECT ", "");
 const firstName = (n) => String(n || "").trim().split(/\s+/)[0];
 
-const NAVY = "#232c3c", BRAND = "#45536c", CREAM = "#fbfaf5", SAND = "#f1efe3", MUTED = "#5d6574", LINE = "#e1ded2";
-const FONT = "font-family:Helvetica,Arial,sans-serif;";
+const C = { navy: "#232c3c", navy2: "#2f3a4f", brand: "#45536c", cream: "#fbfaf5", sand: "#f1efe3", line: "#e1ded2",
+  ink: "#1b2230", muted: "#5d6574", accent: "#c4561c", logoCream: "#fbf8cc", green: "#adbb89" };
+const HEAD = "font-family:'Barlow Semi Condensed','Arial Narrow',Arial,sans-serif;";
+const BODY = "font-family:Helvetica,Arial,sans-serif;";
+const IMG = "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/";
+const photo = (file, w, h) => `${IMG}${file}/:/rs=w:${w},h:${h},cg:true,m/cr=w:${w},h:${h},a:cc`;
+const url = (path) => SITE_URL + path;
 
-function button(href, label) {
-  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0 8px"><tr><td style="background:${BRAND};border-radius:999px">
-    <a href="${esc(href)}" style="${FONT}display:inline-block;padding:14px 26px;color:#fff;font-weight:700;font-size:15px;text-decoration:none;letter-spacing:.02em">${esc(label)}</a></td></tr></table>`;
+// What the emails can show and link to. `machine` matches the planner's machine names.
+const PRODUCTS = {
+  impact: { name: "Impact 2001A Kit", machine: "AECT Impact 2001A", price: "From $59,000", page: "impact-2001a.html", img: "e48a0068-88d7-476c-a776-9f0a846ac278.jpg",
+    blurb: "Our most affordable kit. Fully automated, 300 blocks an hour, and light enough to tow." },
+  k3500: { name: "3500 Kit", machine: "AECT 3500", price: "From $149,000", page: "3500.html", img: "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg",
+    blurb: "Big, fast and built to last. 480 blocks an hour of our standard 10\"×14\" block." },
+  bp714: { name: "BP714 Kit", machine: "AECT BP714", price: "From $69,625", page: "bp714.html", img: "889d4a57-f36f-4da9-8b17-e691db617e06.png",
+    blurb: "Interlocking, holey blocks you can run rebar and grout through. Required in some jurisdictions." },
+  hd2500: { name: "2500HD Kit", machine: "AECT 2500HD", price: "From $89,000", page: "2500hd.html", img: "bf5b7c80-8d03-46af-8d3b-ffebd057b135.jpg",
+    blurb: "The 6\"×12\" block at 480 an hour, with a one-yard hopper you load by tractor." },
+  rent: { name: "Rent our plant", price: "$1 per block + setup", page: "rent.html", img: "block%20plant_2.jpg",
+    blurb: "We bring the full plant and an operator to your land and train your crew." },
+  blocks: { name: "Finished blocks", price: "From $2.75 a block", page: "blocks.html", img: "3%20-%20pallet%20of%20blocks.jpg",
+    blurb: "Made on AECT machines, palletized and delivered to your site, ready to lay." },
+};
+const productFor = (machine) => Object.values(PRODUCTS).find((p) => p.machine === machine);
+const MORE_LINKS = [["Small Block Press", "small-block-press.html"], ["Mega Mixer", "mega-mixer.html"], ["Block Cutter", "block-cutter.html"], ["All machines", "machines.html"]];
+
+// ---- Building blocks ----
+const eyebrow = (t, color = C.accent) => `<div style="${HEAD}font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${color};margin:0 0 10px">${esc(t)}</div>`;
+const h1 = (t) => `<h1 style="${HEAD}margin:0 0 12px;font-size:36px;line-height:1.05;font-weight:800;color:${C.navy}">${t}</h1>`;
+const h2 = (t) => `<h2 style="${HEAD}margin:0 0 14px;font-size:24px;line-height:1.15;font-weight:800;color:${C.navy}">${esc(t)}</h2>`;
+const para = (t, extra = "") => `<p style="${BODY}margin:0 0 16px;font-size:16px;line-height:1.6;color:${C.ink};${extra}">${t}</p>`;
+const spacer = (h) => `<div style="height:${h}px;line-height:${h}px;font-size:1px">&nbsp;</div>`;
+const rule = () => `<div style="border-top:1px solid ${C.line};margin:32px 0"></div>`;
+
+function button(href, label, color = C.accent) {
+  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:8px 0 4px"><tr><td style="background:${color};border-radius:999px">
+    <a href="${esc(href)}" style="${HEAD}display:inline-block;padding:15px 30px;color:#fff;font-weight:700;font-size:16px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none">${esc(label)} &rarr;</a></td></tr></table>`;
 }
 
-function layout(preheader, inner) {
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:${SAND}">
-<span style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(preheader)}</span>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${SAND}"><tr><td align="center" style="padding:24px 12px">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:14px;overflow:hidden">
-    <tr><td style="background:${NAVY};padding:20px 28px"><img src="${SITE_URL}assets/img/logo-badge.png" width="120" alt="AECT" style="display:block;border:0"></td></tr>
-    <tr><td style="${FONT}padding:28px;color:#1b2230;font-size:16px;line-height:1.55">${inner}</td></tr>
-    <tr><td style="${FONT}padding:20px 28px;background:${CREAM};color:${MUTED};font-size:12px;line-height:1.5;border-top:1px solid ${LINE}">
-      Advanced Earthen Construction Technologies · 10608 Cassiano Rd., San Antonio, TX<br>
-      Questions? Reply to this email or write <a href="mailto:${AECT_EMAIL}" style="color:${BRAND}">${AECT_EMAIL}</a>.
-    </td></tr>
+/** Big numbers in a row, e.g. blocks / kit / earth. */
+function stats(items) {
+  const w = Math.floor(100 / items.length);
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.navy};border-radius:14px;margin:6px 0 30px"><tr>
+    ${items.map(([big, small], i) => `<td class="statcell" width="${w}%" style="padding:20px 18px;${i ? `border-left:1px solid ${C.navy2};` : ""}vertical-align:top">
+      <div class="stat" style="${HEAD}font-size:26px;line-height:1.05;font-weight:800;color:${C.logoCream}">${big}</div>
+      <div style="${BODY}font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#b8c0ce;margin-top:6px">${esc(small)}</div></td>`).join("")}
+  </tr></table>`;
+}
+
+/** Label / value rows in a soft card. */
+function details(rows) {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.cream};border:1px solid ${C.line};border-radius:14px;margin:0 0 24px">
+    ${rows.map(([k, v], i) => `<tr><td style="${BODY}padding:13px 20px;font-size:14px;color:${C.muted};${i ? `border-top:1px solid ${C.line};` : ""}width:42%">${esc(k)}</td>
+      <td style="${BODY}padding:13px 20px;font-size:15px;font-weight:700;color:${C.ink};${i ? `border-top:1px solid ${C.line};` : ""}">${esc(v)}</td></tr>`).join("")}
+  </table>`;
+}
+
+/** Numbered "what happens next" steps. */
+function steps(list) {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 8px">${list.map(([title, text], i) => `
+    <tr><td width="44" style="vertical-align:top;padding:0 0 18px">
+      <div style="${HEAD}width:32px;height:32px;line-height:32px;border-radius:50%;background:${C.navy};color:${C.logoCream};text-align:center;font-weight:800;font-size:16px">${i + 1}</div></td>
+      <td style="vertical-align:top;padding:4px 0 18px"><div style="${HEAD}font-size:18px;font-weight:700;color:${C.navy}">${esc(title)}</div>
+      <div style="${BODY}font-size:15px;line-height:1.5;color:${C.muted};margin-top:2px">${esc(text)}</div></td></tr>`).join("")}</table>`;
+}
+
+/** One wide product card: photo on the left, details and link on the right. */
+function featureCard(p, label) {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${C.line};border-radius:16px;overflow:hidden;margin:0 0 30px;background:#fff"><tr>
+    <td class="stack" width="44%" style="vertical-align:middle;background:${C.sand}"><a href="${url(p.page)}"><img src="${photo(p.img, 520, 520)}" width="260" alt="${esc(p.name)}" style="display:block;width:100%;height:auto;border:0"></a></td>
+    <td class="stack" style="vertical-align:middle;padding:24px 24px">
+      ${eyebrow(label)}
+      <div style="${HEAD}font-size:26px;font-weight:800;line-height:1.05;color:${C.navy}">${esc(p.name)}</div>
+      <div style="${BODY}font-size:15px;font-weight:700;color:${C.ink};margin:6px 0 10px">${esc(p.price)}</div>
+      <div style="${BODY}font-size:14px;line-height:1.5;color:${C.muted};margin:0 0 16px">${esc(p.blurb)}</div>
+      <a href="${url(p.page)}" style="${HEAD}font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${C.accent};text-decoration:none">View ${esc(p.name)} &rarr;</a>
+    </td></tr></table>`;
+}
+
+/** Two-by-two grid of product cards, plus text links to the rest of the lineup. */
+function showcase(keys, title = "Explore the AECT lineup") {
+  const card = (p, right) => p ? `<td class="stack" width="50%" style="vertical-align:top;padding:0 ${right ? 0 : 8}px 16px ${right ? 8 : 0}px">
+    <a href="${url(p.page)}" style="text-decoration:none;color:inherit;display:block;border:1px solid ${C.line};border-radius:14px;overflow:hidden;background:#fff">
+      <img src="${photo(p.img, 520, 340)}" width="260" alt="${esc(p.name)}" style="display:block;width:100%;height:auto;border:0">
+      <div style="padding:16px 18px 18px">
+        <div style="${HEAD}font-size:20px;font-weight:800;color:${C.navy}">${esc(p.name)}</div>
+        <div style="${BODY}font-size:13px;font-weight:700;color:${C.ink};margin:3px 0 8px">${esc(p.price)}</div>
+        <div style="${BODY}font-size:13px;line-height:1.45;color:${C.muted};margin:0 0 12px">${esc(p.blurb)}</div>
+        <div style="${HEAD}font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${C.accent}">Learn more &rarr;</div>
+      </div></a></td>` : `<td class="stack" width="50%"></td>`;
+  let ps = keys.map((k) => PRODUCTS[k]).filter(Boolean);
+  if (ps.length > 1 && ps.length % 2) ps = ps.slice(0, -1); // keep the grid even, no lone card
+  const rows = [];
+  for (let i = 0; i < ps.length; i += 2) rows.push(`<tr>${card(ps[i], false)}${card(ps[i + 1], true)}</tr>`);
+  return `${h2(title)}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rows.join("")}</table>
+    <p style="${BODY}margin:4px 0 0;font-size:14px;color:${C.muted}">Also from AECT: ${MORE_LINKS.map(([t, h]) => `<a href="${url(h)}" style="color:${C.brand};font-weight:700">${t}</a>`).join(" &nbsp;·&nbsp; ")}</p>`;
+}
+
+function layout({ preheader, hero, heroAlt, body, audience = "customer" }) {
+  const nav = [["Machines", "machines.html"], ["Blocks", "blocks.html"], ["Rent", "rent.html"], ["FAQ", "learn.html"]];
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  @media (max-width: 620px) {
+    .wrap { width: 100% !important; border-radius: 0 !important; }
+    .pad { padding-left: 22px !important; padding-right: 22px !important; }
+    .stack { display: block !important; width: 100% !important; box-sizing: border-box; }
+    .stack + .stack { border-left: 0 !important; }
+    h1 { font-size: 30px !important; }
+    .stat { font-size: 19px !important; white-space: nowrap; }
+    .statcell { padding: 16px 10px 16px 14px !important; }
+  }
+</style></head>
+<body style="margin:0;padding:0;background:${C.sand}">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(preheader)}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.sand}"><tr><td align="center" style="padding:28px 12px">
+  <table role="presentation" class="wrap" width="620" cellpadding="0" cellspacing="0" style="width:620px;max-width:620px;background:#fff;border-radius:18px;overflow:hidden">
+    <tr><td style="background:${C.navy};padding:18px 32px" class="pad">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td><a href="${SITE_URL}"><img src="${SITE_URL}assets/img/logo-badge.png" width="104" alt="AECT Earth Block" style="display:block;border:0"></a></td>
+        <td align="right" style="${HEAD}font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.green}">${audience === "aect" ? "Lead alert" : "Est. 1989 · San Antonio, TX"}</td>
+      </tr></table></td></tr>
+    ${hero ? `<tr><td><img src="${photo(hero, 1240, 520)}" width="620" alt="${esc(heroAlt || "")}" style="display:block;width:100%;height:auto;border:0"></td></tr>` : ""}
+    <tr><td class="pad" style="padding:40px 44px 44px">${body}</td></tr>
+    ${audience === "aect" ? "" : `<tr><td style="background:${C.navy};padding:32px 44px" class="pad">
+      <div style="${HEAD}font-size:22px;font-weight:800;color:${C.logoCream};margin:0 0 6px">Building the world's best CEB machines since 1989.</div>
+      <div style="${BODY}font-size:14px;line-height:1.6;color:#b8c0ce;margin:0 0 18px">Questions? Just reply to this email, or write <a href="mailto:${AECT_EMAIL}" style="color:${C.logoCream}">${AECT_EMAIL}</a>.</div>
+      <div style="${HEAD}font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">${nav.map(([t, h]) => `<a href="${url(h)}" style="color:#fff;text-decoration:none">${t}</a>`).join(`<span style="color:${C.brand}"> &nbsp;/&nbsp; </span>`)}</div>
+      <div style="${BODY}font-size:12px;color:#8892a3;margin-top:20px">Advanced Earthen Construction Technologies · 10608 Cassiano Rd., San Antonio, TX · <i>Semper Terrae</i></div>
+    </td></tr>`}
   </table>
 </td></tr></table></body></html>`;
 }
 
-/** Email sent to a visitor after they finish the planner: a copy of their plan and the next step. */
+// ---- The emails ----
+
+/** Sent to a visitor when they finish the planner: their plan, their kit, and a way to see everything else. */
 export function planEmail(lead) {
   const s = lead.summary || {};
   const n = firstName(lead.name);
   const intl = lead.state === "Outside the US";
-  const kit = `${short(s.machine)} Kit`;
+  const kit = productFor(s.machine) || PRODUCTS.k3500;
   const options = [
-    { key: "own", label: `Buy the ${kit}`, sub: "Machine, soil analysis and training", total: s.makeOwnTotal },
+    { key: "own", label: `Buy the ${kit.name}`, sub: "Machine, soil analysis and on-site training", total: s.makeOwnTotal },
     ...(intl ? [] : [
       { key: "rent", label: "Rent our plant", sub: "We bring it, with an operator", total: s.rentTotal },
       { key: "buy", label: "Buy finished blocks", sub: "Made on AECT machines, delivered", total: s.buyTotal },
     ]),
   ];
   const best = s.best || options.reduce((a, b) => (b.total < a.total ? b : a)).key;
-  const rows = options.map((o) => `
-    <tr><td style="padding:12px 14px;border-top:1px solid ${LINE}">
-      <b>${esc(o.label)}</b>${o.key === best ? ` <span style="background:${BRAND};color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;letter-spacing:.04em">BEST VALUE</span>` : ""}
-      <div style="color:${MUTED};font-size:13px">${esc(o.sub)}</div></td>
-      <td align="right" style="padding:12px 14px;border-top:1px solid ${LINE};font-weight:700;font-size:17px;white-space:nowrap">${money(o.total)}</td></tr>`).join("");
-  const cta = lead.path === "blocks"
-    ? `<p style="margin:22px 0 0">Want a quote for your ${int(s.totalBlocks)} blocks, delivered? <b>Reply to this email</b> and our team will put one together.</p>`
-    : button(`${SITE_URL}contact.html?topic=${lead.path === "rent" ? "rental" : "quote"}&machine=${encodeURIComponent(kit)}`, "Get my official quote")
-      + `<p style="color:${MUTED};font-size:14px;margin:0">Send us your plan and we'll reply with an official quote, usually within 2 business days.</p>`;
-  const html = layout(`About ${int(s.totalBlocks)} blocks. Here are your numbers.`, `
-    <p style="margin:0 0 6px;color:${MUTED};font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700">${n ? esc(n) + "'s" : "Your"} CEB plan</p>
-    <h1 style="${FONT}margin:0 0 4px;font-size:28px;line-height:1.2;color:${NAVY}">You'll need about ${int(s.totalBlocks)} blocks</h1>
-    <p style="margin:0 0 20px;color:${MUTED}">${esc(PROJECTS[lead.project] || "Your project")}${s.size ? ` · ${esc(int(s.size))} ${lead.project === "outdoor" ? "ft of wall" : "sq ft"}` : ""}${lead.state && !intl ? ` · ${esc(lead.state)}` : ""} · ${esc(s.blockSize || "")} blocks</p>
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${CREAM};border-radius:10px;margin-bottom:22px"><tr>
-      <td style="padding:14px"><div style="font-weight:700;font-size:18px">${esc(kit)}</div><div style="color:${MUTED};font-size:12px">recommended kit</div></td>
-      <td style="padding:14px"><div style="font-weight:700;font-size:18px">${int(s.earthYd)} yd³</div><div style="color:${MUTED};font-size:12px">of earth</div></td>
-    </tr></table>
-    <h2 style="${FONT}font-size:19px;margin:0 0 8px;color:${NAVY}">Your three ways to get blocks</h2>
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${LINE};border-radius:10px;border-collapse:separate">${rows}</table>
-    ${cta}
-    <p style="color:${MUTED};font-size:13px;margin:22px 0 0">Estimates are for planning only, not a quote. Kit prices are FOB San Antonio, TX; shipping extra.</p>`);
-  return { subject: `${n ? n + ", your" : "Your"} CEB plan: about ${int(s.totalBlocks)} blocks`, html };
+  const rows = options.map((o, i) => `
+    <tr><td style="padding:18px 20px;${i ? `border-top:1px solid ${C.line};` : ""}${o.key === best ? `background:${C.cream};` : ""}">
+      ${o.key === best ? `<div style="margin:0 0 6px"><span style="${BODY}display:inline-block;white-space:nowrap;background:${C.accent};color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;border-radius:999px;padding:3px 9px">BEST VALUE</span></div>` : ""}
+      <div style="${HEAD}font-size:19px;font-weight:800;color:${C.navy}">${esc(o.label)}</div>
+      <div style="${BODY}color:${C.muted};font-size:13px;margin-top:2px">${esc(o.sub)}</div></td>
+      <td align="right" style="${HEAD}padding:18px 20px;${i ? `border-top:1px solid ${C.line};` : ""}${o.key === best ? `background:${C.cream};` : ""}font-weight:800;font-size:24px;color:${C.navy};white-space:nowrap">${money(o.total)}</td></tr>`).join("");
+  const quote = lead.path === "blocks" ? "contact.html?topic=blocks" : `contact.html?topic=${lead.path === "rent" ? "rental" : "quote"}&machine=${encodeURIComponent(kit.name)}`;
+  const feature = lead.path === "blocks" ? featureCard(PRODUCTS.blocks, "Your best fit") : lead.path === "rent" ? featureCard(PRODUCTS.rent, "Your best fit") : featureCard(kit, "Your recommended kit");
+  const others = ["impact", "k3500", "rent", "blocks"].filter((k) => PRODUCTS[k] !== kit && !(lead.path === "rent" && k === "rent") && !(lead.path === "blocks" && k === "blocks")).slice(0, lead.path === "kit" ? 2 : 4);
+  const body = `
+    ${eyebrow(`${n ? n + "'s" : "Your"} CEB plan`)}
+    ${h1(`You'll need about ${int(s.totalBlocks)} blocks`)}
+    ${para(`${esc(PROJECTS[lead.project] || "Your project")}${s.size ? ` · ${esc(int(s.size))} ${lead.project === "outdoor" ? "ft of wall" : "sq ft"}` : ""}${lead.state && !intl ? ` · ${esc(lead.state)}` : ""} · ${esc(s.blockSize || "")} blocks`, `color:${C.muted}`)}
+    ${stats([[int(s.totalBlocks), "blocks"], [esc(kit.name.replace(" Kit", "")), "your machine"], [`${int(s.earthYd)} yd³`, "of earth"]])}
+    ${h2("Three ways to get your blocks")}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${C.line};border-radius:14px;overflow:hidden;border-collapse:separate;margin:0 0 14px">${rows}</table>
+    ${para("Planning estimates, not a quote. Kit prices FOB San Antonio, TX; shipping extra.", `font-size:12px;color:${C.muted};margin-bottom:26px`)}
+    ${para("Ready for real numbers? Send us your plan and our team will reply with an official quote, usually within 2 business days.")}
+    ${button(url(quote), "Get my official quote")}
+    ${rule()}
+    ${feature}
+    ${showcase(others, "Explore more from AECT")}`;
+  return { subject: `${n ? n + ", your" : "Your"} CEB plan: about ${int(s.totalBlocks)} blocks`,
+    html: layout({ preheader: `About ${int(s.totalBlocks)} blocks, your recommended kit, and three ways to get them.`, hero: "1%20-%20finished%20house.jpg", heroAlt: "A finished compressed earth block home", body }) };
 }
 
 const CONTACT_REPLY = {
-  kit: ["We got your kit quote request", "Ryan and the team will put together an official quote for your kit and reply within 2 business days."],
-  blocks: ["We got your block quote request", "We'll price your blocks, delivered to your site, and reply with a quote within 2 business days."],
-  rent: ["We got your rental request", "We'll look at your location and block count and reply with a rental estimate within 2 business days."],
-  consulting: ["We got your consulting request", "We'll reply within 2 business days to talk through your site and dates."],
-  consult: ["We got your video consult request", "We'll reply within 2 business days with times for your 30-minute call with Ryan Runge."],
-  tools: ["We got your order request", "We'll confirm availability, shipping and payment within 2 business days."],
+  kit: { subject: "We got your kit quote request", line: "Ryan and the team will put together an official quote for your kit.", hero: "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg",
+    next: [["We review your project", "Block count, location and soil, so we recommend the right kit."], ["You get an official quote", "By email, usually within 2 business days."], ["You pick a training week", "A week on site with our team when your kit arrives."]],
+    feature: "k3500", more: ["impact", "k3500", "rent", "blocks"] },
+  rent: { subject: "We got your rental request", line: "We'll price your rental from your location and block count.", hero: "HOPE%20project%20photo.jpg",
+    next: [["We review your site", "Location, block count, soil and the equipment you'll need."], ["You get a rental estimate", "By email, usually within 2 business days."], ["We schedule your mobilization", "Our operator brings the plant and trains your crew."]],
+    feature: "rent", more: ["blocks", "impact", "k3500"] },
+  blocks: { subject: "We got your block quote request", line: "We'll price your blocks, delivered to your site.", hero: "conveyor%20full%20of%20blocks.jpg",
+    next: [["We review your order", "Block count, block type and your delivery location."], ["You get a delivered quote", "By email, usually within 2 business days."], ["We schedule delivery", "Palletized blocks, ready to lay."]],
+    feature: "blocks", more: ["rent", "impact", "k3500"] },
+  consulting: { subject: "We got your consulting request", line: "We'll be in touch about your site and dates.", hero: "assembly%20line.jpg",
+    next: [["We review your project", "What you're building and where your crew is today."], ["We email you", "Usually within 2 business days, to plan dates."], ["We come to your site", "Hands-on help from soil prep to the last course of plaster."]],
+    more: ["impact", "k3500", "rent", "blocks"] },
+  consult: { subject: "We got your video consult request", line: "We'll send times for your 30-minute call with Ryan Runge.", hero: "1%20-%20finished%20house.jpg",
+    next: [["We email you times", "Usually within 2 business days."], ["You pick a time", "A 30-minute video call with Ryan Runge."], ["Bring your questions", "Soil, machines, cost, design: anything about your build."]],
+    more: ["impact", "k3500", "rent", "blocks"] },
+  tools: { subject: "We got your order request", line: "We'll confirm availability, shipping and payment.", hero: "thumbnail_IMG_3282.jpg",
+    next: [["We confirm your order", "Availability and shipping to your location."], ["You get an invoice", "By email, usually within 2 business days."], ["We ship it", "From our shop in San Antonio, TX."]],
+    more: ["impact", "k3500", "rent", "blocks"] },
 };
 
 /** Automatic reply to a contact form request. */
 export function contactEmail(lead) {
-  const [subject, line] = CONTACT_REPLY[lead.path] || ["We got your message", "We'll reply within 2 business days."];
+  const r = CONTACT_REPLY[lead.path] || CONTACT_REPLY.consult;
   const s = lead.summary || {};
   const n = firstName(lead.name);
-  const details = [
-    ["Kit", s.kit], ["Product", s.product], ["Block type", s.blockType], ["Estimated blocks", s.blocks && int(s.blocks)], ["Location", lead.state],
-    ["Project", TIMELINES[lead.timeline]],
+  const rows = [
+    ["Kit", s.kit], ["Product", s.product], ["Block type", s.blockType], ["Estimated blocks", s.blocks && int(s.blocks)],
+    ["Location", lead.state], ["Project", TIMELINES[lead.timeline]],
   ].filter(([, v]) => v);
-  const html = layout(line, `
-    <h1 style="${FONT}margin:0 0 12px;font-size:26px;line-height:1.2;color:${NAVY}">Thanks${n ? ", " + esc(n) : ""}. ${esc(subject.replace(/^We got/, "We've got"))}.</h1>
-    <p style="margin:0 0 18px">${esc(line)}</p>
-    ${details.length ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${CREAM};border-radius:10px">${details.map(([k, v]) => `<tr><td style="padding:8px 14px;color:${MUTED};font-size:14px">${esc(k)}</td><td style="padding:8px 14px;font-size:14px;font-weight:600">${esc(v)}</td></tr>`).join("")}</table>` : ""}
-    ${s.message ? `<p style="margin:18px 0 4px;color:${MUTED};font-size:13px">Your message</p><p style="margin:0;white-space:pre-wrap;border-left:3px solid ${LINE};padding-left:12px">${esc(s.message)}</p>` : ""}
-    <p style="margin:22px 0 0">In the meantime, our <a href="${SITE_URL}learn.html" style="color:${BRAND}">FAQ</a> answers the most common questions about soil, cost and building with CEBs.</p>`);
-  return { subject: `${subject}, ${n || "thanks"}`.replace(/, thanks$/, ""), html };
+  const body = `
+    ${eyebrow("Request received")}
+    ${h1(`Thanks${n ? ", " + esc(n) : ""}. We're on it.`)}
+    ${para(`${esc(r.line)} You'll hear from us by email, usually within <b>2 business days</b>.`)}
+    ${spacer(6)}
+    ${rows.length ? `${eyebrow("Your request", C.muted)}${details(rows)}` : ""}
+    ${s.message ? `<div style="border-left:3px solid ${C.accent};padding:4px 0 4px 18px;margin:0 0 30px"><div style="${BODY}font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:${C.muted};margin-bottom:6px">Your message</div><div style="${BODY}font-size:16px;line-height:1.55;color:${C.ink};font-style:italic;white-space:pre-wrap">${esc(s.message)}</div></div>` : ""}
+    ${h2("What happens next")}
+    ${steps(r.next)}
+    ${rule()}
+    ${r.feature ? featureCard(PRODUCTS[r.feature], "While you wait") : ""}
+    ${showcase(r.more.filter((k) => k !== r.feature), "Explore the AECT lineup")}
+    ${spacer(24)}
+    ${para(`Have a question before then? Our <a href="${url("learn.html")}" style="color:${C.brand};font-weight:700">FAQ</a> covers soil, cost and building with compressed earth blocks.`, `font-size:15px;color:${C.muted}`)}`;
+  return { subject: `${r.subject}${n ? ", " + n : ""}`, html: layout({ preheader: `${r.line} We'll reply within 2 business days.`, hero: r.hero, body }) };
 }
 
 /** The email the visitor gets for this lead. */
@@ -206,16 +343,23 @@ export function customerEmail(lead) {
 /** Heads-up to AECT's inbox when a lead comes in. */
 export function internalEmail(lead, stage, dashboardUrl) {
   const s = lead.summary || {};
+  const st = STAGES.find((x) => x.id === stage);
   const rows = [
-    ["Name", lead.name], ["Email", lead.email], ["Wants", PATHS[lead.path]],
-    ["Wants us to reach out", lead.wants_contact === true ? "Yes" : lead.wants_contact === false ? "Not right now" : null], ["Stage", STAGES.find((x) => x.id === stage)?.label],
+    ["Email", lead.email], ["Wants", PATHS[lead.path]],
+    ["Wants us to reach out", lead.wants_contact === true ? "Yes" : lead.wants_contact === false ? "Not right now" : null],
     ["Location", lead.state], ["Project", PROJECTS[lead.project]], ["Timeline", TIMELINES[lead.timeline]],
-    ["Blocks", s.totalBlocks ? int(s.totalBlocks) : s.blocks], ["Machine", s.machine && short(s.machine)],
-    ["Kit / product", s.kit || s.product], ["Block type", s.blockType], ["Message", s.message],
+    ["Blocks", s.totalBlocks ? int(s.totalBlocks) : s.blocks && int(s.blocks)], ["Machine", s.machine && short(s.machine)],
+    ["Kit / product", s.kit || s.product], ["Block type", s.blockType],
   ].filter(([, v]) => v);
-  const html = layout("New lead", `
-    <h1 style="${FONT}margin:0 0 14px;font-size:22px;color:${NAVY}">New ${lead.source === "planner" ? "planner" : "contact form"} lead</h1>
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rows.map(([k, v]) => `<tr><td style="padding:6px 0;color:${MUTED};font-size:14px;width:120px;vertical-align:top">${esc(k)}</td><td style="padding:6px 0;font-size:14px;white-space:pre-wrap">${esc(v)}</td></tr>`).join("")}</table>
-    ${button(dashboardUrl || SITE_URL + "admin/", "Open in the dashboard")}`);
-  return { subject: `New lead: ${lead.name || lead.email} · ${PATHS[lead.path] || lead.source}`, html };
+  const body = `
+    ${eyebrow(`New ${lead.source === "planner" ? "planner" : "contact form"} lead`)}
+    ${h1(esc(lead.name || lead.email))}
+    <div style="margin:0 0 24px"><span style="${HEAD}display:inline-block;background:${stage === "reach" ? C.accent : C.navy};color:#fff;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:6px 14px">${esc(st?.label || stage)}</span>
+      ${st?.todo ? `<span style="${BODY}font-size:14px;color:${C.muted};margin-left:8px">Next: ${esc(st.todo)}</span>` : ""}</div>
+    ${details(rows)}
+    ${s.message ? `<div style="border-left:3px solid ${C.accent};padding:4px 0 4px 18px;margin:0 0 28px"><div style="${BODY}font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:${C.muted};margin-bottom:6px">Their message</div><div style="${BODY}font-size:15px;line-height:1.55;color:${C.ink};white-space:pre-wrap">${esc(s.message)}</div></div>` : ""}
+    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+      <td style="padding-right:10px">${button(dashboardUrl || url("admin/"), "Open in dashboard", C.navy)}</td>
+      <td>${button(`mailto:${lead.email}`, `Email ${firstName(lead.name) || "them"}`)}</td></tr></table>`;
+  return { subject: `New lead: ${lead.name || lead.email} · ${PATHS[lead.path] || lead.source}`, html: layout({ preheader: `${st?.label || ""} · ${PATHS[lead.path] || ""}`, body, audience: "aect" }) };
 }
