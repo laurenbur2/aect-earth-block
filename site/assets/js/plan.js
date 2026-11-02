@@ -124,8 +124,9 @@
     steps.forEach((s, k) => s.classList.toggle("is-active", k === current));
     progress.style.width = `${Math.min(100, Math.round((current / QUESTION_STEPS) * 100))}%`;
     backBtn.classList.toggle("is-visible", current > 0 && !["building", "results"].includes(id));
-    // Single-tap screens don't need a Continue button; text inputs do.
-    $("#actions").hidden = !["name", "size"].includes(id);
+    // Single-tap screens don't need a Continue button; text inputs and the state dropdown do
+    // (re-picking the same state after Back fires no change event).
+    $("#actions").hidden = !["name", "location", "size"].includes(id);
     updateNext();
     window.scrollTo({ top: 0 });
     const h = steps[current].querySelector("h1");
