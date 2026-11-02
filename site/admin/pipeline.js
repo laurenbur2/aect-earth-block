@@ -6,8 +6,7 @@
 export const SITE_URL = "https://laurenbur2.github.io/aect-earth-block/";
 export const AECT_EMAIL = "info@AECTearthblock.com";
 // Paid video call with Ryan, booked through GoDaddy Online Appointments on AECT's current site.
-// NOTE: this lives on the old GoDaddy site; when aectearthblock.com moves to the new site, replace it
-// (e.g. with a Calendly link) or the button breaks. Also used in reach-out.html, rent.html and contact.html.
+// TODO at launch: swap for the Calendly link (see README, "Calendly"); the site's copy is in assets/js/main.js.
 export const CONSULT = { price: "$75", length: "30-minute", with: "Ryan Runge" };
 export const BOOK_CALL_URL = "https://aectearthblock.com/ola/services/compressed-earth-block-ceb-consultation";
 

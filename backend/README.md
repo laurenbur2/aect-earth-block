@@ -56,7 +56,7 @@ Until Supabase is connected, `/admin/` runs on sample leads stored in your brows
 After changing an email template in `pipeline.js`, rerun `tools/deploy_backend.sh` so the function sends the new version.
 
 ## Notes
-- The $75 call with Ryan is booked through GoDaddy Online Appointments on the *old* site (`BOOK_CALL_URL` in `site/admin/pipeline.js`, also linked from rent.html, contact.html and reach-out.html). When aectearthblock.com moves to the new site, that page goes away: switch to Calendly (or keep the GoDaddy site on a subdomain) and update those links.
+- The $75 call with Ryan is booked on the old GoDaddy site until it moves to Calendly before launch; see "Calendly" in the main README. The emails' link is `BOOK_CALL_URL` in `site/admin/pipeline.js`.
 - Spam: both forms have a hidden "website" field; submissions that fill it are dropped silently. If spam becomes a problem, add Cloudflare Turnstile.
 - If Resend is down or not configured, the lead is still saved and the timeline shows the email as "not sent" or "failed".
 - `SITE_URL` in `pipeline.js` is the GitHub Pages address for now. Change it to `https://aectearthblock.com/` at launch so email links and the logo point at the real site.
