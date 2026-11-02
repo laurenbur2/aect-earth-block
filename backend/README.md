@@ -30,6 +30,8 @@ site/admin/ (dashboard) ──signed in as an AECT admin──> reads/updates le
 Until Supabase is connected, `/admin/` runs on sample leads stored in your browser (the **Demo data** badge; click it to reset). **Email previews** shows every template with sample data.
 
 ## Setup (about 30 minutes)
+For a first run against the test site, follow [TESTING.md](TESTING.md): it covers the same steps with test settings and a test script.
+
 1. **Supabase**: create a project at supabase.com (free tier is plenty). Under Authentication > Providers, keep Email on and turn **off** "Allow new users to sign up".
 2. **Resend**: create an account at resend.com, verify AECT's sending domain (adds DNS records), and create an API key.
 3. Link and deploy from the repo root:

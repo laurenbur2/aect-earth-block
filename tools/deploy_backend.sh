@@ -7,4 +7,4 @@ mkdir -p supabase/functions/_shared
 # The stage rules and email templates live in site/admin/pipeline.js so the dashboard can use them too.
 cp ../site/admin/pipeline.js supabase/functions/_shared/pipeline.js
 supabase db push
-supabase functions deploy submit-lead --no-verify-jwt
+supabase functions deploy submit-lead --no-verify-jwt --use-api  # --use-api: no Docker needed
