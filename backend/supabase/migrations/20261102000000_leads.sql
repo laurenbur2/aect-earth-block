@@ -7,8 +7,10 @@ create table public.leads (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   source text not null check (source in ('planner', 'contact')),
-  stage text not null default 'inquiring'
-    check (stage in ('inquiring', 'unsure', 'ready', 'quoted', 'won', 'lost')),
+  -- Funnel stages; see STAGES in site/admin/pipeline.js for what each one means.
+  stage text not null default 'planning'
+    check (stage in ('call', 'ready', 'planning', 'curious', 'talking', 'quoted', 'won', 'lost')),
+  stage_changed_at timestamptz not null default now(), -- for "overdue" flags on the dashboard
   -- What they're after: kit | rent | blocks | consulting | consult | tools
   path text,
   name text,
@@ -51,6 +53,7 @@ language plpgsql security definer set search_path = public as $$
 begin
   new.updated_at := now();
   if new.stage is distinct from old.stage then
+    new.stage_changed_at := now();
     insert into public.lead_events (lead_id, kind, title, meta, author)
     values (new.id, 'stage', 'Stage changed', jsonb_build_object('from', old.stage, 'to', new.stage),
             coalesce(auth.jwt() ->> 'email', 'system'));

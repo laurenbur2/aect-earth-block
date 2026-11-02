@@ -3,7 +3,7 @@
 // otherwise runs on sample leads kept in this browser (demo mode).
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 import {
-  STAGES, PATHS, PROJECTS, INTENTS, TIMELINES, normalize, initialStage, interestStage, customerEmail, internalEmail, planEmail, contactEmail,
+  STAGES, PATHS, PROJECTS, INTENTS, TIMELINES, normalize, initialStage, interestStage, isOverdue, customerEmail, internalEmail, planEmail, contactEmail,
 } from "./pipeline.js";
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -45,7 +45,7 @@ async function supabaseApi() {
 }
 
 // ---- Data: demo (sample leads in localStorage) ------------------------------------------------
-const DEMO_KEY = "aect-admin-demo-v4";
+const DEMO_KEY = "aect-admin-demo-v6";
 const day = 864e5;
 const DEMO_SEED = [
   { days: 0.1, stage: null, interested: true, p: { source: "aect-ceb-planner", contact: { name: "Sam Ortiz", email: "sam.ortiz@example.com" },
@@ -54,7 +54,7 @@ const DEMO_SEED = [
   { days: 0.6, stage: null, interested: false, p: { source: "aect-ceb-planner", contact: { name: "Priya Shah", email: "priya@example.com" },
     qualify: { project: "outdoor", intent: "unsure", timeline: "research", state: "Colorado", dirt: "delivered", labor: "volunteer", size: "100" },
     plan: { totalBlocks: 1240, blockSize: '6" x 12"', machine: "AECT Impact 2001A", earthYd: 14, makeOwnTotal: 66100, rentTotal: 28600, buyTotal: 6900, best: "buy" } } },
-  { days: 1.2, stage: null, p: { source: "aect-contact-form", topic: "kit", name: "Mike Delgado", email: "mdelgado@example.com", state: "Arizona",
+  { days: 1.2, stage: "talking", note: "Called Mike. Wants the 3500 kit by March; sending a quote Friday.", p: { source: "aect-contact-form", topic: "kit", name: "Mike Delgado", email: "mdelgado@example.com", state: "Arizona",
     status: "Planning to build: 6 to 12 months out", kit: "3500 kit", blocks: "14000", message: "Planning a 2,400 sq ft home outside Tucson. Can the 3500 kit ship by March? Also curious about financing." } },
   { days: 2.5, stage: null, p: { source: "aect-ceb-planner", contact: { name: "Hannah Brooks", email: "hbrooks@example.com" },
     qualify: { project: "barn", intent: "rent", timeline: "6-12", state: "Oklahoma", dirt: "own", labor: "hired", size: "2500" },
@@ -66,18 +66,21 @@ const DEMO_SEED = [
     plan: { totalBlocks: 21400, blockSize: '10" x 14"', machine: "AECT 3500", earthYd: 331, makeOwnTotal: 198700, rentTotal: 96800, buyTotal: 92000, best: "own" } } },
   { days: 6, stage: null, p: { source: "aect-contact-form", topic: "consult", name: "Alex Kim", email: "alexkim@example.com", state: "Oregon",
     status: "Just curious: researching for now", message: "Want to talk through whether my clay-heavy soil will work." } },
-  { days: 1.8, stage: null, p: { source: "aect-contact-form", topic: "blocks", name: "Rosa Martinez", email: "rosa.m@example.com", state: "Texas",
+  { days: 3.2, stage: null, p: { source: "aect-contact-form", topic: "blocks", name: "Rosa Martinez", email: "rosa.m@example.com", state: "Texas",
     status: "Ready to build: starting within 6 months", blockType: "Stabilized (recommended)", blocks: "4200", kit: "Impact 2001A kit", product: "Small Block Press",
     message: "Outdoor kitchen and garden walls near Fredericksburg. Need delivery by April." } },
   { days: 14, stage: "lost", note: "Went with a used machine from a local seller.", p: { source: "aect-contact-form", topic: "tools", name: "Chris Hall", email: "chall@example.com",
     state: "Kansas", status: "Ready to build: starting within 6 months", product: "Block Cutter", message: "Price for a block cutter shipped to Wichita?" } },
+  { days: 1.5, stage: null, p: { source: "aect-ceb-planner", contact: { name: "Marcus Webb", email: "mwebb@example.com" },
+    qualify: { project: "home", intent: "own", timeline: "0-6", state: "New Mexico", dirt: "own", labor: "hired", size: "2200" },
+    plan: { totalBlocks: 11900, blockSize: '6" x 12"', machine: "AECT Impact 2001A", earthYd: 128, makeOwnTotal: 112400, rentTotal: 51200, buyTotal: 49800, best: "buy" } } },
 ];
 function demoSeed() {
   const leads = [], events = [];
   DEMO_SEED.forEach(({ days, stage, note, interested, p }, i) => {
     const t = Date.now() - days * day;
     const lead = normalize(p);
-    const row = { id: `demo-${i + 1}`, created_at: new Date(t).toISOString(), updated_at: new Date(t + 36e5).toISOString(), ...lead, stage: initialStage(lead), raw: p };
+    const row = { id: `demo-${i + 1}`, created_at: new Date(t).toISOString(), updated_at: new Date(t + 36e5).toISOString(), stage_changed_at: new Date(t).toISOString(), ...lead, stage: initialStage(lead), raw: p };
     const ev = (o, dt = 0) => events.push({ id: events.length + 1, lead_id: row.id, created_at: new Date(t + dt).toISOString(), author: "system", meta: {}, ...o });
     ev({ kind: "created", title: lead.source === "planner" ? "Finished the planner" : "Sent the contact form", meta: { payload: p } });
     const mine = customerEmail(row), alert = internalEmail(row, row.stage);
@@ -87,11 +90,11 @@ function demoSeed() {
       ev({ kind: "interest", title: interested ? "Still interested: wants a team member to reach out" : "Not interested right now" }, 60000);
       row.wants_contact = interested;
       const to = interestStage(row.stage, interested);
-      if (to !== row.stage) { ev({ kind: "stage", title: "Stage changed", meta: { from: row.stage, to }, author: "system" }, 61000); row.stage = to; }
+      if (to !== row.stage) { ev({ kind: "stage", title: "Stage changed", meta: { from: row.stage, to }, author: "system" }, 61000); row.stage = to; row.stage_changed_at = new Date(t + 61000).toISOString(); }
     }
     if (stage) {
       ev({ kind: "stage", title: "Stage changed", meta: { from: row.stage, to: stage }, author: "ryan@aectearthblock.com" }, 2 * day / 3);
-      row.stage = stage;
+      row.stage = stage; row.stage_changed_at = new Date(t + 2 * day / 3).toISOString();
     }
     if (note) ev({ kind: "note", body: note, author: "ryan@aectearthblock.com" }, day / 2);
     leads.push(row);
@@ -112,7 +115,7 @@ function demoApi() {
       const l = db.leads.find((x) => x.id === id);
       if (!l || l.stage === stage) return;
       db.events.push({ id: Date.now(), lead_id: id, created_at: now(), kind: "stage", title: "Stage changed", meta: { from: l.stage, to: stage }, author: "you (demo)" });
-      Object.assign(l, { stage, updated_at: now() });
+      Object.assign(l, { stage, updated_at: now(), stage_changed_at: now() });
       save();
     },
     async addNote(id, body) {
@@ -144,11 +147,12 @@ function cardHtml(l) {
   const what = l.source === "planner"
     ? `${PROJECTS[l.project] || "Project"}${blocks ? ` · ${int(blocks)} blocks` : ""}`
     : `${s.kit || s.product || "Contact form"}${blocks ? ` · ${int(blocks)} blocks` : ""}`;
-  return `<button class="card" draggable="true" data-id="${esc(l.id)}" aria-label="Open ${esc(l.name || l.email)}">
+  const late = isOverdue(l);
+  return `<button class="card${late ? " is-late" : ""}" draggable="true" data-id="${esc(l.id)}" aria-label="Open ${esc(l.name || l.email)}">
     <span class="card-top"><b>${esc(l.name || l.email)}</b><span class="path path--${esc(l.path)}">${esc(PATHS[l.path] || l.source)}</span></span>
     <span class="card-what">${esc(what)}</span>
     <span class="card-meta">${esc(l.state || "")}${l.timeline ? ` · ${esc(TIMELINES[l.timeline])}` : ""}</span>
-    ${l.wants_contact === true ? `<span class="call call--yes">Wants a call</span>` : l.wants_contact === false ? `<span class="call">Not right now</span>` : ""}
+    <span class="tags">${late ? `<span class="call call--late">Overdue · ${ago(l.stage_changed_at || l.created_at).replace(" ago", "")}</span>` : ""}${l.wants_contact === true ? `<span class="call call--yes">Said yes</span>` : l.wants_contact === false ? `<span class="call">Said not right now</span>` : ""}</span>
     <span class="card-foot"><span>${l.source === "planner" ? "Planner" : "Contact form"}</span><span>${ago(l.created_at)}</span></span>
   </button>`;
 }
@@ -156,10 +160,14 @@ function cardHtml(l) {
 function render() {
   const list = filtered();
   board.innerHTML = STAGES.map((st) => {
-    const inStage = list.filter((l) => l.stage === st.id);
+    let inStage = list.filter((l) => l.stage === st.id);
+    // Stages with a deadline show the longest-waiting lead first.
+    if (st.due) inStage = inStage.sort((a, b) => (a.stage_changed_at || a.created_at).localeCompare(b.stage_changed_at || b.created_at));
+    const late = inStage.filter((l) => isOverdue(l)).length;
     return `<section class="col col--${st.id}" data-stage="${st.id}">
-      <header class="col-head"><h2>${st.label}</h2><span class="count">${inStage.length}</span></header>
-      <p class="col-hint">${st.hint}</p>
+      <header class="col-head"><h2>${st.label}</h2><span class="count${late ? " count--late" : ""}" title="${late ? `${late} overdue` : ""}">${inStage.length}</span></header>
+      <p class="col-hint">${esc(st.hint)}</p>
+      ${st.todo ? `<p class="col-todo">→ ${esc(st.todo)}</p>` : ""}
       <div class="col-cards">${inStage.map(cardHtml).join("") || `<p class="empty">No leads</p>`}</div>
     </section>`;
   }).join("");
@@ -257,6 +265,7 @@ async function openLead(id, scroll = true) {
     <label class="d-stage"><span>Stage</span>
       <select id="stageSel">${STAGES.map((st) => `<option value="${st.id}" ${st.id === l.stage ? "selected" : ""}>${st.label}</option>`).join("")}</select>
     </label>
+    ${(() => { const st = STAGES.find((x) => x.id === l.stage); return st?.todo ? `<p class="d-todo${isOverdue(l) ? " is-late" : ""}">Next: ${esc(st.todo)}${isOverdue(l) ? ` · overdue, in this stage since ${when(l.stage_changed_at || l.created_at)}` : ""}</p>` : ""; })()}
     <p class="d-src">${l.source === "planner" ? "Came in through the planner" : "Came in through the contact form"} · ${when(l.created_at)}</p>
     ${facts(l)}
     ${planBlock(s)}
@@ -311,6 +320,27 @@ function showEmail(list) {
   pick(0);
   modal.showModal();
 }
+
+// How new leads are sorted, for the team.
+$("#rulesBtn").onclick = () => {
+  const row = (a, b) => `<tr><td>${a}</td><td><b>${b}</b></td></tr>`;
+  const html = `<!doctype html><html><body style="font:15px/1.55 Helvetica,Arial,sans-serif;color:#1b2230;padding:24px 28px;background:#fff;margin:0">
+    <p style="margin-top:0">New leads are sorted automatically from the quiz and contact form. After that, drag cards as you work them.
+    The site only ever moves a lead <b>up</b>, and never moves a lead once it's In conversation or later.</p>
+    <table cellpadding="8" style="border-collapse:collapse;width:100%">
+      <tr style="background:#f1efe3"><th align="left">When someone…</th><th align="left">They go to</th></tr>
+      ${row("Finishes the quiz: <i>Ready to build</i>", "Ready to build")}
+      ${row("Finishes the quiz: <i>Planning to build</i> or <i>I have land</i>", "Planning")}
+      ${row("Finishes the quiz: <i>Just curious</i>", "Just curious")}
+      ${row("Clicks <i>Yes, have someone reach out</i> on their results", "Wants a call")}
+      ${row("Clicks <i>Not right now</i> (was Ready to build)", "Planning")}
+      ${row("Sends the contact form", "Wants a call (Just curious if they picked that)")}
+    </table>
+    <p><b>What to do</b></p>
+    <ul style="padding-left:20px">${STAGES.filter((s) => s.todo).map((s) => `<li><b>${s.label}:</b> ${s.todo}${s.due ? ` (marked overdue after ${s.due} days)` : ""}</li>`).join("")}</ul>
+  </body></html>`;
+  showEmail([{ subject: "How leads are sorted", meta: "The rules behind the board", html }]);
+};
 
 // Every template with sample data, so AECT can review the wording before going live.
 $("#emailsBtn").onclick = () => {

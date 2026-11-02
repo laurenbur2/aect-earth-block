@@ -1,17 +1,20 @@
 # AECT lead backend
 
-Every planner submission and contact request becomes a **lead** on a private dashboard at `/admin/`, sorted into stages AECT can drag between:
+Every planner submission and contact request becomes a **lead** on a private dashboard at `/admin/`. The board is the funnel: the first four columns sort new leads by how serious they are, the rest are moved by AECT as they work the lead.
 
-| Stage | Who lands here automatically |
-|---|---|
-| Inquiring | Has a project but isn't starting within 6 months |
-| Unsure | Picked "Not sure yet" or "Just exploring" |
-| Ready to buy | Starting within 6 months, or sent a quote/order request on the contact form |
-| Quote sent | Set by AECT |
-| Won | Set by AECT |
-| Lost | Set by AECT |
+| Stage | Who lands here automatically | Team action |
+|---|---|---|
+| Wants a call | Clicked "Yes, have someone reach out" on their results, or sent the contact form | Call within 2 business days (overdue after 2 days) |
+| Ready to build | Quiz: "Ready to build", hasn't answered "still interested?" | Reach out (overdue after 3 days) |
+| Planning | Quiz: "Planning to build" or "I have land", or was Ready but clicked "Not right now" | Check in later |
+| Just curious | Quiz or contact form: "Just curious" | Email only, no calls |
+| In conversation | Moved by AECT | Send a quote when ready |
+| Quote sent | Moved by AECT | Follow up (overdue after 7 days) |
+| Won / Lost | Moved by AECT | |
 
-Each lead shows their answers, plan numbers, message, a timeline of every email sent (click **View email** to see exactly what they got), stage changes, and notes from the team. A person who comes back (runs the planner again, or sends the contact form after the planner) is updated on the same card, not duplicated. Returning leads only ever move forward automatically, never back.
+The site only ever moves a lead *up* (Just curious → Planning → Ready to build → Wants a call), and never moves a lead once it's In conversation or later. A person who comes back is updated on the same card, not duplicated. **How leads are sorted** on the dashboard shows these rules to the team.
+
+Each lead shows their answers, plan numbers, whether they said yes to a call, their message, a timeline of every email sent (click **View email** to see exactly what they got), stage changes, and notes from the team.
 
 ## How it fits together
 ```

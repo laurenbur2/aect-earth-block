@@ -6,14 +6,24 @@
 export const SITE_URL = "https://laurenbur2.github.io/aect-earth-block/";
 export const AECT_EMAIL = "info@AECTearthblock.com";
 
+// The funnel, in board order. The first four sort new leads by how serious they are (set automatically
+// from the quiz and contact form); the rest are moved by AECT as they work the lead.
+// `todo` is what the team should do; `due` (days) flags a card as overdue when it sits longer.
 export const STAGES = [
-  { id: "inquiring", label: "Inquiring", hint: "Exploring with a real project, not ready to buy yet" },
-  { id: "unsure", label: "Unsure", hint: "Just researching, or doesn't know which option fits" },
-  { id: "ready", label: "Ready to buy", hint: "Asked for a quote or starting within 6 months" },
-  { id: "quoted", label: "Quote sent", hint: "AECT sent an official quote" },
-  { id: "won", label: "Won", hint: "Bought a kit, booked a rental or ordered" },
+  { id: "call", label: "Wants a call", hint: "Said yes to \"still interested?\" or sent the contact form", todo: "Call within 2 business days", due: 2 },
+  { id: "ready", label: "Ready to build", hint: "Starting within 6 months, hasn't answered \"still interested?\"", todo: "Reach out", due: 3 },
+  { id: "planning", label: "Planning", hint: "6+ months out, or ready but said \"not right now\"", todo: "Check in later" },
+  { id: "curious", label: "Just curious", hint: "Researching for now", todo: "Email only, no calls" },
+  { id: "talking", label: "In conversation", hint: "We've reached out and are talking", todo: "Send a quote when ready" },
+  { id: "quoted", label: "Quote sent", hint: "Official quote sent", todo: "Follow up", due: 7 },
+  { id: "won", label: "Won", hint: "Bought a kit, booked a rental or ordered blocks" },
   { id: "lost", label: "Lost", hint: "Not a fit, went elsewhere or went quiet" },
 ];
+
+// How serious each stage is, for automatic moves. The site only ever moves a lead *up* this list,
+// and never touches a lead AECT is already working (In conversation and later).
+const HEAT = { curious: 0, planning: 1, ready: 2, call: 3, talking: 4, quoted: 5, won: 6, lost: 6 };
+const WORKING = HEAT.talking;
 
 export const PATHS = {
   kit: "Kit", rent: "Rental", blocks: "Blocks", consulting: "On-site consulting",
@@ -64,21 +74,34 @@ export function normalize(p) {
   throw new Error("Unknown source");
 }
 
-/**
- * Stage after the visitor answers "Are you still interested?" on their results. Yes means they want
- * a call (Ready to buy); no means not now (Unsure). Leads AECT already quoted, won or lost stay put.
- */
-export function interestStage(stage, interested) {
-  const rank = (id) => STAGES.findIndex((s) => s.id === id);
-  if (rank(stage) >= rank("quoted")) return stage;
-  return interested ? "ready" : "unsure";
+/** Which stage a brand-new lead starts in, from "Where are you in your project?". */
+export function initialStage(lead) {
+  if (lead.timeline === "research") return "curious";
+  if (lead.source === "contact") return "call"; // they asked us to reply
+  return lead.timeline === "0-6" ? "ready" : "planning";
 }
 
-/** Which stage a brand-new lead starts in. AECT can drag it anywhere afterwards. */
-export function initialStage(lead) {
-  if (lead.timeline === "research" || lead.intent === "unsure") return "unsure";
-  if (lead.source === "contact") return lead.timeline === "12+" ? "inquiring" : "ready"; // they asked for a quote or order
-  return lead.timeline === "0-6" ? "ready" : "inquiring";
+/** Stage for a returning lead (planner again, or the contact form after the planner): only ever up. */
+export function mergeStage(current, proposed) {
+  if (HEAT[current] >= WORKING) return current;
+  return HEAT[proposed] > HEAT[current] ? proposed : current;
+}
+
+/**
+ * Stage after "Are you still interested?" on the planner results. Yes: Wants a call. No: a lead that
+ * looked ready drops to Planning (they weren't truly ready); Planning and Just curious stay put.
+ * Leads AECT is already working are never moved.
+ */
+export function interestStage(stage, interested) {
+  if (HEAT[stage] >= WORKING) return stage;
+  if (interested) return "call";
+  return stage === "call" || stage === "ready" ? "planning" : stage;
+}
+
+/** True when a lead has sat in a stage with a deadline (e.g. Wants a call) longer than it should. */
+export function isOverdue(lead, now = Date.now()) {
+  const due = STAGES.find((s) => s.id === lead.stage)?.due;
+  return !!due && now - new Date(lead.stage_changed_at || lead.created_at) > due * 864e5;
 }
 
 // ---- Emails ------------------------------------------------------------------------------

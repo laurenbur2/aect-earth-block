@@ -10,13 +10,12 @@
 //   DASHBOARD_URL    link used in the alert email, e.g. "https://aectearthblock.com/admin/"
 // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by Supabase.
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { customerEmail, initialStage, interestStage, internalEmail, normalize, STAGES } from "../_shared/pipeline.js";
+import { customerEmail, initialStage, interestStage, internalEmail, mergeStage, normalize } from "../_shared/pipeline.js";
 
 const env = (k: string) => Deno.env.get(k) ?? "";
 const db = createClient(env("SUPABASE_URL"), env("SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
 const allowed = env("ALLOWED_ORIGINS").split(",").map((s) => s.trim()).filter(Boolean);
 const emailOk = (v: unknown) => typeof v === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-const rank = (stage: string) => STAGES.findIndex((s) => s.id === stage);
 
 function cors(origin: string | null) {
   const ok = origin && (allowed.length === 0 || allowed.includes(origin));
@@ -71,8 +70,8 @@ Deno.serve(async (req) => {
       timeline: lead.timeline || existing.timeline, path: lead.path || existing.path,
       summary: { ...existing.summary, ...lead.summary },
       raw: payload,
-      // Only ever move a returning lead forward automatically (e.g. Unsure -> Ready to buy), never back.
-      stage: rank(stage) > rank(existing.stage) && rank(existing.stage) < rank("quoted") ? stage : existing.stage,
+      // Only ever move a returning lead up (e.g. Just curious -> Wants a call), never down.
+      stage: mergeStage(existing.stage, stage),
     }).eq("id", existing.id).select().single();
     if (error) return new Response(JSON.stringify({ error: "Save failed" }), { status: 500, headers });
     row = data;
