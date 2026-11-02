@@ -244,9 +244,9 @@ async function submit(req, env) {
 
 /** Records a yes/no to "a team member reaching out" and, on yes, alerts AECT right away. */
 async function interest(env, req, lead, yes, via) {
-  const row = await updateLead(env, lead, { wants_contact: yes, stage: interestStage(lead.stage, yes) });
   await addEvent(env, lead.id, { kind: "interest", title: !yes ? "Not interested right now"
     : via === "email" ? "Clicked \"Have a team member reach out\" in their plan email" : "Still interested: wants a team member to reach out" });
+  const row = await updateLead(env, lead, { wants_contact: yes, stage: interestStage(lead.stage, yes) });
   if (!yes) return;
   const notify = list(env.NOTIFY_EMAIL);
   const alert = internalEmail(row, row.stage, dashboardLink(env, req, row.id));
