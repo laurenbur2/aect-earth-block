@@ -10,7 +10,7 @@
 //   DASHBOARD_URL    link used in the alert email, e.g. "https://aectearthblock.com/admin/"
 // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by Supabase.
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { customerEmail, initialStage, internalEmail, normalize, STAGES } from "../_shared/pipeline.js";
+import { customerEmail, initialStage, interestStage, internalEmail, normalize, STAGES } from "../_shared/pipeline.js";
 
 const env = (k: string) => Deno.env.get(k) ?? "";
 const db = createClient(env("SUPABASE_URL"), env("SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
@@ -49,6 +49,9 @@ Deno.serve(async (req) => {
   try { payload = await req.json(); } catch { return new Response(JSON.stringify({ error: "Bad JSON" }), { status: 400, headers }); }
   // Honeypot: the forms have a hidden "website" field that people never fill in. Pretend success.
   if (payload.website) return new Response(JSON.stringify({ ok: true }), { headers });
+
+  // "Are you still interested?" on the planner results: update the lead they just created.
+  if (payload.source === "aect-ceb-planner-interest") return interest(payload, headers);
 
   let lead;
   try { lead = normalize(payload); } catch (e) { return new Response(JSON.stringify({ error: String(e.message) }), { status: 400, headers }); }
@@ -102,3 +105,27 @@ Deno.serve(async (req) => {
 
   return new Response(JSON.stringify({ ok: true }), { headers });
 });
+
+async function interest(payload: Record<string, unknown>, headers: Record<string, string>) {
+  const email = String(payload.email || "").toLowerCase();
+  if (!emailOk(email)) return new Response(JSON.stringify({ error: "Invalid email" }), { status: 400, headers });
+  const yes = payload.interested === true;
+  const { data: lead } = await db.from("leads").select("*").ilike("email", email)
+    .order("created_at", { ascending: false }).limit(1).maybeSingle();
+  if (!lead) return new Response(JSON.stringify({ error: "No lead" }), { status: 404, headers });
+  const { data: row } = await db.from("leads").update({ wants_contact: yes, stage: interestStage(lead.stage, yes) })
+    .eq("id", lead.id).select().single();
+  await db.from("lead_events").insert({
+    lead_id: lead.id, kind: "interest", author: "system",
+    title: yes ? "Still interested: wants a team member to reach out" : "Not interested right now",
+  });
+  if (yes && row) { // a hot lead: tell AECT right away
+    const notify = env("NOTIFY_EMAIL").split(",").map((s) => s.trim()).filter(Boolean);
+    const alert = internalEmail(row, row.stage, env("DASHBOARD_URL") ? `${env("DASHBOARD_URL")}#lead=${row.id}` : undefined);
+    const subject = `Wants a call: ${row.name || row.email}`;
+    const r = await send(notify, subject, alert.html, row.email);
+    await db.from("lead_events").insert({ lead_id: row.id, kind: "email", author: "system", title: subject, body: alert.html,
+      meta: { to: notify.join(", "), subject, audience: "aect", ...r } });
+  }
+  return new Response(JSON.stringify({ ok: true }), { headers });
+}

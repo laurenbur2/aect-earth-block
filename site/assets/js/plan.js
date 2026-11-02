@@ -5,13 +5,17 @@
   // The submit-lead Supabase Edge Function (backend/README.md): saves the lead for the admin
   // dashboard and emails the visitor their plan. Leave empty during development; leads are then only logged.
   const LEAD_ENDPOINT = "";
-  const TERRA_MADRE = "https://terramadrebrickco.com/"; // AECT's brick company: sells finished blocks
   const IMG = "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/";
   const MACHINE_PAGES = {
-    "AECT Impact 2001A": { page: "impact-2001a.html", img: IMG + "e48a0068-88d7-476c-a776-9f0a846ac278.jpg/:/rs=w:800", rate: "300 blocks/hr" },
-    "AECT 2500HD": { page: "2500hd.html", img: IMG + "bf5b7c80-8d03-46af-8d3b-ffebd057b135.jpg/:/rs=w:800", rate: "480 blocks/hr" },
-    "AECT 3500": { page: "3500.html", img: IMG + "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg/:/rs=w:800", rate: "480 blocks/hr" },
-    "AECT BP714": { page: "bp714.html", img: IMG + "889d4a57-f36f-4da9-8b17-e691db617e06.png/:/rs=w:800", rate: "240 blocks/hr" },
+    // intro: same copy as the machine pages (tools/build_machines.py), shown in the results pop-up.
+    "AECT Impact 2001A": { img: IMG + "e48a0068-88d7-476c-a776-9f0a846ac278.jpg/:/rs=w:800", rate: "300 blocks/hr",
+      intro: "Our smallest, least expensive CEB machine, and it's fully automated. Fed by a small hopper you can load with shovels, buckets or a power conveyor. Light enough to tow behind any vehicle. Perfect if you need to build one to five houses." },
+    "AECT 2500HD": { img: IMG + "bf5b7c80-8d03-46af-8d3b-ffebd057b135.jpg/:/rs=w:800", rate: "480 blocks/hr",
+      intro: "The same 6\"×12\" block as the Impact, at 480 blocks an hour, with a one-yard hopper you load with a tractor. Built for tens of thousands of blocks, fast and without much effort." },
+    "AECT 3500": { img: IMG + "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg/:/rs=w:800", rate: "480 blocks/hr",
+      intro: "The Cadillac of CEB machines. Big, fast, versatile and built to last. There are 3500s in the field today that have made one, two, even three million blocks." },
+    "AECT BP714": { img: IMG + "889d4a57-f36f-4da9-8b17-e691db617e06.png/:/rs=w:800", rate: "240 blocks/hr",
+      intro: "Some projects and jurisdictions (California, for example) call for interlocking, holey blocks you can run rebar and grout through. The BP714 makes exactly that, with a dual-stage compression chamber for consistent size and strength." },
   };
   // Defaults for questions we no longer ask (kept simple on purpose).
   const DEFAULTS = { crew: 5, rate: 18, cement: 350, earthDelivered: 15, pallets: 0.15, incid: 0.12 };
@@ -36,7 +40,7 @@
   const backBtn = $("#back");
   const progress = $("#progress");
 
-  const state = { project: null, name: "", state: null, size: "", height: null, width: null, extType: null, dirt: null, labor: null, intent: null, timeline: null, email: "" };
+  const state = { project: null, name: "", state: null, size: "", height: null, width: null, extType: null, dirt: null, labor: null, intent: null, timeline: null, email: "", interested: null };
   try { Object.assign(state, JSON.parse(localStorage.getItem(STORE_KEY) || "{}")); } catch (e) {}
   const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {} };
   const params = new URLSearchParams(location.search);
@@ -212,6 +216,8 @@
 
   $("#reveal").addEventListener("click", () => {
     if (!emailOk(state.email)) { $("#f-email").classList.add("has-error"); $("#email").focus(); return; }
+    state.interested = null; // a new plan gets a fresh "still interested?" answer
+    save();
     submitLead();
     show(current + 1);
   });
@@ -226,9 +232,12 @@
       plan: { totalBlocks: Math.round(r.totalBlocks), blockSize: r.blockSize, machine: r.machine, earthYd: Math.round(r.earthYd), makeOwnTotal: Math.round(own), rentTotal: Math.round(r.rentalTotal), buyTotal: Math.round(r.purchaseTotal), best },
       website: $("#website").value, // spam trap, always empty for people
     };
-    if (!LEAD_ENDPOINT) { console.info("[planner] lead captured (no endpoint configured):", payload); return; }
+    post(payload);
+  }
+  function post(payload) {
+    if (!LEAD_ENDPOINT) { console.info("[planner] sent (no endpoint configured):", payload); return; }
     fetch(LEAD_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(payload) })
-      .catch((err) => console.warn("[planner] lead submit failed", err));
+      .catch((err) => console.warn("[planner] submit failed", err));
   }
 
   function renderResults() {
@@ -254,28 +263,27 @@
       ? `For this project, ${LABEL[best]} comes in lower at ${money(TOTAL[best])}. ${why}`
       : why;
 
-    const card = (key, title, sub, total, per, rows, href, cta) => `
+    const card = (key, title, sub, total, per, rows, pop, cta) => `
       <div class="opt ${best === key ? "is-best" : ""} ${pick === key ? "is-pick" : ""}">${best === key ? '<span class="flag">Best value</span>' : pick === key ? '<span class="flag flag--pick">Your pick</span>' : ""}
         <h3>${title}</h3><div class="sub">${sub}</div>
         <div class="big">${money(total)}</div><div class="per">${per}</div>
         <details class="breakdown"><summary>See breakdown</summary><ul>${rows.map(([a, b]) => `<li><span>${a}</span><span>${b}</span></li>`).join("")}</ul></details>
-        <a class="btn ${best === key || pick === key ? "" : "btn--outline"}" href="${href}"${/^https?:/.test(href) ? ' target="_blank" rel="noopener"' : ""}>${cta}</a>
+        <button type="button" class="btn ${best === key || pick === key ? "" : "btn--outline"}" data-pop="${pop}">${cta}</button>
       </div>`;
     const cards = {
       own: card("own", `Buy the ${kitName}`, "Machine, soil analysis & training", own, `Includes the machine (${money(r.machineCost)})`,
         [[`${short(r.machine)} kit`, money(r.machineCost)], ["Materials", money(r.materialCost)], ["Labor", r.laborCost ? money(r.laborCost) : "Volunteer"], ["Pallets & supplies", money(r.incidentalCost)]],
-        m.page || "machines.html", `See the ${kitName}`),
+        "kit", `See the ${kitName}`),
       rent: intl ? "" : card("rent", "Rent our plant", "We bring it, with an operator", r.rentalTotal, `${money2(r.rentalCostPerBlock)} per block, all in`,
         [["Setup & delivery", money(r.mobilizationCost)], ["Rental ($1/block)", money(r.rentalMachineryCost)], ["Your materials & crew", money(r.rentalMaterialLaborIncidental)]],
-        "rent.html", "How renting works"),
-      buy: intl ? "" : card("buy", "Buy blocks", "From Terra Madre Brick Co.", r.purchaseTotal, `${money2(r.purchaseCostPerBlock)} per block, delivered`,
+        "rent", "How renting works"),
+      buy: intl ? "" : card("buy", "Buy blocks", "Made on AECT machines", r.purchaseTotal, `${money2(r.purchaseCostPerBlock)} per block, delivered`,
         [[`${int(r.totalBlocks)} × ${money2(r.blockPrice)}`, money(r.purchaseCost)], [`Delivery (${up(r.truckloads)} trucks)`, money(r.deliveryCost)]],
-        TERRA_MADRE, "Get a block quote ↗"),
+        "buy", "How buying blocks works"),
     };
     const order = [pick, best, "own", "rent", "buy"].filter((k, idx, arr) => k && arr.indexOf(k) === idx);
     const fastNote = r.machine === "AECT Impact 2001A" && r.totalBlocks > 30000
-      ? `<p class="fine" style="margin-top:10px">Big project? Ask us about the <a href="2500hd.html">2500HD</a>, which makes the same 6"×12" block at 480 an hour.</p>` : "";
-    const topic = { own: "quote", rent: "rental", buy: "blocks" }[pick || best];
+      ? `<p class="fine" style="margin-top:10px">Big project? Ask our team about the 2500HD, which makes the same 6"×12" block at 480 an hour.</p>` : "";
 
     $("#results").innerHTML = `
       <div class="results-hero">
@@ -297,6 +305,16 @@
         <div class="options3">${order.map((k) => cards[k]).join("")}</div>
       </div>
 
+      <div class="res-section next-cta" id="interest">
+        <h2>${n ? `${n}, are` : "Are"} you still interested?</h2>
+        <p>Say yes and a member of our team will reach out within 2 business days to talk through your plan and get you real numbers.</p>
+        <div class="btn-row" style="justify-content:center">
+          <button type="button" class="btn btn--cream btn--lg" data-interest="yes">Yes, have someone reach out</button>
+          <button type="button" class="btn btn--ghost btn--lg" data-interest="no">Not right now</button>
+        </div>
+        <p class="interest-msg" id="interestMsg" role="status"></p>
+      </div>
+
       <div class="res-section machine-rec">
         ${m.img ? `<img src="${m.img}" alt="${r.machine}">` : ""}
         <div>
@@ -304,20 +322,9 @@
           <h3>${kitName} · from ${money(r.machineCost)}</h3>
           <ul class="kit-includes"><li>${short(r.machine)} machine</li><li>Soil analysis</li><li>1 week on-site training</li><li>Warranty & lifetime support</li></ul>
           <p>${m.rate || ""}. Makes your ${r.blockSize} blocks.</p>
-          <a class="btn btn--outline" href="${m.page || "machines.html"}">View kit</a>
+          <button type="button" class="btn btn--outline" data-pop="kit">View kit</button>
           ${fastNote}
         </div>
-      </div>
-
-      <div class="res-section next-cta">
-        ${(pick || best) === "buy" ? `
-        <h2>Ready to order blocks?</h2>
-        <p>Finished blocks are made and sold by our brick company, Terra Madre Brick Co. Send them your block count (${int(r.totalBlocks)}) for a free quote.</p>
-        <a class="btn btn--cream btn--lg" href="${TERRA_MADRE}" target="_blank" rel="noopener">Get a block quote from Terra Madre <span class="arrow">↗</span></a>
-        <p class="fine" style="margin:14px 0 0;color:#b8c0ce">Thinking about making your own instead? <a href="contact.html?topic=quote&machine=${encodeURIComponent(kitName)}" style="color:var(--logo-cream)">Ask AECT about the ${kitName}</a></p>` : `
-        <h2>Ready for real numbers?</h2>
-        <p>Send us your plan and we'll reply with an official quote.</p>
-        <a class="btn btn--cream btn--lg" href="contact.html?topic=${topic}&machine=${encodeURIComponent(kitName)}">Get my official quote <span class="arrow">→</span></a>`}
       </div>
 
       <details class="res-section assumptions">
@@ -336,7 +343,67 @@
         <button class="btn btn--outline" type="button" id="restart">Change my answers</button>
       </div>`;
     $("#restart").onclick = () => show(0);
+    showInterest();
   }
+
+  // ---- "Still interested?" ----------------------------------------------------------
+  // The answer goes to the same lead: yes moves it to Ready to buy on AECT's dashboard.
+  function showInterest() {
+    $$("[data-interest]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.interest === state.interested)));
+    const n = firstName();
+    $("#interestMsg").textContent = state.interested === "yes"
+      ? `Thanks${n ? ", " + n : ""}! A member of our team will reach out at ${state.email} within 2 business days.`
+      : state.interested === "no" ? "No problem. Your plan is in your inbox whenever you're ready." : "";
+  }
+  function setInterest(v) {
+    if (state.interested === v) return;
+    state.interested = v; save(); showInterest();
+    post({ source: "aect-ceb-planner-interest", submittedAt: new Date().toISOString(), email: state.email, interested: v === "yes" });
+  }
+
+  // ---- Pop-ups for the kit, renting and buying blocks (no leaving the page) --------
+  const modal = $("#infoModal");
+  function popContent(key) {
+    const { r } = plan();
+    const m = MACHINE_PAGES[r.machine] || {};
+    const kitName = `${short(r.machine)} Kit`;
+    const cta = `<div class="btn-row" style="margin-top:24px"><button type="button" class="btn" data-interest="yes" data-close>Yes, have someone reach out</button><button type="button" class="btn btn--outline" data-close>Close</button></div>`;
+    if (key === "kit") return `
+      ${m.img ? `<img class="pop-img" src="${m.img}" alt="${r.machine}">` : ""}
+      <span class="eyebrow">Your kit</span>
+      <h2>${kitName} · from ${money(r.machineCost)}</h2>
+      <p>${m.intro || ""}</p>
+      <ul class="kit-includes"><li>${short(r.machine)} machine</li><li>Soil analysis</li><li>1 week on-site training</li><li>Warranty & lifetime support</li></ul>
+      <ul class="pop-facts"><li><span>Makes</span><b>${r.blockSize} blocks</b></li><li><span>Rated output</span><b>${m.rate || ""}</b></li><li><span>Your project</span><b>${int(r.totalBlocks)} blocks</b></li></ul>
+      <p class="fine">Kit prices FOB San Antonio, TX; shipping extra.</p>${cta}`;
+    if (key === "rent") return `
+      <span class="eyebrow">Rent our plant</span>
+      <h2>How renting works</h2>
+      <ol class="pop-steps">
+        <li><b>Plan & test.</b> We confirm your soil works with a jar test and Small Block Press samples.</li>
+        <li><b>We mobilize.</b> AECT hauls the plant to your site: Mega Mixer, 3500 machine, conveyors and support equipment.</li>
+        <li><b>We produce.</b> Our operator runs the plant and trains your crew on mixing, moisture, stacking and curing.</li>
+        <li><b>You build.</b> Blocks are palletized on site, typically 5,000 to 8,000 a week.</li>
+      </ol>
+      <ul class="pop-facts"><li><span>Setup & delivery${state.state && state.state !== "intl" ? ` (${state.state})` : ""}</span><b>${money(r.mobilizationCost)}</b></li><li><span>Rental, $1 per block</span><b>${money(r.rentalMachineryCost)}</b></li><li><span>Your materials & crew</span><b>${money(r.rentalMaterialLaborIncidental)}</b></li></ul>
+      <p class="fine">You provide the crew (typically 4 to 6), a tractor with loader, forklift, earth, stabilizer, water, power, pallets and lodging for our operator.</p>${cta}`;
+    return `
+      <span class="eyebrow">Buy finished blocks</span>
+      <h2>Blocks delivered, ready to lay</h2>
+      <p>Skip the equipment. Your blocks are made on AECT machines, cement-stabilized, palletized and delivered to your site.</p>
+      <ul class="pop-facts"><li><span>${int(r.totalBlocks)} blocks × ${money2(r.blockPrice)}</span><b>${money(r.purchaseCost)}</b></li><li><span>Delivery (${up(r.truckloads)} trucks)</span><b>${money(r.deliveryCost)}</b></li><li><span>Total, delivered</span><b>${money(r.purchaseTotal)}</b></li></ul>
+      <p class="fine">Planning estimate. Our team will confirm block size, price and delivery with you.</p>${cta}`;
+  }
+  document.addEventListener("click", (e) => {
+    const pop = e.target.closest("[data-pop]");
+    if (pop) { $("#infoBody").innerHTML = popContent(pop.dataset.pop); modal.showModal(); return; }
+    const yes = e.target.closest("[data-interest]");
+    if (yes) setInterest(yes.dataset.interest);
+    if (e.target.closest("[data-close]") || e.target === modal) {
+      modal.close();
+      if (yes) $("#interest").scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
 
   // ---- Boot -----------------------------------------------------------------------
   renderDynamic();

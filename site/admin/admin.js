@@ -3,7 +3,7 @@
 // otherwise runs on sample leads kept in this browser (demo mode).
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 import {
-  STAGES, PATHS, PROJECTS, INTENTS, TIMELINES, normalize, initialStage, customerEmail, internalEmail, planEmail, contactEmail,
+  STAGES, PATHS, PROJECTS, INTENTS, TIMELINES, normalize, initialStage, interestStage, customerEmail, internalEmail, planEmail, contactEmail,
 } from "./pipeline.js";
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -45,13 +45,13 @@ async function supabaseApi() {
 }
 
 // ---- Data: demo (sample leads in localStorage) ------------------------------------------------
-const DEMO_KEY = "aect-admin-demo-v2";
+const DEMO_KEY = "aect-admin-demo-v4";
 const day = 864e5;
 const DEMO_SEED = [
-  { days: 0.1, stage: null, p: { source: "aect-ceb-planner", contact: { name: "Sam Ortiz", email: "sam.ortiz@example.com" },
+  { days: 0.1, stage: null, interested: true, p: { source: "aect-ceb-planner", contact: { name: "Sam Ortiz", email: "sam.ortiz@example.com" },
     qualify: { project: "home", intent: "own", timeline: "0-6", state: "Texas", dirt: "own", labor: "volunteer", size: "1800" },
     plan: { totalBlocks: 9850, blockSize: '10" x 14"', machine: "AECT 3500", earthYd: 152, makeOwnTotal: 171200, rentTotal: 52900, buyTotal: 41800, best: "buy" } } },
-  { days: 0.6, stage: null, p: { source: "aect-ceb-planner", contact: { name: "Priya Shah", email: "priya@example.com" },
+  { days: 0.6, stage: null, interested: false, p: { source: "aect-ceb-planner", contact: { name: "Priya Shah", email: "priya@example.com" },
     qualify: { project: "outdoor", intent: "unsure", timeline: "research", state: "Colorado", dirt: "delivered", labor: "volunteer", size: "100" },
     plan: { totalBlocks: 1240, blockSize: '6" x 12"', machine: "AECT Impact 2001A", earthYd: 14, makeOwnTotal: 66100, rentTotal: 28600, buyTotal: 6900, best: "buy" } } },
   { days: 1.2, stage: null, p: { source: "aect-contact-form", topic: "kit", name: "Mike Delgado", email: "mdelgado@example.com", state: "Arizona",
@@ -66,12 +66,15 @@ const DEMO_SEED = [
     plan: { totalBlocks: 21400, blockSize: '10" x 14"', machine: "AECT 3500", earthYd: 331, makeOwnTotal: 198700, rentTotal: 96800, buyTotal: 92000, best: "own" } } },
   { days: 6, stage: null, p: { source: "aect-contact-form", topic: "consult", name: "Alex Kim", email: "alexkim@example.com", state: "Oregon",
     status: "Just curious: researching for now", message: "Want to talk through whether my clay-heavy soil will work." } },
+  { days: 1.8, stage: null, p: { source: "aect-contact-form", topic: "blocks", name: "Rosa Martinez", email: "rosa.m@example.com", state: "Texas",
+    status: "Ready to build: starting within 6 months", blockType: "Stabilized (recommended)", blocks: "4200", kit: "Impact 2001A kit", product: "Small Block Press",
+    message: "Outdoor kitchen and garden walls near Fredericksburg. Need delivery by April." } },
   { days: 14, stage: "lost", note: "Went with a used machine from a local seller.", p: { source: "aect-contact-form", topic: "tools", name: "Chris Hall", email: "chall@example.com",
     state: "Kansas", status: "Ready to build: starting within 6 months", product: "Block Cutter", message: "Price for a block cutter shipped to Wichita?" } },
 ];
 function demoSeed() {
   const leads = [], events = [];
-  DEMO_SEED.forEach(({ days, stage, note, p }, i) => {
+  DEMO_SEED.forEach(({ days, stage, note, interested, p }, i) => {
     const t = Date.now() - days * day;
     const lead = normalize(p);
     const row = { id: `demo-${i + 1}`, created_at: new Date(t).toISOString(), updated_at: new Date(t + 36e5).toISOString(), ...lead, stage: initialStage(lead), raw: p };
@@ -80,6 +83,12 @@ function demoSeed() {
     const mine = customerEmail(row), alert = internalEmail(row, row.stage);
     ev({ kind: "email", title: mine.subject, body: mine.html, meta: { to: row.email, subject: mine.subject, audience: "customer", status: "sent" } }, 5000);
     ev({ kind: "email", title: alert.subject, body: alert.html, meta: { to: "info@AECTearthblock.com", subject: alert.subject, audience: "aect", status: "sent" } }, 5000);
+    if (interested !== undefined) {
+      ev({ kind: "interest", title: interested ? "Still interested: wants a team member to reach out" : "Not interested right now" }, 60000);
+      row.wants_contact = interested;
+      const to = interestStage(row.stage, interested);
+      if (to !== row.stage) { ev({ kind: "stage", title: "Stage changed", meta: { from: row.stage, to }, author: "system" }, 61000); row.stage = to; }
+    }
     if (stage) {
       ev({ kind: "stage", title: "Stage changed", meta: { from: row.stage, to: stage }, author: "ryan@aectearthblock.com" }, 2 * day / 3);
       row.stage = stage;
@@ -139,6 +148,7 @@ function cardHtml(l) {
     <span class="card-top"><b>${esc(l.name || l.email)}</b><span class="path path--${esc(l.path)}">${esc(PATHS[l.path] || l.source)}</span></span>
     <span class="card-what">${esc(what)}</span>
     <span class="card-meta">${esc(l.state || "")}${l.timeline ? ` · ${esc(TIMELINES[l.timeline])}` : ""}</span>
+    ${l.wants_contact === true ? `<span class="call call--yes">Wants a call</span>` : l.wants_contact === false ? `<span class="call">Not right now</span>` : ""}
     <span class="card-foot"><span>${l.source === "planner" ? "Planner" : "Contact form"}</span><span>${ago(l.created_at)}</span></span>
   </button>`;
 }
@@ -189,15 +199,16 @@ async function moveLead(id, stage) {
 }
 
 // ---- Detail drawer -------------------------------------------------------------------------------
-const EVENT_ICON = { created: "★", resubmitted: "↺", email: "✉", stage: "→", note: "✎" };
+const EVENT_ICON = { created: "★", resubmitted: "↺", interest: "?", email: "✉", stage: "→", note: "✎" };
 
 function facts(l) {
   const s = l.summary || {};
   const rows = [
-    ["Wants", PATHS[l.path]], ["Location", l.state], ["Project", PROJECTS[l.project]], ["Size", s.size && `${int(s.size)} ${l.project === "outdoor" ? "ft of wall" : "sq ft"}`],
+    ["Wants", PATHS[l.path]], ["Wants a call", l.wants_contact === true ? "Yes" : l.wants_contact === false ? "Not right now" : l.source === "planner" ? "Didn't answer" : null],
+    ["Location", l.state], ["Project", PROJECTS[l.project]], ["Size", s.size && `${int(s.size)} ${l.project === "outdoor" ? "ft of wall" : "sq ft"}`],
     ["Buy or rent", INTENTS[l.intent]], ["Timeline", TIMELINES[l.timeline]],
     ["Dirt", s.dirt && (s.dirt === "own" ? "From their land" : "Delivered")], ["Labor", s.labor && (s.labor === "hired" ? "Hired crew" : "Volunteers")],
-    ["Kit", s.kit], ["Product", s.product], ["Est. blocks", !s.totalBlocks && s.blocks && int(s.blocks)],
+    ["Kit", s.kit], ["Product", s.product], ["Block type", s.blockType], ["Est. blocks", !s.totalBlocks && s.blocks && int(s.blocks)],
   ].filter(([, v]) => v);
   return `<dl class="facts">${rows.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`;
 }
@@ -309,9 +320,10 @@ $("#emailsBtn").onclick = () => {
   const t = (label, who, { subject, html }) => ({ label, subject, html, meta: who });
   showEmail([
     t("Planner: their plan", "Sent to the client when they finish the planner", planEmail(planLead)),
-    t("Planner: buying blocks", "Planner email when buying blocks is their path (points to Terra Madre)", planEmail(blocksLead)),
+    t("Planner: buying blocks", "Planner email when buying blocks is their path", planEmail(blocksLead)),
     t("Kit quote reply", "Auto-reply to a kit quote request", contactEmail(kitLead)),
     t("Rental reply", "Auto-reply to a rental request", contactEmail(rentLead)),
+    t("Block quote reply", "Auto-reply to a block quote request", contactEmail(sample(DEMO_SEED.find((d) => d.p.topic === "blocks").p))),
     t("Consult reply", "Auto-reply to a video consult request", contactEmail(consult)),
     t("Alert to AECT", "Sent to AECT's inbox for every new lead", internalEmail(planLead, planLead.stage)),
   ]);

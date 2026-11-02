@@ -55,6 +55,8 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.15; margin: 0; color:
 .card-top b { font-size: .98rem; }
 .card-what { font-size: .88rem; }
 .card-meta { color: var(--muted); font-size: .8rem; }
+.call { align-self: flex-start; font-size: .72rem; font-weight: 700; border-radius: 999px; padding: 2px 8px; margin-top: 2px; background: #eceae4; color: #4f4a3d; }
+.call--yes { background: #e6efdf; color: var(--ok); }
 .card-foot { display: flex; justify-content: space-between; color: var(--muted); font-size: .75rem; margin-top: 4px; padding-top: 6px; border-top: 1px solid var(--line); }
 .path { font-size: .68rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; border-radius: 999px; padding: 2px 8px; white-space: nowrap; background: var(--brand-tint); color: var(--brand-dark); }
 .path--rent { background: #e6efdf; color: #46572c; }

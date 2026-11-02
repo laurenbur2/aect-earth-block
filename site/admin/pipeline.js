@@ -5,7 +5,6 @@
 // Public site address, used for links and the logo in emails. Change to https://aectearthblock.com/ at launch.
 export const SITE_URL = "https://laurenbur2.github.io/aect-earth-block/";
 export const AECT_EMAIL = "info@AECTearthblock.com";
-export const TERRA_MADRE = "https://terramadrebrickco.com/";
 
 export const STAGES = [
   { id: "inquiring", label: "Inquiring", hint: "Exploring with a real project, not ready to buy yet" },
@@ -54,10 +53,25 @@ export function normalize(p) {
       path: TOPIC_TO_PATH[p.topic] || null,
       name: clean(p.name, 120), email: clean(p.email, 200), state: clean(p.state, 60),
       project: null, intent: null, timeline: STATUS_TO_TIMELINE[p.status] || null,
-      summary: { topic: p.topic, kit: clean(p.kit, 80), blocks: clean(p.blocks, 20), product: clean(p.product, 80), message: clean(p.message, 5000) },
+      // Hidden fields for other topics still post their defaults, so keep only the ones for this topic.
+      summary: {
+        topic: p.topic, kit: p.topic === "kit" ? clean(p.kit, 80) : null, product: p.topic === "tools" ? clean(p.product, 80) : null,
+        blockType: p.topic === "blocks" ? clean(p.blockType, 40) : null,
+        blocks: ["kit", "rental", "blocks"].includes(p.topic) ? clean(p.blocks, 20) : null, message: clean(p.message, 5000),
+      },
     };
   }
   throw new Error("Unknown source");
+}
+
+/**
+ * Stage after the visitor answers "Are you still interested?" on their results. Yes means they want
+ * a call (Ready to buy); no means not now (Unsure). Leads AECT already quoted, won or lost stay put.
+ */
+export function interestStage(stage, interested) {
+  const rank = (id) => STAGES.findIndex((s) => s.id === id);
+  if (rank(stage) >= rank("quoted")) return stage;
+  return interested ? "ready" : "unsure";
 }
 
 /** Which stage a brand-new lead starts in. AECT can drag it anywhere afterwards. */
@@ -108,7 +122,7 @@ export function planEmail(lead) {
     { key: "own", label: `Buy the ${kit}`, sub: "Machine, soil analysis and training", total: s.makeOwnTotal },
     ...(intl ? [] : [
       { key: "rent", label: "Rent our plant", sub: "We bring it, with an operator", total: s.rentTotal },
-      { key: "buy", label: "Buy finished blocks", sub: "From Terra Madre Brick Co., delivered", total: s.buyTotal },
+      { key: "buy", label: "Buy finished blocks", sub: "Made on AECT machines, delivered", total: s.buyTotal },
     ]),
   ];
   const best = s.best || options.reduce((a, b) => (b.total < a.total ? b : a)).key;
@@ -118,8 +132,7 @@ export function planEmail(lead) {
       <div style="color:${MUTED};font-size:13px">${esc(o.sub)}</div></td>
       <td align="right" style="padding:12px 14px;border-top:1px solid ${LINE};font-weight:700;font-size:17px;white-space:nowrap">${money(o.total)}</td></tr>`).join("");
   const cta = lead.path === "blocks"
-    ? button(TERRA_MADRE, "Get a block quote from Terra Madre")
-      + `<p style="color:${MUTED};font-size:14px;margin:0">Finished blocks are made and sold by our brick company, Terra Madre Brick Co. Send them your block count (${int(s.totalBlocks)}) for a free quote.</p>`
+    ? `<p style="margin:22px 0 0">Want a quote for your ${int(s.totalBlocks)} blocks, delivered? <b>Reply to this email</b> and our team will put one together.</p>`
     : button(`${SITE_URL}contact.html?topic=${lead.path === "rent" ? "rental" : "quote"}&machine=${encodeURIComponent(kit)}`, "Get my official quote")
       + `<p style="color:${MUTED};font-size:14px;margin:0">Send us your plan and we'll reply with an official quote, usually within 2 business days.</p>`;
   const html = layout(`About ${int(s.totalBlocks)} blocks. Here are your numbers.`, `
@@ -139,6 +152,7 @@ export function planEmail(lead) {
 
 const CONTACT_REPLY = {
   kit: ["We got your kit quote request", "Ryan and the team will put together an official quote for your kit and reply within 2 business days."],
+  blocks: ["We got your block quote request", "We'll price your blocks, delivered to your site, and reply with a quote within 2 business days."],
   rent: ["We got your rental request", "We'll look at your location and block count and reply with a rental estimate within 2 business days."],
   consulting: ["We got your consulting request", "We'll reply within 2 business days to talk through your site and dates."],
   consult: ["We got your video consult request", "We'll reply within 2 business days with times for your 30-minute call with Ryan Runge."],
@@ -151,7 +165,7 @@ export function contactEmail(lead) {
   const s = lead.summary || {};
   const n = firstName(lead.name);
   const details = [
-    ["Kit", s.kit], ["Product", s.product], ["Estimated blocks", s.blocks && int(s.blocks)], ["Location", lead.state],
+    ["Kit", s.kit], ["Product", s.product], ["Block type", s.blockType], ["Estimated blocks", s.blocks && int(s.blocks)], ["Location", lead.state],
     ["Project", TIMELINES[lead.timeline]],
   ].filter(([, v]) => v);
   const html = layout(line, `
@@ -172,10 +186,11 @@ export function customerEmail(lead) {
 export function internalEmail(lead, stage, dashboardUrl) {
   const s = lead.summary || {};
   const rows = [
-    ["Name", lead.name], ["Email", lead.email], ["Wants", PATHS[lead.path]], ["Stage", STAGES.find((x) => x.id === stage)?.label],
+    ["Name", lead.name], ["Email", lead.email], ["Wants", PATHS[lead.path]],
+    ["Wants a call", lead.wants_contact === true ? "Yes" : lead.wants_contact === false ? "Not right now" : null], ["Stage", STAGES.find((x) => x.id === stage)?.label],
     ["Location", lead.state], ["Project", PROJECTS[lead.project]], ["Timeline", TIMELINES[lead.timeline]],
     ["Blocks", s.totalBlocks ? int(s.totalBlocks) : s.blocks], ["Machine", s.machine && short(s.machine)],
-    ["Kit / product", s.kit || s.product], ["Message", s.message],
+    ["Kit / product", s.kit || s.product], ["Block type", s.blockType], ["Message", s.message],
   ].filter(([, v]) => v);
   const html = layout("New lead", `
     <h1 style="${FONT}margin:0 0 14px;font-size:22px;color:${NAVY}">New ${lead.source === "planner" ? "planner" : "contact form"} lead</h1>

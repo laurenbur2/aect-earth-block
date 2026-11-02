@@ -17,6 +17,7 @@ create table public.leads (
   project text,   -- home | barn | commercial | outdoor | business (planner only)
   intent text,    -- own | rent | buy | unsure (planner only)
   timeline text,  -- 0-6 | 6-12 | 12+ | research
+  wants_contact boolean, -- "Are you still interested?" on the planner results: yes / no / not answered (null)
   summary jsonb not null default '{}'::jsonb, -- plan numbers, or the contact request fields
   raw jsonb not null                           -- the exact payload the site sent
 );
@@ -27,7 +28,7 @@ create table public.lead_events (
   id bigint generated always as identity primary key,
   lead_id uuid not null references public.leads (id) on delete cascade,
   created_at timestamptz not null default now(),
-  kind text not null check (kind in ('created', 'resubmitted', 'email', 'stage', 'note')),
+  kind text not null check (kind in ('created', 'resubmitted', 'interest', 'email', 'stage', 'note')),
   title text,
   body text,                 -- email HTML, or note text
   meta jsonb not null default '{}'::jsonb, -- e.g. {to, subject, status} for emails, {from, to} for stages
