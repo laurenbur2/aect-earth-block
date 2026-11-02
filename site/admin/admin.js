@@ -45,7 +45,7 @@ async function supabaseApi() {
 }
 
 // ---- Data: demo (sample leads in localStorage) ------------------------------------------------
-const DEMO_KEY = "aect-admin-demo-v10";
+const DEMO_KEY = "aect-admin-demo-v11";
 const day = 864e5;
 const DEMO_SEED = [
   { days: 0.1, stage: null, interested: true, p: { source: "aect-ceb-planner", contact: { name: "Sam Ortiz", email: "sam.ortiz@example.com" },

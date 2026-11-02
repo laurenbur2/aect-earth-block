@@ -5,10 +5,11 @@
 // Public site address, used for links and the logo in emails. Change to https://aectearthblock.com/ at launch.
 export const SITE_URL = "https://laurenbur2.github.io/aect-earth-block/";
 export const AECT_EMAIL = "info@AECTearthblock.com";
-// Paid video call with Ryan. Swap BOOK_CALL_URL for the real booking link (GoDaddy, Calendly, etc.) when there is one;
-// until then it opens the consult request on the contact form.
+// Paid video call with Ryan, booked through GoDaddy Online Appointments on AECT's current site.
+// NOTE: this lives on the old GoDaddy site; when aectearthblock.com moves to the new site, replace it
+// (e.g. with a Calendly link) or the button breaks. Also used in reach-out.html, rent.html and contact.html.
 export const CONSULT = { price: "$75", length: "30-minute", with: "Ryan Runge" };
-export const BOOK_CALL_URL = SITE_URL + "contact.html?topic=consult";
+export const BOOK_CALL_URL = "https://aectearthblock.com/ola/services/compressed-earth-block-ceb-consultation";
 
 // The funnel, in board order. Wants us to reach out, Ready to build and Not ready yet (last, out of the
 // way) are set automatically from the quiz and contact form; the rest are moved by AECT as they work the lead.
