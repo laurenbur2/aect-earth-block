@@ -6,17 +6,17 @@
 export const SITE_URL = "https://laurenbur2.github.io/aect-earth-block/";
 export const AECT_EMAIL = "info@AECTearthblock.com";
 
-// The funnel, in board order. The first four sort new leads by how serious they are (set automatically
-// from the quiz and contact form); the rest are moved by AECT as they work the lead.
+// The funnel, in board order. Wants us to reach out, Ready to build and Not ready yet (last, out of the
+// way) are set automatically from the quiz and contact form; the rest are moved by AECT as they work the lead.
 // `todo` is what the team should do; `due` (days) flags a card as overdue when it sits longer.
 export const STAGES = [
   { id: "reach", label: "Wants us to reach out", hint: "Said yes to \"still interested?\" or sent the contact form", todo: "Email them within 2 business days", due: 2 },
   { id: "ready", label: "Ready to build", hint: "Starting within 6 months, hasn't answered \"still interested?\"", todo: "Email them", due: 3 },
-  { id: "later", label: "Not ready yet", hint: "Building 6+ months out, just curious, or said \"not right now\"", todo: "No outreach; they have their plan by email" },
   { id: "talking", label: "In conversation", hint: "We've reached out and are talking", todo: "Send a quote when ready" },
   { id: "quoted", label: "Quote sent", hint: "Official quote sent", todo: "Follow up", due: 7 },
   { id: "won", label: "Won", hint: "Bought a kit, booked a rental or ordered blocks" },
   { id: "lost", label: "Lost", hint: "Not a fit, went elsewhere or went quiet" },
+  { id: "later", label: "Not ready yet", hint: "Building 6+ months out, just curious, or said \"not right now\"", todo: "No outreach; they have their plan by email" },
 ];
 
 // How serious each stage is, for automatic moves. The site only ever moves a lead *up* this list,
