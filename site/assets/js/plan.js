@@ -309,9 +309,10 @@
 
       <!-- Asked right under the three options; a sticky bar repeats it if they scroll past without answering. -->
       <div class="interest-card" id="interest">
-        <span class="eyebrow">One quick question</span>
-        <h2>${n ? `${n}, are` : "Are"} you still interested?</h2>
-        <p>Say yes and a member of our team will reach out within 2 business days to talk through your plan.</p>
+        <div class="interest-text">
+          <h2>${n ? `${n}, are` : "Are"} you still interested?</h2>
+          <p>A member of our team will reach out within 2 business days.</p>
+        </div>
         <div class="interest-choices" role="radiogroup">
           <button type="button" class="interest-choice interest-choice--yes" role="radio" data-interest="yes">
             <span class="ic-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
@@ -368,12 +369,13 @@
       ? `Thanks${n ? ", " + n : ""}! A member of our team will reach out at ${state.email} within 2 business days.`
       : state.interested === "no" ? "No problem. Your plan is in your inbox whenever you're ready." : "";
   }
-  // Sticky reminder at the bottom once they've scrolled past the question without answering.
+  // Sticky reminder at the bottom whenever the question is off screen and unanswered: on phones the
+  // stacked price cards push it down, and on any screen it follows people who scroll past.
   const bar = $("#interestBar");
-  let cardAbove = false;
-  function updateBar() { bar.hidden = !(current === steps.length - 1 && !state.interested && cardAbove); }
-  const io = new IntersectionObserver(([e]) => { cardAbove = !e.isIntersecting && e.boundingClientRect.top < 0; updateBar(); });
-  function watchCard() { io.disconnect(); cardAbove = false; const c = $("#interest"); if (c) io.observe(c); }
+  let cardHidden = false;
+  function updateBar() { bar.hidden = !(current === steps.length - 1 && !state.interested && cardHidden); }
+  const io = new IntersectionObserver(([e]) => { cardHidden = !e.isIntersecting; updateBar(); });
+  function watchCard() { io.disconnect(); cardHidden = false; const c = $("#interest"); if (c) io.observe(c); }
 
   function setInterest(v) {
     if (state.interested === v) return;
