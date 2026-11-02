@@ -18,9 +18,9 @@ database_name = "aect-leads"
 database_id = "6222c227-32b0-49ff-b14d-23c9b16b73f7"
 
 [vars]
-# Testing: Resend's test sender only delivers to the address you signed up to Resend with.
-# Going live: a verified AECT address, e.g. "AECT Earth Block <plans@aectearthblock.com>".
-EMAIL_FROM = "AECT Earth Block <onboarding@resend.dev>"
+# Testing: sent from Lauren's verified Resend domain (centeredstrategy.com).
+# Going live: verify aectearthblock.com in Resend and use e.g. "AECT Earth Block <plans@aectearthblock.com>".
+EMAIL_FROM = "AECT Earth Block <aect@centeredstrategy.com>"
 ALLOWED_ORIGINS = "https://laurenbur2.github.io,http://localhost:4173"
 
 # Secrets, set with `npx wrangler secret put NAME` (kept out of this public repo):
