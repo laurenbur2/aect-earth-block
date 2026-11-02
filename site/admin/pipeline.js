@@ -111,7 +111,8 @@ const int = (n) => Math.round(+n || 0).toLocaleString("en-US");
 const short = (m) => String(m || "").replace("AECT ", "");
 const firstName = (n) => String(n || "").trim().split(/\s+/)[0];
 
-const C = { navy: "#232c3c", navy2: "#2f3a4f", brand: "#45536c", cream: "#fbfaf5", sand: "#f1efe3", line: "#e1ded2",
+// blue is the logo's background, so the logo always blends into the header and footer; navy is for text only.
+const C = { navy: "#232c3c", blue: "#45536c", blueLine: "#5a6884", soft: "#d3d9e3", brand: "#45536c", cream: "#fbfaf5", sand: "#f1efe3", line: "#e1ded2",
   ink: "#1b2230", muted: "#5d6574", accent: "#c4561c", logoCream: "#fbf8cc", green: "#adbb89" };
 const HEAD = "font-family:'Barlow Semi Condensed','Arial Narrow',Arial,sans-serif;";
 const BODY = "font-family:Helvetica,Arial,sans-serif;";
@@ -153,10 +154,10 @@ function button(href, label, color = C.accent) {
 /** Big numbers in a row, e.g. blocks / kit / earth. */
 function stats(items) {
   const w = Math.floor(100 / items.length);
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.navy};border-radius:14px;margin:6px 0 30px"><tr>
-    ${items.map(([big, small], i) => `<td class="statcell" width="${w}%" style="padding:20px 18px;${i ? `border-left:1px solid ${C.navy2};` : ""}vertical-align:top">
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.blue};border-radius:14px;margin:6px 0 30px"><tr>
+    ${items.map(([big, small], i) => `<td class="statcell" width="${w}%" style="padding:20px 18px;${i ? `border-left:1px solid ${C.blueLine};` : ""}vertical-align:top">
       <div class="stat" style="${HEAD}font-size:26px;line-height:1.05;font-weight:800;color:${C.logoCream}">${big}</div>
-      <div style="${BODY}font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#b8c0ce;margin-top:6px">${esc(small)}</div></td>`).join("")}
+      <div style="${BODY}font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:${C.soft};margin-top:6px">${esc(small)}</div></td>`).join("")}
   </tr></table>`;
 }
 
@@ -172,7 +173,7 @@ function details(rows) {
 function steps(list) {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 8px">${list.map(([title, text], i) => `
     <tr><td width="44" style="vertical-align:top;padding:0 0 18px">
-      <div style="${HEAD}width:32px;height:32px;line-height:32px;border-radius:50%;background:${C.navy};color:${C.logoCream};text-align:center;font-weight:800;font-size:16px">${i + 1}</div></td>
+      <div style="${HEAD}width:32px;height:32px;line-height:32px;border-radius:50%;background:${C.blue};color:${C.logoCream};text-align:center;font-weight:800;font-size:16px">${i + 1}</div></td>
       <td style="vertical-align:top;padding:4px 0 18px"><div style="${HEAD}font-size:18px;font-weight:700;color:${C.navy}">${esc(title)}</div>
       <div style="${BODY}font-size:15px;line-height:1.5;color:${C.muted};margin-top:2px">${esc(text)}</div></td></tr>`).join("")}</table>`;
 }
@@ -210,7 +211,7 @@ function showcase(keys, title = "Explore the AECT lineup") {
     <p style="${BODY}margin:4px 0 0;font-size:14px;color:${C.muted}">Also from AECT: ${MORE_LINKS.map(([t, h]) => `<a href="${url(h)}" style="color:${C.brand};font-weight:700">${t}</a>`).join(" &nbsp;·&nbsp; ")}</p>`;
 }
 
-function layout({ preheader, hero, heroAlt, body, audience = "customer" }) {
+function layout({ preheader, body, audience = "customer" }) {
   const nav = [["Machines", "machines.html"], ["Blocks", "blocks.html"], ["Rent", "rent.html"], ["FAQ", "learn.html"]];
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@700;800&display=swap" rel="stylesheet">
@@ -229,18 +230,17 @@ function layout({ preheader, hero, heroAlt, body, audience = "customer" }) {
 <div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(preheader)}</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.sand}"><tr><td align="center" style="padding:28px 12px">
   <table role="presentation" class="wrap" width="620" cellpadding="0" cellspacing="0" style="width:620px;max-width:620px;background:#fff;border-radius:18px;overflow:hidden">
-    <tr><td style="background:${C.navy};padding:18px 32px" class="pad">
+    <tr><td style="background:${C.blue};padding:18px 32px" class="pad">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
         <td><a href="${SITE_URL}"><img src="${SITE_URL}assets/img/logo-badge.png" width="104" alt="AECT Earth Block" style="display:block;border:0"></a></td>
         <td align="right" style="${HEAD}font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.green}">${audience === "aect" ? "Lead alert" : "Est. 1989 · San Antonio, TX"}</td>
       </tr></table></td></tr>
-    ${hero ? `<tr><td><img src="${photo(hero, 1240, 520)}" width="620" alt="${esc(heroAlt || "")}" style="display:block;width:100%;height:auto;border:0"></td></tr>` : ""}
     <tr><td class="pad" style="padding:40px 44px 44px">${body}</td></tr>
-    ${audience === "aect" ? "" : `<tr><td style="background:${C.navy};padding:32px 44px" class="pad">
+    ${audience === "aect" ? "" : `<tr><td style="background:${C.blue};padding:32px 44px" class="pad">
       <div style="${HEAD}font-size:22px;font-weight:800;color:${C.logoCream};margin:0 0 6px">Building the world's best CEB machines since 1989.</div>
-      <div style="${BODY}font-size:14px;line-height:1.6;color:#b8c0ce;margin:0 0 18px">Questions? Just reply to this email, or write <a href="mailto:${AECT_EMAIL}" style="color:${C.logoCream}">${AECT_EMAIL}</a>.</div>
-      <div style="${HEAD}font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">${nav.map(([t, h]) => `<a href="${url(h)}" style="color:#fff;text-decoration:none">${t}</a>`).join(`<span style="color:${C.brand}"> &nbsp;/&nbsp; </span>`)}</div>
-      <div style="${BODY}font-size:12px;color:#8892a3;margin-top:20px">Advanced Earthen Construction Technologies · 10608 Cassiano Rd., San Antonio, TX · <i>Semper Terrae</i></div>
+      <div style="${BODY}font-size:14px;line-height:1.6;color:${C.soft};margin:0 0 18px">Questions? Just reply to this email, or write <a href="mailto:${AECT_EMAIL}" style="color:${C.logoCream}">${AECT_EMAIL}</a>.</div>
+      <div style="${HEAD}font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">${nav.map(([t, h]) => `<a href="${url(h)}" style="color:#fff;text-decoration:none">${t}</a>`).join(`<span style="color:${C.soft}"> &nbsp;/&nbsp; </span>`)}</div>
+      <div style="${BODY}font-size:12px;color:${C.soft};margin-top:20px">Advanced Earthen Construction Technologies · 10608 Cassiano Rd., San Antonio, TX · <i>Semper Terrae</i></div>
     </td></tr>`}
   </table>
 </td></tr></table></body></html>`;
@@ -285,26 +285,26 @@ export function planEmail(lead) {
     ${feature}
     ${showcase(others, "Explore more from AECT")}`;
   return { subject: `${n ? n + ", your" : "Your"} CEB plan: about ${int(s.totalBlocks)} blocks`,
-    html: layout({ preheader: `About ${int(s.totalBlocks)} blocks, your recommended kit, and three ways to get them.`, hero: "1%20-%20finished%20house.jpg", heroAlt: "A finished compressed earth block home", body }) };
+    html: layout({ preheader: `About ${int(s.totalBlocks)} blocks, your recommended kit, and three ways to get them.`, body }) };
 }
 
 const CONTACT_REPLY = {
-  kit: { subject: "We got your kit quote request", line: "Ryan and the team will put together an official quote for your kit.", hero: "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg",
+  kit: { subject: "We got your kit quote request", line: "Ryan and the team will put together an official quote for your kit.",
     next: [["We review your project", "Block count, location and soil, so we recommend the right kit."], ["You get an official quote", "By email, usually within 2 business days."], ["You pick a training week", "A week on site with our team when your kit arrives."]],
     feature: "k3500", more: ["impact", "k3500", "rent", "blocks"] },
-  rent: { subject: "We got your rental request", line: "We'll price your rental from your location and block count.", hero: "HOPE%20project%20photo.jpg",
+  rent: { subject: "We got your rental request", line: "We'll price your rental from your location and block count.",
     next: [["We review your site", "Location, block count, soil and the equipment you'll need."], ["You get a rental estimate", "By email, usually within 2 business days."], ["We schedule your mobilization", "Our operator brings the plant and trains your crew."]],
     feature: "rent", more: ["blocks", "impact", "k3500"] },
-  blocks: { subject: "We got your block quote request", line: "We'll price your blocks, delivered to your site.", hero: "conveyor%20full%20of%20blocks.jpg",
+  blocks: { subject: "We got your block quote request", line: "We'll price your blocks, delivered to your site.",
     next: [["We review your order", "Block count, block type and your delivery location."], ["You get a delivered quote", "By email, usually within 2 business days."], ["We schedule delivery", "Palletized blocks, ready to lay."]],
     feature: "blocks", more: ["rent", "impact", "k3500"] },
-  consulting: { subject: "We got your consulting request", line: "We'll be in touch about your site and dates.", hero: "assembly%20line.jpg",
+  consulting: { subject: "We got your consulting request", line: "We'll be in touch about your site and dates.",
     next: [["We review your project", "What you're building and where your crew is today."], ["We email you", "Usually within 2 business days, to plan dates."], ["We come to your site", "Hands-on help from soil prep to the last course of plaster."]],
     more: ["impact", "k3500", "rent", "blocks"] },
-  consult: { subject: "We got your video consult request", line: "We'll send times for your 30-minute call with Ryan Runge.", hero: "1%20-%20finished%20house.jpg",
+  consult: { subject: "We got your video consult request", line: "We'll send times for your 30-minute call with Ryan Runge.",
     next: [["We email you times", "Usually within 2 business days."], ["You pick a time", "A 30-minute video call with Ryan Runge."], ["Bring your questions", "Soil, machines, cost, design: anything about your build."]],
     more: ["impact", "k3500", "rent", "blocks"] },
-  tools: { subject: "We got your order request", line: "We'll confirm availability, shipping and payment.", hero: "thumbnail_IMG_3282.jpg",
+  tools: { subject: "We got your order request", line: "We'll confirm availability, shipping and payment.",
     next: [["We confirm your order", "Availability and shipping to your location."], ["You get an invoice", "By email, usually within 2 business days."], ["We ship it", "From our shop in San Antonio, TX."]],
     more: ["impact", "k3500", "rent", "blocks"] },
 };
@@ -332,7 +332,7 @@ export function contactEmail(lead) {
     ${showcase(r.more.filter((k) => k !== r.feature), "Explore the AECT lineup")}
     ${spacer(24)}
     ${para(`Have a question before then? Our <a href="${url("learn.html")}" style="color:${C.brand};font-weight:700">FAQ</a> covers soil, cost and building with compressed earth blocks.`, `font-size:15px;color:${C.muted}`)}`;
-  return { subject: `${r.subject}${n ? ", " + n : ""}`, html: layout({ preheader: `${r.line} We'll reply within 2 business days.`, hero: r.hero, body }) };
+  return { subject: `${r.subject}${n ? ", " + n : ""}`, html: layout({ preheader: `${r.line} We'll reply within 2 business days.`, body }) };
 }
 
 /** The email the visitor gets for this lead. */
@@ -354,12 +354,12 @@ export function internalEmail(lead, stage, dashboardUrl) {
   const body = `
     ${eyebrow(`New ${lead.source === "planner" ? "planner" : "contact form"} lead`)}
     ${h1(esc(lead.name || lead.email))}
-    <div style="margin:0 0 24px"><span style="${HEAD}display:inline-block;background:${stage === "reach" ? C.accent : C.navy};color:#fff;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:6px 14px">${esc(st?.label || stage)}</span>
+    <div style="margin:0 0 24px"><span style="${HEAD}display:inline-block;background:${stage === "reach" ? C.accent : C.blue};color:#fff;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:6px 14px">${esc(st?.label || stage)}</span>
       ${st?.todo ? `<span style="${BODY}font-size:14px;color:${C.muted};margin-left:8px">Next: ${esc(st.todo)}</span>` : ""}</div>
     ${details(rows)}
     ${s.message ? `<div style="border-left:3px solid ${C.accent};padding:4px 0 4px 18px;margin:0 0 28px"><div style="${BODY}font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:${C.muted};margin-bottom:6px">Their message</div><div style="${BODY}font-size:15px;line-height:1.55;color:${C.ink};white-space:pre-wrap">${esc(s.message)}</div></div>` : ""}
     <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-      <td style="padding-right:10px">${button(dashboardUrl || url("admin/"), "Open in dashboard", C.navy)}</td>
+      <td style="padding-right:10px">${button(dashboardUrl || url("admin/"), "Open in dashboard", C.blue)}</td>
       <td>${button(`mailto:${lead.email}`, `Email ${firstName(lead.name) || "them"}`)}</td></tr></table>`;
   return { subject: `New lead: ${lead.name || lead.email} · ${PATHS[lead.path] || lead.source}`, html: layout({ preheader: `${st?.label || ""} · ${PATHS[lead.path] || ""}`, body, audience: "aect" }) };
 }

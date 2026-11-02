@@ -25,7 +25,7 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.15; margin: 0; color:
 .input:focus, .search:focus, select:focus, textarea:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
 
 /* Top bar */
-.bar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 10px 20px; background: var(--earth); color: #fff; }
+.bar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 10px 20px; background: var(--brand); color: #fff; }
 .bar-logo { width: 74px; height: auto; display: block; }
 .bar h1 { color: #fff; font-size: 1.5rem; }
 .demo-badge { background: #fbf8cc; color: var(--earth); font-size: .75rem; font-weight: 700; border-radius: 999px; padding: 3px 10px; cursor: pointer; text-transform: uppercase; letter-spacing: .05em; }
