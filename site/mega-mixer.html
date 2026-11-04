@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700;800&family=Fraunces:ital,opsz,wght@1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css?v=9db3de0b">
+  <link rel="stylesheet" href="assets/css/styles.css?v=69c0f61b">
   <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 </head>
@@ -25,7 +25,13 @@
       <a href="machines.html" aria-current="page">Machines</a>
       <a href="blocks.html">Blocks</a>
       <a href="rent.html">Rent Equipment</a>
-      <a href="about.html">About</a>
+      <div class="nav-drop">
+        <button class="nav-drop-toggle" type="button" aria-expanded="false" aria-controls="nav-about">About <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nav-drop-menu" id="nav-about">
+          <a href="about.html">About Us</a>
+          <a href="blog/">Blog</a>
+        </div>
+      </div>
       <a href="contact.html">Contact</a>
       <a class="btn" href="plan.html">Plan my build</a>
     </nav>
@@ -166,6 +172,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=15f48daf"></script>
+<script src="assets/js/main.js?v=be5cf280"></script>
 </body>
 </html>

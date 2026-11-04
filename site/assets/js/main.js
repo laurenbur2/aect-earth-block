@@ -37,6 +37,15 @@
     });
   }
 
+  // About dropdown (About Us, Blog): opens on click, closes on outside click or Escape.
+  document.querySelectorAll(".nav-drop").forEach((drop) => {
+    const btn = drop.querySelector(".nav-drop-toggle");
+    const set = (open) => { drop.classList.toggle("is-open", open); btn.setAttribute("aria-expanded", String(open)); };
+    btn.addEventListener("click", (e) => { e.stopPropagation(); set(!drop.classList.contains("is-open")); });
+    document.addEventListener("click", (e) => { if (!drop.contains(e.target)) set(false); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && drop.classList.contains("is-open")) { set(false); btn.focus(); } });
+  });
+
   // Reveal on scroll
   const io = "IntersectionObserver" in window
     ? new IntersectionObserver((entries) => {

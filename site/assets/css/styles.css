@@ -944,3 +944,34 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .post-cta { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 28px; }
 .post-cta h2 { margin: 0 0 4px; font-size: clamp(1.4rem, 2.4vw, 1.8rem); }
 .post-cta p { margin: 0; color: var(--muted); }
+
+/* ---------- About dropdown in the header (About Us, Blog) ---------- */
+.nav-drop { position: relative; }
+.nav-drop-toggle {
+  display: inline-flex; align-items: center; gap: 4px; background: none; border: 0; cursor: pointer;
+  color: #fff; font: 600 .98rem/1 var(--font-head); letter-spacing: .03em; padding: 10px 14px; border-radius: 8px;
+}
+.nav-drop-toggle svg { width: 16px; height: 16px; stroke: currentColor; transition: transform .15s ease; }
+.nav-drop-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.nav-drop-toggle:hover, .nav-drop-toggle[aria-expanded="true"] { background: rgba(255,255,255,.12); }
+.nav-drop-toggle.is-current { box-shadow: inset 0 -2px 0 var(--brand); border-radius: 0; }
+.is-solid .nav-drop-toggle, .site-header--solid .nav-drop-toggle { color: var(--earth); }
+.is-solid .nav-drop-toggle:hover, .site-header--solid .nav-drop-toggle:hover,
+.is-solid .nav-drop-toggle[aria-expanded="true"], .site-header--solid .nav-drop-toggle[aria-expanded="true"] { background: var(--sand); }
+.nav-drop-menu {
+  position: absolute; top: calc(100% + 8px); left: 0; min-width: 180px; padding: 6px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow);
+  display: none; flex-direction: column;
+}
+.nav-drop.is-open .nav-drop-menu { display: flex; }
+.nav .nav-drop-menu a:not(.btn) { color: var(--earth); padding: 12px 14px; border-radius: 8px; }
+.nav .nav-drop-menu a:not(.btn):hover { background: var(--sand); }
+.nav .nav-drop-menu a[aria-current="page"]:not(.btn) { box-shadow: none; border-radius: 8px; background: var(--sand); }
+@media (max-width: 860px) {
+  .nav-drop-toggle { width: 100%; justify-content: space-between; color: var(--earth); padding: 16px 4px; border-bottom: 1px solid var(--line); border-radius: 0; font-size: 1.15rem; }
+  .nav-drop-toggle:hover, .nav-drop-toggle[aria-expanded="true"] { background: none; }
+  .nav-drop-toggle.is-current { box-shadow: none; }
+  .nav-drop-menu { position: static; min-width: 0; padding: 0 0 0 16px; border: 0; box-shadow: none; background: none; border-radius: 0; }
+  .nav .nav-drop-menu a:not(.btn) { padding: 14px 4px; border-bottom: 1px solid var(--line); border-radius: 0; font-size: 1.05rem; }
+  .nav .nav-drop-menu a[aria-current="page"]:not(.btn) { background: none; color: var(--brand); }
+}

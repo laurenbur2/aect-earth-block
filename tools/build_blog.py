@@ -40,6 +40,8 @@ def shell():
     _, foot = rest.split("</main>", 1)
     fix = lambda t: re.sub(r'((?:href|src)=")(?!https?:|mailto:|tel:|#|/|data:)', r"\1../", t)
     head = fix(head[head.index("<header"):]).replace(' aria-current="page"', "")
+    head = head.replace('<a href="../blog/">Blog</a>', '<a href="../blog/" aria-current="page">Blog</a>', 1)
+    head = head.replace('class="nav-drop-toggle"', 'class="nav-drop-toggle is-current"', 1)
     return fix(s[:s.index("</head>")]), head, fix(foot)
 
 
