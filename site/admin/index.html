@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>AECT Leads</title>
+  <script>
+    // The site is hosted on GitHub Pages, which has no lead backend, so aectearthblock.com/admin/ forwards to the
+    // real dashboard on the Cloudflare Worker (where sign-in and the leads live).
+    if (/(^|\.)aectearthblock\.com$/.test(location.hostname)) location.replace("https://aect-leads.casadanovavida.workers.dev/admin/" + location.hash);
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
