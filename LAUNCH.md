@@ -39,31 +39,19 @@ Delete these (old GoDaddy website): A `@` → `13.248.243.5` and `76.223.105.230
 - [ ] **Book a call (on hold):** no Calendly yet, so `BOOK_CALL_URL` is empty in `main.js` and `pipeline.js`. "Book a call" links go to the consult request on the contact form, and emails say "Request a call". Once Calendly exists, paste its link into both files ([README.md](README.md#calendly-the-75-call-with-ryan)).
 - [x] **Old URLs:** all 44 old addresses (pages, blog posts, shop, booking) forward to the closest new page via `site/_redirects` (301s, so Google moves its listings). Add a line there if an old link turns up later.
 
-## 2. Move DNS to Cloudflare (Lauren, about 30 minutes plus waiting)
-1. **Write down the current records.** GoDaddy → My Products → aectearthblock.com → **DNS**. Screenshot the whole list, especially MX, TXT and CNAME.
-2. **Turn off DNSSEC** in GoDaddy if it's on (same DNS page). Otherwise the switch can break resolution.
-3. **Add the site to Cloudflare.** dash.cloudflare.com → **Add a domain** → `aectearthblock.com` → **Free** plan. Cloudflare imports the existing records.
-4. **Check Cloudflare's list against the table above** (and your screenshot). Every MX and TXT must be there with the same value, set to **DNS only** (grey cloud). Add any that are missing, especially `google._domainkey`.
-5. **Delete the old website records** for `@` and `www` (the A/CNAME records pointing to GoDaddy). Step 4 of section 3 adds the new ones.
-6. **Switch nameservers.** GoDaddy → aectearthblock.com → DNS → **Nameservers** → **Change** → "I'll use my own" → enter Cloudflare's two nameservers. GoDaddy may warn the website will disconnect; that's expected.
-7. **Wait for Cloudflare to say "Active"** (usually under an hour, at most 24). Then send an email to info@AECTearthblock.com from a personal account and confirm it arrives, and reply from info@ to confirm sending works.
+## 2. Point the domain at the site: DONE 2026-11-04
+Hosting is GitHub Pages (repo `laurenbur2/aect-earth-block`, custom domain `aectearthblock.com`, HTTPS enforced). DNS stays at GoDaddy:
+- A `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` (replaced "WebsiteBuilder Site")
+- CNAME `www` → `laurenbur2.github.io` (GitHub forwards www to the bare domain)
+- All email records unchanged.
 
-## 3. Point the domain at the Worker (Claude)
-1. Add the domains to `worker/wrangler.toml`:
-   ```toml
-   routes = [
-     { pattern = "aectearthblock.com", custom_domain = true },
-     { pattern = "www.aectearthblock.com", custom_domain = true },
-   ]
-   ```
-2. In `site/admin/pipeline.js`, set `SITE_URL = "https://aectearthblock.com/"`.
-3. Optional: change the form endpoints in `plan.js`, `contact.js` and `reach-out.js` from `aect-leads.casadanovavida.workers.dev` to `aectearthblock.com`. The workers.dev address keeps working either way, and `ALLOWED_ORIGINS` already includes the real domain.
-4. Deploy: `cd worker && npx wrangler deploy`. Cloudflare creates the DNS records and the HTTPS certificate.
-5. Redirect `www` to the bare domain with a Cloudflare **Redirect Rule** (Rules → Redirect Rules → "Redirect from WWW to root" template).
+The lead backend stays on the Cloudflare Worker (`aect-leads.casadanovavida.workers.dev`): forms post to it, and `aectearthblock.com/admin/` forwards to its dashboard. Old addresses forward via pages generated from `site/_redirects` (`tools/build_redirect_pages.py`). `SITE_URL` in `pipeline.js` is `https://aectearthblock.com/`.
+
+To undo: put the GoDaddy A record back to the Website Builder site (Website → Manage → connect domain) and remove the custom domain in GitHub → Settings → Pages.
 
 ## 4. Send lead emails from the AECT domain (Lauren + Claude)
 1. resend.com → **Domains** → Add `aectearthblock.com`. Resend lists DKIM/SPF records, which go on a `send.` subdomain and don't touch Google's.
-2. Add those records in Cloudflare DNS (DNS only, grey cloud) and click **Verify** in Resend.
+2. Add those records in GoDaddy DNS and click **Verify** in Resend.
 3. In `worker/wrangler.toml`, set `EMAIL_FROM = "AECT Earth Block <plans@aectearthblock.com>"` and redeploy. Replies still go to info@AECTearthblock.com.
 
 ## 5. Test, then cancel the GoDaddy site
@@ -79,7 +67,7 @@ Delete these (old GoDaddy website): A `@` → `13.248.243.5` and `76.223.105.230
 ## 6. Google Search Console (Lauren, after launch)
 Redirects already tell Google where every old page went, so nothing has to be removed by hand. Search Console lets you confirm it and speed it up.
 
-1. **Add the site:** search.google.com/search-console → Add property → **Domain** → `aectearthblock.com`. Google gives you a TXT record; add it in Cloudflare DNS, then click Verify. If AECT already has a property for the old site, keep it, since its history carries over.
+1. **Add the site:** search.google.com/search-console → Add property → **Domain** → `aectearthblock.com`. AECT already has Google verification TXT records, so it may already be verified. If not, Google gives you a TXT record; add it in GoDaddy DNS. If AECT already has a property for the old site, keep it, since its history carries over.
 2. **Submit the sitemap:** Sitemaps → enter `sitemap.xml` → Submit. It lists every page and blog post (rebuilt by `tools/build_blog.py`). Remove the old GoDaddy sitemaps if they're listed there.
 3. **Watch it settle:** over 2 to 8 weeks the old addresses drop out of results and the new ones replace them. Pages → "Page with redirect" is expected for old addresses; anything under "Not found (404)" means an old link is missing from `_redirects`.
 4. **Removals tool:** only for a page that must vanish from Google right away (it hides it for about 6 months). Not needed for normal redirected pages.
