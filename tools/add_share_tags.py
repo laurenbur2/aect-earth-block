@@ -11,7 +11,7 @@ import re
 
 SITE = pathlib.Path(__file__).resolve().parent.parent / "site"
 DOMAIN = "https://aectearthblock.com/"
-IMAGE = DOMAIN + "assets/img/share.jpg"  # 1200x630, the logo on cream
+IMAGE = DOMAIN + "assets/img/share-logo.jpg"  # 1200x630, the logo full bleed
 START, END = "  <!-- SHARE -->\n", "  <!-- /SHARE -->\n"
 BLOCK = re.compile(re.escape(START) + r".*?" + re.escape(END), re.S)
 
