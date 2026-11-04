@@ -42,7 +42,8 @@ def shell():
     head = fix(head[head.index("<header"):]).replace(' aria-current="page"', "")
     head = head.replace('<a href="../blog/">Blog</a>', '<a href="../blog/" aria-current="page">Blog</a>', 1)
     head = head.replace('class="nav-drop-toggle"', 'class="nav-drop-toggle is-current"', 1)
-    return fix(s[:s.index("</head>")]), head, fix(foot)
+    top = re.sub(r"  <!-- SHARE -->\n.*?  <!-- /SHARE -->\n", "", s[:s.index("</head>")], flags=re.S)  # rebuilt per page below
+    return fix(top), head, fix(foot)
 
 
 def page(head_html, header, footer, title, desc, body, canonical, image=None, extra_head=""):
@@ -133,6 +134,7 @@ def main():
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "\n".join(f"  <url><loc>{u}</loc></url>" for u in urls) + "\n</urlset>\n")
     print(f"built {len(posts)} posts, blog index and sitemap ({len(urls)} URLs)")
+    subprocess.run([sys.executable, str(REPO / "tools/add_share_tags.py")], check=True)
 
 
 def card(p, prefix):
