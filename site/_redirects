@@ -27,14 +27,24 @@
 /aect-mega-mixer            /mega-mixer              301
 /aect-block-cutter          /block-cutter            301
 
-# Old blog posts (the new site has no blog; each goes to the closest page)
-/aect-blog/f/aect---our-consulting-services                          /rent#consulting   301
-/aect-blog/f/fulfilling-the-latest-aect-3500-ceb-machine-order       /3500              301
-/aect-blog/f/fulfilling-the-latest-aect-3500-ceb-machine-order---part-2  /3500          301
-/aect-blog/f/stabilized-vs-un-stabilized-cebs                        /learn             301
-/aect-blog/f/exciting-time-for-aect                                  /about             301
-/aect-blog/*                                                         /about#projects    301
-/aect-blog                  /learn                   301
+# Old blog posts -> the same post on the new blog
+/aect-blog/f/adobe-and-cebs-in-marfa-texas                                  /blog/adobe-and-cebs-in-marfa-texas  301
+/aect-blog/f/aect---our-consulting-services                                 /blog/aect-consulting-services  301
+/aect-blog/f/beginning-construction-on-the-oklahoma-ceb-home-build          /blog/beginning-construction-on-the-oklahoma-ceb-home-build  301
+/aect-blog/f/building-a-ceb-fire-pit                                        /blog/building-a-ceb-fire-pit  301
+/aect-blog/f/building-a-ceb-hearth-for-a-wood-burning-stove                 /blog/building-a-ceb-hearth-for-a-wood-burning-stove  301
+/aect-blog/f/fulfilling-the-latest-aect-3500-ceb-machine-order---part-2     /blog/building-an-aect-3500-part-2  301
+/aect-blog/f/fulfilling-the-latest-aect-3500-ceb-machine-order              /blog/building-an-aect-3500  301
+/aect-blog/f/exciting-time-for-aect                                         /blog/exciting-times-at-aect  301
+/aect-blog/f/making-cebs-in-oklahoma                                        /blog/making-cebs-in-oklahoma  301
+/aect-blog/f/our-new-ceb-bathroom                                           /blog/our-new-ceb-bathroom  301
+/aect-blog/f/our-off-grid-ceb-home---1-year-later                           /blog/our-off-grid-ceb-home-one-year-later  301
+/aect-blog/f/pas-ceb-garden-border                                          /blog/pas-ceb-garden-border  301
+/aect-blog/f/producing-lots-of-ceb-homes-in-haiti                           /blog/producing-lots-of-ceb-homes-in-haiti  301
+/aect-blog/f/stabilized-vs-un-stabilized-cebs                               /blog/stabilized-vs-un-stabilized-cebs  301
+/aect-blog/f/un-stabilized-ceb-home-build-outside-blanco-tx                 /blog/un-stabilized-ceb-home-build-outside-blanco-tx  301
+/aect-blog/*   /blog/   301
+/aect-blog     /blog/   301
 
 # Old online shop and appointment booking
 /shop/*                     /machines                301

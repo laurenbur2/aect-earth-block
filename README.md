@@ -45,6 +45,7 @@ python3 tools/build_machines.py
 - Logo: `site/assets/img/logo-*.png` are generated from AECT's original (`logo-original.png`) by `python3 tools/make_logos.py site/assets/img/logo-original.png`. Swap in a vector/high-res original when AECT provides one and rerun.
 - Replace hotlinked GoDaddy CDN images with originals in `site/assets/img/`.
 - Header and footer are duplicated in each page. Edit `index.html` first, then copy the changes to the other pages.
+- Blog: posts are in `blog-src/` (one HTML file each, details at the top of `tools/build_blog.py`). After adding or editing a post, or changing the header/footer, run `python3 tools/build_blog.py` to rebuild `site/blog/` and `sitemap.xml`.
 - The $75 call with Ryan is on hold until AECT sets up Calendly (below). Until then, "Book a call" goes to the consult request on the contact form.
 
 ## Calendly (the $75 call with Ryan)

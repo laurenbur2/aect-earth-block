@@ -13,6 +13,7 @@ Email and the website use different DNS records. Outlook uses the **MX**, **auto
 
 ## 1. Before the switch
 - [x] **Images:** all 40 photos saved in `site/assets/img/photos/` (no GoDaddy CDN links left).
+- [x] **Blog:** all 15 old posts (text, 112 photos, videos) moved to `/blog/`; old post addresses forward to them.
 - [x] **Press archive:** now a "More coverage" list on `about.html#more-press`.
 - [ ] **Privacy policy:** draft at `site/privacy.html`, linked from every footer. AECT must review and approve it. (The old site's Privacy and Terms pages were empty, so the Terms link is gone.)
 - [ ] **Book a call (on hold):** no Calendly yet, so `BOOK_CALL_URL` is empty in `main.js` and `pipeline.js`. "Book a call" links go to the consult request on the contact form, and emails say "Request a call". Once Calendly exists, paste its link into both files ([README.md](README.md#calendly-the-75-call-with-ryan)).
@@ -63,7 +64,7 @@ Email and the website use different DNS records. Outlook uses the **MX**, **auto
 Redirects already tell Google where every old page went, so nothing has to be removed by hand. Search Console lets you confirm it and speed it up.
 
 1. **Add the site:** search.google.com/search-console → Add property → **Domain** → `aectearthblock.com`. Google gives you a TXT record; add it in Cloudflare DNS, then click Verify. If AECT already has a property for the old site, keep it, since its history carries over.
-2. **Submit the sitemap:** Sitemaps → enter `sitemap.xml` → Submit. It lists the 16 new pages. Remove the old GoDaddy sitemaps if they're listed there.
+2. **Submit the sitemap:** Sitemaps → enter `sitemap.xml` → Submit. It lists every page and blog post (rebuilt by `tools/build_blog.py`). Remove the old GoDaddy sitemaps if they're listed there.
 3. **Watch it settle:** over 2 to 8 weeks the old addresses drop out of results and the new ones replace them. Pages → "Page with redirect" is expected for old addresses; anything under "Not found (404)" means an old link is missing from `_redirects`.
 4. **Removals tool:** only for a page that must vanish from Google right away (it hides it for about 6 months). Not needed for normal redirected pages.
 5. **Optional:** link Google Business Profile and any Google Ads to the new pages.
