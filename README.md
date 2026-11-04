@@ -45,10 +45,10 @@ python3 tools/build_machines.py
 - Logo: `site/assets/img/logo-*.png` are generated from AECT's original (`logo-original.png`) by `python3 tools/make_logos.py site/assets/img/logo-original.png`. Swap in a vector/high-res original when AECT provides one and rerun.
 - Replace hotlinked GoDaddy CDN images with originals in `site/assets/img/`.
 - Header and footer are duplicated in each page. Edit `index.html` first, then copy the changes to the other pages.
-- Move the $75 call with Ryan to Calendly (below) **before** the domain switches, or every "Book a call" button breaks.
+- The $75 call with Ryan is on hold until AECT sets up Calendly (below). Until then, "Book a call" goes to the consult request on the contact form.
 
 ## Calendly (the $75 call with Ryan)
-Today "Book a call" opens GoDaddy Online Appointments on the old site (`aectearthblock.com/ola/services/compressed-earth-block-ceb-consultation`). That page disappears when aectearthblock.com points at the new site, so set up Calendly first:
+On hold: `BOOK_CALL_URL` is empty, so "Book a call" goes to the consult request on the contact form and the team schedules the call by email. (The old GoDaddy Online Appointments page goes away with the old site.) To turn on real booking:
 
 1. **Account:** AECT signs up at calendly.com with Ryan's calendar (Google or Outlook) connected. Collecting payment needs a paid plan (Standard or higher); check current pricing.
 2. **Payments:** Integrations > Stripe (or PayPal). Connect AECT's Stripe account so the $75 is paid at booking.

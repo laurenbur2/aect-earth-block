@@ -11,13 +11,11 @@ GoDaddy stays the **registrar**: AECT keeps owning and renewing the domain there
 ## Why email is safe
 Email and the website use different DNS records. Outlook uses the **MX**, **autodiscover** and **TXT (SPF)** records, plus DKIM `selector1`/`selector2` CNAMEs if they're set up. The website uses the **A/CNAME** records for `@` and `www`. We copy the Outlook records over exactly and replace only the website ones.
 
-## 1. Fix these first (they break the moment the domain moves)
-These all link to pages hosted on the old GoDaddy site, which disappears at the switch.
-
-- [ ] **Book a call:** GoDaddy Online Appointments (`/ola/services/...`) → Calendly. Steps are in [README.md](README.md#calendly-the-75-call-with-ryan).
-- [ ] **Privacy and Terms:** every footer links to `aectearthblock.com/privacy-policy` and `/terms-and-conditions` on the old site. Copy them into `site/privacy.html` and `site/terms.html` and update the footers.
-- [ ] **Press archive:** `about.html` links to `aectearthblock.com/aect-in-the-news`. Copy that page, or link to the articles directly.
-- [ ] **Images:** 62 images are hotlinked from GoDaddy's CDN (`img1.wsimg.com`). They can stop loading once the GoDaddy website plan is canceled. Download them into `site/assets/img/` and update the links.
+## 1. Before the switch
+- [x] **Images:** all 40 photos saved in `site/assets/img/photos/` (no GoDaddy CDN links left).
+- [x] **Press archive:** now a "More coverage" list on `about.html#more-press`.
+- [ ] **Privacy policy:** draft at `site/privacy.html`, linked from every footer. AECT must review and approve it. (The old site's Privacy and Terms pages were empty, so the Terms link is gone.)
+- [ ] **Book a call (on hold):** no Calendly yet, so `BOOK_CALL_URL` is empty in `main.js` and `pipeline.js`. "Book a call" links go to the consult request on the contact form, and emails say "Request a call". Once Calendly exists, paste its link into both files ([README.md](README.md#calendly-the-75-call-with-ryan)).
 - [ ] **Old URLs:** list the old site's pages (e.g. `/ceb-calculator`) and decide which should redirect to new pages, so Google links and bookmarks don't 404.
 
 ## 2. Move DNS to Cloudflare (Lauren, about 30 minutes plus waiting)
@@ -57,5 +55,5 @@ These all link to pages hosted on the old GoDaddy site, which disappears at the 
 - [ ] Lauren, Nicole and Ryan can each sign in at `/admin/`
 - [ ] Lead and sign-in emails arrive from `@aectearthblock.com` and aren't in spam
 - [ ] Email to info@AECTearthblock.com still reaches Outlook, and Outlook can still send
-- [ ] Book a call opens Calendly; Privacy and Terms load; no broken images
+- [ ] Book a call goes to the consult request (or Calendly, once set up); Privacy loads; no broken images
 - [ ] Only then: cancel GoDaddy's **Websites + Marketing** plan. Keep the **domain** and **Microsoft 365** subscriptions.

@@ -4,10 +4,10 @@
 // Public site address, used for links and the logo in emails. Change to https://aectearthblock.com/ at launch.
 export const SITE_URL = "https://laurenbur2.github.io/aect-earth-block/";
 export const AECT_EMAIL = "info@AECTearthblock.com";
-// Paid video call with Ryan, booked through GoDaddy Online Appointments on AECT's current site.
-// TODO at launch: swap for the Calendly link (see README, "Calendly"); the site's copy is in assets/js/main.js.
+// Paid video call with Ryan. On hold until AECT sets up Calendly (see README, "Calendly"): while BOOK_CALL_URL is
+// empty, emails link to the consult request on the contact form instead. The site's copy is in assets/js/main.js.
 export const CONSULT = { price: "$75", length: "30-minute", with: "Ryan Runge" };
-export const BOOK_CALL_URL = "https://aectearthblock.com/ola/services/compressed-earth-block-ceb-consultation";
+export const BOOK_CALL_URL = "";
 
 // The funnel, in board order. Wants us to reach out, Ready to build and Not ready yet (last, out of the
 // way) are set automatically from the quiz and contact form; the rest are moved by AECT as they work the lead.
@@ -266,13 +266,14 @@ function reachOut(lead) {
 
 /** "Have questions? Book a call", the paid video consult with Ryan. */
 function bookCall() {
+  const href = BOOK_CALL_URL || url("contact.html?topic=consult");
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${C.line};border-radius:16px;margin:0 0 4px"><tr>
     <td class="stack" style="padding:22px 24px;vertical-align:middle">
       <div style="${HEAD}font-size:20px;font-weight:800;color:${C.navy}">Have questions? Book a call.</div>
       <div style="${BODY}font-size:14px;line-height:1.5;color:${C.muted};margin-top:4px">A ${CONSULT.length} video call with ${CONSULT.with}, AECT's president. Soil, machines, cost, design: anything about your build. <b style="color:${C.ink}">${CONSULT.price}</b></div></td>
     <td class="stack" align="right" style="padding:0 24px 22px 24px;vertical-align:middle;white-space:nowrap">
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px"><tr><td style="border:2px solid ${C.blue};border-radius:999px">
-        <a href="${BOOK_CALL_URL}" style="${HEAD}display:inline-block;padding:12px 22px;color:${C.blue};font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none">Book a call &middot; ${CONSULT.price}</a></td></tr></table></td>
+        <a href="${href}" style="${HEAD}display:inline-block;padding:12px 22px;color:${C.blue};font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none">${BOOK_CALL_URL ? "Book" : "Request"} a call &middot; ${CONSULT.price}</a></td></tr></table></td>
   </tr></table>`;
 }
 

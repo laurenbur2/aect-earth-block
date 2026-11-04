@@ -917,3 +917,10 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .more-press a { color: var(--ink); text-decoration: none; }
 .more-press a:hover { color: var(--brand); text-decoration: underline; }
 .more-press .press-src { display: block; margin-bottom: 3px; }
+
+/* ---------- Long-form text pages (Privacy) ---------- */
+.prose { max-width: 72ch; }
+.prose h2 { font-size: clamp(1.4rem, 2.4vw, 1.8rem); margin: 1.8em 0 .5em; }
+.prose p, .prose li { line-height: 1.65; }
+.prose ul { padding-left: 1.2em; margin: 0 0 1em; }
+.prose li { margin: .35em 0; }

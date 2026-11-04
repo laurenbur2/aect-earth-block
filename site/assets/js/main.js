@@ -1,11 +1,12 @@
 // Shared behavior: sticky header, mobile nav, scroll reveals, click-to-load videos, hero video.
 (function () {
   // Where "Book a call" links go: the $75 video call with Ryan. Set here once for the whole site
-  // (emails use BOOK_CALL_URL in admin/pipeline.js). Links marked data-book-call get this href;
-  // without JavaScript they fall back to the consult request on the contact form.
-  // TODO at launch: swap this GoDaddy page for the Calendly link (see README, "Calendly").
-  const BOOK_CALL_URL = "https://aectearthblock.com/ola/services/compressed-earth-block-ceb-consultation";
-  document.querySelectorAll("[data-book-call]").forEach((a) => { a.href = BOOK_CALL_URL; a.target = "_blank"; a.rel = "noopener"; });
+  // (emails use BOOK_CALL_URL in admin/pipeline.js). Links marked data-book-call get this href.
+  // On hold until AECT sets up Calendly (see README, "Calendly"): while it's empty, those links keep their
+  // fallback (the consult request on the contact form) and anything marked data-book-call-only is removed.
+  const BOOK_CALL_URL = "";
+  if (BOOK_CALL_URL) document.querySelectorAll("[data-book-call]").forEach((a) => { a.href = BOOK_CALL_URL; a.target = "_blank"; a.rel = "noopener"; });
+  else document.querySelectorAll("[data-book-call-only]").forEach((el) => el.remove());
 
   const header = document.querySelector(".site-header");
   const hasHero = document.querySelector(".hero, .page-hero");
