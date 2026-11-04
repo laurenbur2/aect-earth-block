@@ -2,7 +2,8 @@
 //
 //   POST /api/submit            the planner, contact form and reach-out page post here (public)
 //   POST /api/login             email an admin a sign-in link (only addresses in ADMIN_EMAILS)
-//   GET  /api/auth?t=...        the sign-in link: sets a session cookie, opens the dashboard
+//   GET  /api/auth?t=...        the sign-in link: sets a session cookie and opens the dashboard here, or (&r=<site>)
+//                               hands the session to the dashboard on the public site (aectearthblock.com/admin/)
 //   POST /api/logout
 //   GET  /api/me                who is signed in (the dashboard uses it to pick live vs demo mode)
 //   GET  /api/leads             the board
@@ -10,7 +11,8 @@
 //   PATCH  /api/leads/:id       { stage }
 //   POST   /api/leads/:id/notes { body }
 //   DELETE /api/leads/:id
-// Everything else is the static site (../site), so the dashboard is at /admin/ on the same origin.
+// Everything else is the static site (../site), so the dashboard also works at /admin/ on this origin. The public
+// site (GitHub Pages) calls these routes cross-origin, signed in with an Authorization: Bearer session token.
 //
 // Secrets (`npx wrangler secret put NAME`): RESEND_API_KEY, LINK_SECRET.
 // Vars (wrangler.toml): EMAIL_FROM, NOTIFY_EMAIL, ADMIN_EMAILS, ALLOWED_ORIGINS.
@@ -28,25 +30,32 @@ export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     if (!url.pathname.startsWith("/api/")) return env.ASSETS.fetch(req);
-    try {
-      if (url.pathname === "/api/submit") return await submit(req, env);
-      if (url.pathname === "/api/login" && req.method === "POST") return await login(req, env, url);
-      if (url.pathname === "/api/auth") return await auth(env, url);
-      if (url.pathname === "/api/logout") return json({ ok: true }, 200, { "Set-Cookie": cookie("", 0) });
-
-      const me = await session(req, env);
-      if (!me) return json({ error: "Not signed in" }, 401);
-      if (url.pathname === "/api/me") return json({ email: me });
-      if (url.pathname === "/api/leads" && req.method === "GET") return json(await leads(env));
-      const m = url.pathname.match(/^\/api\/leads\/([\w-]+)(\/events|\/notes)?$/);
-      if (m) return await leadRoute(req, env, me, m[1], m[2]);
-      return json({ error: "Not found" }, 404);
-    } catch (e) {
-      console.error(e);
-      return json({ error: "Server error" }, 500);
-    }
+    if (req.method === "OPTIONS") return new Response(null, { headers: cors(req, env) });
+    const res = await route(req, env, url);
+    if (url.pathname !== "/api/submit") for (const [k, v] of Object.entries(cors(req, env))) res.headers.set(k, v);
+    return res;
   },
 };
+
+async function route(req, env, url) {
+  try {
+    if (url.pathname === "/api/submit") return await submit(req, env);
+    if (url.pathname === "/api/login" && req.method === "POST") return await login(req, env, url);
+    if (url.pathname === "/api/auth") return await auth(env, url);
+    if (url.pathname === "/api/logout") return json({ ok: true }, 200, { "Set-Cookie": cookie("", 0) });
+
+    const me = await session(req, env);
+    if (!me) return json({ error: "Not signed in" }, 401);
+    if (url.pathname === "/api/me") return json({ email: me });
+    if (url.pathname === "/api/leads" && req.method === "GET") return json(await leads(env));
+    const m = url.pathname.match(/^\/api\/leads\/([\w-]+)(\/events|\/notes)?$/);
+    if (m) return await leadRoute(req, env, me, m[1], m[2]);
+    return json({ error: "Not found" }, 404);
+  } catch (e) {
+    console.error(e);
+    return json({ error: "Server error" }, 500);
+  }
+}
 
 // ---- Database helpers ----------------------------------------------------------------------------
 const parseLead = (r) => r && { ...r, wants_contact: r.wants_contact === null ? null : !!r.wants_contact,
@@ -89,7 +98,7 @@ async function send(env, to, subject, html, replyTo) {
   const body = await res.json().catch(() => ({}));
   return res.ok ? { status: "sent", id: body.id } : { status: "failed", error: body.message || res.statusText };
 }
-const dashboardLink = (env, req, id) => `${new URL(req.url).origin}/admin/${id ? `#lead=${id}` : ""}`;
+const dashboardLink = (env, req, id) => `${SITE_URL}admin/${id ? `#lead=${id}` : ""}`;
 
 // ---- Signing (reach-out links, sign-in links, sessions) ------------------------------------------
 async function hmac(env, text) {
@@ -112,20 +121,24 @@ async function readToken(env, purpose, t) {
     return email;
   } catch { return null; }
 }
+const allowedOrigin = (env, o) => !!o && list(env.ALLOWED_ORIGINS).includes(o);
 const cookie = (value, maxAge) => `aect_session=${value}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
 async function session(req, env) {
-  const t = (req.headers.get("Cookie") || "").match(/aect_session=([^;]+)/)?.[1];
+  const t = (req.headers.get("Authorization") || "").match(/^Bearer (\S+)$/)?.[1]
+    || (req.headers.get("Cookie") || "").match(/aect_session=([^;]+)/)?.[1];
   const email = t && await readToken(env, "session", t);
   return email && list(env.ADMIN_EMAILS).map((e) => e.toLowerCase()).includes(email) ? email : null;
 }
 
 // ---- Dashboard sign-in ---------------------------------------------------------------------------
 async function login(req, env, url) {
-  const { email = "" } = await req.json().catch(() => ({}));
+  const { email = "", from = "" } = await req.json().catch(() => ({}));
   const e = String(email).trim().toLowerCase();
   // Same answer either way, so the form doesn't reveal who is an admin.
   if (list(env.ADMIN_EMAILS).map((a) => a.toLowerCase()).includes(e)) {
-    const link = `${url.origin}/api/auth?t=${await token(env, "login", e, 15 * 60)}`;
+    // `from`: the site the dashboard was opened on, so the link brings them back there.
+    const back = allowedOrigin(env, from) ? `&r=${encodeURIComponent(from)}` : "";
+    const link = `${url.origin}/api/auth?t=${await token(env, "login", e, 15 * 60)}${back}`;
     await send(env, [e], "Your AECT Leads sign-in link",
       `<p style="font:16px/1.5 Helvetica,Arial,sans-serif">Click to sign in to AECT Leads. The link works for 15 minutes.</p>
        <p><a href="${link}" style="font:700 16px Helvetica,Arial,sans-serif;background:#45536c;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;display:inline-block">Sign in to AECT Leads</a></p>
@@ -136,7 +149,11 @@ async function login(req, env, url) {
 async function auth(env, url) {
   const email = await readToken(env, "login", url.searchParams.get("t") || "");
   if (!email) return new Response("This sign-in link has expired. Request a new one from the dashboard.", { status: 400 });
-  return new Response(null, { status: 302, headers: { Location: "/admin/", "Set-Cookie": cookie(await token(env, "session", email, 30 * 86400), 30 * 86400) } });
+  const session = await token(env, "session", email, 30 * 86400);
+  const r = url.searchParams.get("r");
+  // The public site is another origin, so it gets the session in the URL fragment (never sent to a server).
+  if (allowedOrigin(env, r)) return new Response(null, { status: 302, headers: { Location: `${r}/admin/#session=${session}` } });
+  return new Response(null, { status: 302, headers: { Location: "/admin/", "Set-Cookie": cookie(session, 30 * 86400) } });
 }
 
 // ---- Dashboard API ---------------------------------------------------------------------------------
@@ -171,8 +188,9 @@ function cors(req, env) {
   const allowed = list(env.ALLOWED_ORIGINS);
   return {
     "Access-Control-Allow-Origin": origin && (allowed.includes(origin) || origin === new URL(req.url).origin) ? origin : allowed[0] || "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "content-type, accept",
+    "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "content-type, accept, authorization",
+    "Access-Control-Max-Age": "86400",
     Vary: "Origin",
   };
 }

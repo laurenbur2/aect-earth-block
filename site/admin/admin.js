@@ -1,6 +1,6 @@
 // AECT lead dashboard: a board of leads by stage, a detail drawer with the lead's answers, plan
-// numbers, every email we sent them and notes. Served by the Cloudflare Worker, it uses real leads;
-// on a plain static host (GitHub Pages, local preview) it runs on sample leads kept in this browser (demo mode).
+// numbers, every email we sent them and notes. On aectearthblock.com (GitHub Pages) and on the Cloudflare Worker it
+// uses real leads; on other static hosts (GitHub preview, local preview) it runs on sample leads in this browser (demo mode).
 import {
   STAGES, PATHS, PROJECTS, INTENTS, TIMELINES, normalize, initialStage, interestStage, isOverdue, customerEmail, internalEmail, planEmail, contactEmail,
 } from "./pipeline.js";
@@ -21,9 +21,21 @@ function ago(iso) {
 }
 const when = (iso) => new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 
-// ---- Data: the Cloudflare Worker (worker/src/index.js), same origin as this page ------------------
+// ---- Data: the Cloudflare Worker (worker/src/index.js) -------------------------------------------
+// On the public site the Worker is another origin: sign-in hands back a session token (in the URL fragment),
+// kept in this browser and sent as a Bearer header. On the Worker's own origin a cookie does the same job.
+const REMOTE = /(^|\.)aectearthblock\.com$/.test(location.hostname) ? "https://aect-leads.casadanovavida.workers.dev" : "";
+const TOKEN_KEY = "aect-session";
+const store = {
+  get: () => { try { return localStorage.getItem(TOKEN_KEY); } catch { return null; } },
+  set: (t) => { try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch {} },
+};
+const fromLink = location.hash.match(/session=([^&]+)/);
+if (fromLink) { store.set(decodeURIComponent(fromLink[1])); history.replaceState(null, "", location.pathname); }
+const auth = () => (REMOTE && store.get() ? { Authorization: `Bearer ${store.get()}` } : {});
+const opts0 = () => ({ credentials: REMOTE ? "omit" : "same-origin", headers: { "Content-Type": "application/json", ...auth() } });
 async function call(path, opts = {}) {
-  const r = await fetch(`/api/${path}`, { credentials: "same-origin", headers: { "Content-Type": "application/json" }, ...opts });
+  const r = await fetch(`${REMOTE}/api/${path}`, { ...opts0(), ...opts });
   if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.statusText);
   return r.json();
 }
@@ -32,13 +44,13 @@ const workerApi = {
   /** Signed-in email, "signin" if the Worker is here but nobody's signed in, or null when there's no Worker (demo). */
   async whoami() {
     try {
-      const r = await fetch("/api/me", { credentials: "same-origin" });
+      const r = await fetch(`${REMOTE}/api/me`, opts0());
       if (!(r.headers.get("content-type") || "").includes("json")) return null; // static host (GitHub Pages, local server)
       return r.ok ? (await r.json()).email : "signin";
     } catch { return null; }
   },
-  signIn: (email) => call("login", { method: "POST", body: JSON.stringify({ email }) }),
-  signOut: () => call("logout", { method: "POST" }),
+  signIn: (email) => call("login", { method: "POST", body: JSON.stringify({ email, from: REMOTE ? location.origin : undefined }) }),
+  signOut: () => { store.set(null); return call("logout", { method: "POST" }); },
   list: () => call("leads"),
   events: (id) => call(`leads/${id}/events`),
   setStage: (id, stage) => call(`leads/${id}`, { method: "PATCH", body: JSON.stringify({ stage }) }), // the Worker logs the change
