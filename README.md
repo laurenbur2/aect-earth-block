@@ -65,4 +65,4 @@ On hold: `BOOK_CALL_URL` is empty, so "Book a call" goes to the consult request 
 6. **Optional, later:** a Calendly webhook can add bookings to the lead dashboard as "Booked a call" (needs a Calendly plan with webhooks).
 
 ## Deploy
-The Worker in `worker/` serves the whole site and the dashboard. Moving aectearthblock.com onto it (DNS to Cloudflare, keeping Outlook email working) is step by step in [LAUNCH.md](LAUNCH.md).
+The Worker in `worker/` serves the whole site and the dashboard. Moving aectearthblock.com onto it (DNS to Cloudflare, keeping AECT's Google email working) is step by step in [LAUNCH.md](LAUNCH.md).

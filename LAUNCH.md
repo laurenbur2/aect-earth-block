@@ -4,12 +4,30 @@ The new site and the lead dashboard already run on one Cloudflare Worker (`aect-
 
 - **Website:** https://aectearthblock.com/
 - **Lead dashboard:** https://aectearthblock.com/admin/ (sign-in for anyone in the `ADMIN_EMAILS` secret: Lauren, Nicole, Ryan)
-- **Public email:** info@AECTearthblock.com, which is already on every page and in the emails. It stays on Outlook / Microsoft 365, untouched.
+- **Public email:** info@AECTearthblock.com, which is already on every page and in the emails. It stays on Google Workspace (Gmail), untouched. (Checked 2026-11-04: the domain's mail records point to Google, not Microsoft.)
 
 GoDaddy stays the **registrar**: AECT keeps owning and renewing the domain there. Only the domain's DNS moves to Cloudflare (free), because a Worker can only use a custom domain whose DNS Cloudflare runs.
 
 ## Why email is safe
-Email and the website use different DNS records. Outlook uses the **MX**, **autodiscover** and **TXT (SPF)** records, plus DKIM `selector1`/`selector2` CNAMEs if they're set up. The website uses the **A/CNAME** records for `@` and `www`. We copy the Outlook records over exactly and replace only the website ones.
+Email and the website use different DNS records. AECT's email (Google Workspace) uses the **MX**, **SPF**, **DKIM** and **DMARC** records below. The website uses the **A/CNAME** records for `@` and `www`. We copy the email records exactly and replace only the website ones.
+
+### AECT's records today (looked up 2026-11-04, still on GoDaddy DNS)
+Keep all of these. Every one must be **DNS only** (grey cloud) in Cloudflare.
+
+| Type | Name | Value |
+|---|---|---|
+| MX | `@` | `aspmx.l.google.com` (priority 1) |
+| MX | `@` | `alt1.aspmx.l.google.com` (5) |
+| MX | `@` | `alt2.aspmx.l.google.com` (5) |
+| MX | `@` | `alt3.aspmx.l.google.com` (10) |
+| MX | `@` | `alt4.aspmx.l.google.com` (10) |
+| TXT | `@` | `v=spf1 include:_spf.google.com ~all` (**write it this way.** GoDaddy's version points at a GoDaddy-only helper record, `dc-aa8e722993._spfm`, that resolves to the same thing) |
+| TXT | `google._domainkey` | the long `v=DKIM1;k=rsa;p=MIIB…` key (Google's email signature). Copy it exactly from GoDaddy. Cloudflare's scan often misses it. |
+| TXT | `_dmarc` | `v=DMARC1; p=none; rua=mailto:dmarc_rua@onsecureserver.net` |
+| TXT | `@` | four `google-site-verification=…` records (they prove ownership in Google Search Console, so keep them) |
+| TXT | `@` | `NETORGFT3223083.onmicrosoft.com` (old Microsoft verification; harmless, keep) |
+
+Delete these (old GoDaddy website): A `@` → `13.248.243.5` and `76.223.105.230`, CNAME `www` → `@`, CNAME `ftp` → `@`, and any `_domainconnect` record.
 
 ## 1. Before the switch
 - [x] **Content:** Ryan confirmed the prices and details on the site.
@@ -25,14 +43,10 @@ Email and the website use different DNS records. Outlook uses the **MX**, **auto
 1. **Write down the current records.** GoDaddy → My Products → aectearthblock.com → **DNS**. Screenshot the whole list, especially MX, TXT and CNAME.
 2. **Turn off DNSSEC** in GoDaddy if it's on (same DNS page). Otherwise the switch can break resolution.
 3. **Add the site to Cloudflare.** dash.cloudflare.com → **Add a domain** → `aectearthblock.com` → **Free** plan. Cloudflare imports the existing records.
-4. **Check Cloudflare's list against your screenshot.** Every MX, TXT and email CNAME must be there with the same value. Mail records must be **DNS only** (grey cloud), never proxied (orange). Typical Microsoft 365 records:
-   - MX `@` → `aectearthblock-com.mail.protection.outlook.com` (priority 0)
-   - TXT `@` → `v=spf1 include:spf.protection.outlook.com -all`
-   - CNAME `autodiscover` → `autodiscover.outlook.com`
-   - TXT `@` → `MS=ms…` (Microsoft's verification record)
+4. **Check Cloudflare's list against the table above** (and your screenshot). Every MX and TXT must be there with the same value, set to **DNS only** (grey cloud). Add any that are missing, especially `google._domainkey`.
 5. **Delete the old website records** for `@` and `www` (the A/CNAME records pointing to GoDaddy). Step 4 of section 3 adds the new ones.
 6. **Switch nameservers.** GoDaddy → aectearthblock.com → DNS → **Nameservers** → **Change** → "I'll use my own" → enter Cloudflare's two nameservers. GoDaddy may warn the website will disconnect; that's expected.
-7. **Wait for Cloudflare to say "Active"** (usually under an hour, at most 24). Then email info@AECTearthblock.com from a Gmail account and confirm it arrives in Outlook.
+7. **Wait for Cloudflare to say "Active"** (usually under an hour, at most 24). Then send an email to info@AECTearthblock.com from a personal account and confirm it arrives, and reply from info@ to confirm sending works.
 
 ## 3. Point the domain at the Worker (Claude)
 1. Add the domains to `worker/wrangler.toml`:
@@ -48,7 +62,7 @@ Email and the website use different DNS records. Outlook uses the **MX**, **auto
 5. Redirect `www` to the bare domain with a Cloudflare **Redirect Rule** (Rules → Redirect Rules → "Redirect from WWW to root" template).
 
 ## 4. Send lead emails from the AECT domain (Lauren + Claude)
-1. resend.com → **Domains** → Add `aectearthblock.com`. Resend lists DKIM/SPF records, which go on a `send.` subdomain and don't touch Outlook's.
+1. resend.com → **Domains** → Add `aectearthblock.com`. Resend lists DKIM/SPF records, which go on a `send.` subdomain and don't touch Google's.
 2. Add those records in Cloudflare DNS (DNS only, grey cloud) and click **Verify** in Resend.
 3. In `worker/wrangler.toml`, set `EMAIL_FROM = "AECT Earth Block <plans@aectearthblock.com>"` and redeploy. Replies still go to info@AECTearthblock.com.
 
@@ -57,10 +71,10 @@ Email and the website use different DNS records. Outlook uses the **MX**, **auto
 - [ ] Planner, contact and reach-out forms each create a lead on `/admin/`
 - [ ] Lauren, Nicole and Ryan can each sign in at `/admin/`
 - [ ] Lead and sign-in emails arrive from `@aectearthblock.com` and aren't in spam
-- [ ] Email to info@AECTearthblock.com still reaches Outlook, and Outlook can still send
+- [ ] Email to info@AECTearthblock.com still arrives, and info@ can still send
 - [ ] Book a call goes to the consult request (or Calendly, once set up); Privacy loads; no broken images
 - [ ] Old links forward: try `aectearthblock.com/faqs` and `/3500-series`
-- [ ] Only then: cancel GoDaddy's **Websites + Marketing** plan. Keep the **domain** and **Microsoft 365** subscriptions.
+- [ ] Only then: cancel GoDaddy's **Websites + Marketing** plan. Keep the **domain** registration. (Email is billed by Google, not GoDaddy; check GoDaddy for an unused Microsoft 365 plan before canceling anything.)
 
 ## 6. Google Search Console (Lauren, after launch)
 Redirects already tell Google where every old page went, so nothing has to be removed by hand. Search Console lets you confirm it and speed it up.
