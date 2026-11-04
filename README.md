@@ -64,4 +64,4 @@ Today "Book a call" opens GoDaddy Online Appointments on the old site (`aecteart
 6. **Optional, later:** a Calendly webhook can add bookings to the lead dashboard as "Booked a call" (needs a Calendly plan with webhooks).
 
 ## Deploy
-Any static host works. Netlify or Vercel: set the publish directory to `site`. GitHub Pages only serves from the repo root or `/docs`, so use a Pages Actions workflow that uploads `site/`. Then point the domain's DNS at the host.
+The Worker in `worker/` serves the whole site and the dashboard. Moving aectearthblock.com onto it (DNS to Cloudflare, keeping Outlook email working) is step by step in [LAUNCH.md](LAUNCH.md).

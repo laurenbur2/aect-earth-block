@@ -119,8 +119,9 @@ const C = { navy: "#232c3c", blue: "#45536c", blueLine: "#5a6884", soft: "#d3d9e
   ink: "#1b2230", muted: "#5d6574", accent: "#c4561c", logoCream: "#fbf8cc", green: "#adbb89" };
 const HEAD = "font-family:'Barlow Semi Condensed','Arial Narrow',Arial,sans-serif;";
 const BODY = "font-family:Helvetica,Arial,sans-serif;";
-const IMG = "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/";
-const photo = (file, w, h) => `${IMG}${file}/:/rs=w:${w},h:${h},cg:true,m/cr=w:${w},h:${h},a:cc`;
+const IMG = `${SITE_URL}assets/img/photos/email/`;
+// Pre-cropped copies (w x h) saved from the old GoDaddy site; `file` is the name in assets/img/photos/.
+const photo = (file, w, h) => `${IMG}${file.replace(/\.jpg$/, "")}-${w}x${h}.jpg`;
 const url = (path) => SITE_URL + path;
 
 // What the emails can show and link to. `machine` matches the planner's machine names.
@@ -129,13 +130,13 @@ const PRODUCTS = {
     blurb: "Our most affordable kit. Fully automated, 300 blocks an hour, and light enough to tow." },
   k3500: { name: "3500 Kit", machine: "AECT 3500", price: "From $149,000", page: "3500.html", img: "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg",
     blurb: "Big, fast and built to last. 480 blocks an hour of our standard 10\"×14\" block." },
-  bp714: { name: "BP714 Kit", machine: "AECT BP714", price: "From $69,625", page: "bp714.html", img: "889d4a57-f36f-4da9-8b17-e691db617e06.png",
+  bp714: { name: "BP714 Kit", machine: "AECT BP714", price: "From $69,625", page: "bp714.html", img: "889d4a57-f36f-4da9-8b17-e691db617e06.jpg",
     blurb: "Interlocking, holey blocks you can run rebar and grout through. Required in some jurisdictions." },
   hd2500: { name: "2500HD Kit", machine: "AECT 2500HD", price: "From $89,000", page: "2500hd.html", img: "bf5b7c80-8d03-46af-8d3b-ffebd057b135.jpg",
     blurb: "The 6\"×12\" block at 480 an hour, with a one-yard hopper you load by tractor." },
-  rent: { name: "Rent our plant", price: "$1 per block + setup", page: "rent.html", img: "block%20plant_2.jpg",
+  rent: { name: "Rent our plant", price: "$1 per block + setup", page: "rent.html", img: "block-plant-2.jpg",
     blurb: "We bring the full plant and an operator to your land and train your crew." },
-  blocks: { name: "Finished blocks", price: "From $2.75 a block", page: "blocks.html", img: "3%20-%20pallet%20of%20blocks.jpg",
+  blocks: { name: "Finished blocks", price: "From $2.75 a block", page: "blocks.html", img: "3-pallet-of-blocks.jpg",
     blurb: "Made on AECT machines, palletized and delivered to your site, ready to lay." },
 };
 const productFor = (machine) => Object.values(PRODUCTS).find((p) => p.machine === machine);

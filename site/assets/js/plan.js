@@ -5,16 +5,16 @@
   // The Cloudflare Worker's /api/submit (worker/README.md): saves the lead for the admin dashboard
   // and emails the visitor their plan. Leave empty during development; leads are then only logged.
   const LEAD_ENDPOINT = "https://aect-leads.casadanovavida.workers.dev/api/submit";
-  const IMG = "https://img1.wsimg.com/isteam/ip/b19749ae-46c7-4c3e-a02a-fe9f0df82299/";
+  const IMG = "assets/img/photos/";
   const MACHINE_PAGES = {
     // intro: same copy as the machine pages (tools/build_machines.py), shown in the results pop-up.
-    "AECT Impact 2001A": { img: IMG + "e48a0068-88d7-476c-a776-9f0a846ac278.jpg/:/rs=w:800", rate: "300 blocks/hr",
+    "AECT Impact 2001A": { img: IMG + "e48a0068-88d7-476c-a776-9f0a846ac278.jpg", rate: "300 blocks/hr",
       intro: "Our smallest, least expensive CEB machine, and it's fully automated. Fed by a small hopper you can load with shovels, buckets or a power conveyor. Light enough to tow behind any vehicle. Perfect if you need to build one to five houses." },
-    "AECT 2500HD": { img: IMG + "bf5b7c80-8d03-46af-8d3b-ffebd057b135.jpg/:/rs=w:800", rate: "480 blocks/hr",
+    "AECT 2500HD": { img: IMG + "bf5b7c80-8d03-46af-8d3b-ffebd057b135.jpg", rate: "480 blocks/hr",
       intro: "The same 6\"×12\" block as the Impact, at 480 blocks an hour, with a one-yard hopper you load with a tractor. Built for tens of thousands of blocks, fast and without much effort." },
-    "AECT 3500": { img: IMG + "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg/:/rs=w:800", rate: "480 blocks/hr",
+    "AECT 3500": { img: IMG + "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg", rate: "480 blocks/hr",
       intro: "The Cadillac of CEB machines. Big, fast, versatile and built to last. There are 3500s in the field today that have made one, two, even three million blocks." },
-    "AECT BP714": { img: IMG + "889d4a57-f36f-4da9-8b17-e691db617e06.png/:/rs=w:800", rate: "240 blocks/hr",
+    "AECT BP714": { img: IMG + "889d4a57-f36f-4da9-8b17-e691db617e06.jpg", rate: "240 blocks/hr",
       intro: "Some projects and jurisdictions (California, for example) call for interlocking, holey blocks you can run rebar and grout through. The BP714 makes exactly that, with a dual-stage compression chamber for consistent size and strength." },
   };
   // Defaults for questions we no longer ask (kept simple on purpose).

@@ -908,3 +908,12 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .reach-card .lede { margin: 0 auto; max-width: 46ch; }
 .reach-check { display: grid; place-items: center; width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 50%; background: var(--brand); color: var(--logo-cream); }
 .reach-check svg { width: 32px; height: 32px; }
+
+/* ---------- More press coverage (About): compact two-column link list ---------- */
+.more-press { margin-top: 28px; }
+.more-press h3 { margin: 0 0 10px; }
+.more-press ul { list-style: none; margin: 0; padding: 0; columns: 2 320px; column-gap: 32px; }
+.more-press li { break-inside: avoid; padding: 9px 0; border-top: 1px solid var(--line); }
+.more-press a { color: var(--ink); text-decoration: none; }
+.more-press a:hover { color: var(--brand); text-decoration: underline; }
+.more-press .press-src { display: block; margin-bottom: 3px; }
