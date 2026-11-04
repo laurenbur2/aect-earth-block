@@ -402,7 +402,17 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .footer-bottom { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.1); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: .85rem; }
 .motto { font-family: var(--font-accent); font-style: italic; color: #dfe3ea; }
 @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 520px) { .footer-grid { grid-template-columns: 1fr; } }
+@media (max-width: 520px) {
+  /* Phones: logo and blurb across the top, Build and Learn side by side, Contact across the bottom; tighter spacing. */
+  .site-footer { padding: 40px 0 24px; font-size: .9rem; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px 20px; }
+  .footer-grid > div:first-child, .footer-grid > div:last-child { grid-column: 1 / -1; }
+  .footer-grid > div:first-child p { margin: 0 0 6px; }
+  .site-footer h4 { margin-bottom: 10px; }
+  .site-footer li { margin-bottom: 7px; }
+  .footer-grid > div:last-child ul { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+  .footer-bottom { margin-top: 28px; padding-top: 16px; }
+}
 
 /* ---------- Reveal on scroll ---------- */
 .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
@@ -473,6 +483,7 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 720px; font-s
 .site-header.is-solid .logo--badge, .site-header--solid .logo--badge, .site-header.menu-open .logo--badge { display: block; }
 .plan-top .logo--badge { height: 44px; }
 .site-footer .logo--footer { height: 72px; width: auto; margin-bottom: 8px; }
+@media (max-width: 520px) { .site-footer .logo--footer { height: 52px; margin-bottom: 4px; } }
 
 /* ---------- Embedded video (About page) ---------- */
 .video-frame { position: relative; aspect-ratio: 16/9; max-width: 1000px; margin: 36px auto 0; border-radius: var(--radius-lg); overflow: hidden; background: #000; box-shadow: var(--shadow); }
