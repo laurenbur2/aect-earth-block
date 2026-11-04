@@ -12,6 +12,8 @@ GoDaddy stays the **registrar**: AECT keeps owning and renewing the domain there
 Email and the website use different DNS records. Outlook uses the **MX**, **autodiscover** and **TXT (SPF)** records, plus DKIM `selector1`/`selector2` CNAMEs if they're set up. The website uses the **A/CNAME** records for `@` and `www`. We copy the Outlook records over exactly and replace only the website ones.
 
 ## 1. Before the switch
+- [x] **Content:** Ryan confirmed the prices and details on the site.
+- [ ] **Contact form test:** send one request on the live site and check it shows up in `/admin/` and the emails arrive (the planner is already tested).
 - [x] **Images:** all 40 photos saved in `site/assets/img/photos/` (no GoDaddy CDN links left).
 - [x] **Blog:** all 15 old posts (text, 112 photos, videos) moved to `/blog/`; old post addresses forward to them.
 - [x] **Press archive:** now a "More coverage" list on `about.html#more-press`.

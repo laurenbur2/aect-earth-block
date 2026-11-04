@@ -53,6 +53,8 @@ Farmer's Dog pattern: one tap per question (photo or icon answers, auto-advance)
 The math is a faithful port of AECT's 2022 spreadsheet (`research/calculator-logic.md`, `research/calculator.js`), verified against the live sheet. The only change: machine prices updated to what the site shows today.
 
 ## Questions for AECT before launch
+> **Status (2026-11-04):** Ryan confirmed the prices and details as they now appear on the site (machine prices, FOB San Antonio with shipping extra, rental terms). Booking is on hold until Calendly; leads go to the Cloudflare Worker dashboard. The rest below is kept for history.
+
 0. **New from the kickoff notes:** (a) What does a kit cost? We show "Kits from" the machine price. Is soil analysis extra? (b) Terra Madre's block prices and service area (we still show the 2022 calculator's planning prices). (c) Which tool should send the automatic replies (see README)?
 1. **Machine prices in the calculator are stale.** The spreadsheet says Impact $39k, 2500HD $79k, BP714 $59k. The site says $59k, $89k, $69,625. We used the site prices. Confirm.
 2. **Does AECT sell blocks directly?** The calculator prices "buy CEBs from AECT, shipped" ($2.75–$3.50/block), but the Purchase CEBs page sends people to partners. Which is it?
