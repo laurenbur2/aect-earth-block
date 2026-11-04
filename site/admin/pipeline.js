@@ -1,8 +1,8 @@
 // Shared by the admin dashboard (browser) and the Cloudflare Worker (worker/src/index.js), so the stage
 // a lead lands in and the emails it gets are defined in one place. No dependencies.
 
-// Public site address, used for links and the logo in emails. Change to https://aectearthblock.com/ at launch.
-export const SITE_URL = "https://laurenbur2.github.io/aect-earth-block/";
+// Public site address, used for links and the logo in emails.
+export const SITE_URL = "https://aectearthblock.com/";
 export const AECT_EMAIL = "info@AECTearthblock.com";
 // Paid video call with Ryan. On hold until AECT sets up Calendly (see README, "Calendly"): while BOOK_CALL_URL is
 // empty, emails link to the consult request on the contact form instead. The site's copy is in assets/js/main.js.
