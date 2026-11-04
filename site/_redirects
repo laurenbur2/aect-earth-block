@@ -1,0 +1,42 @@
+# Old GoDaddy site addresses -> new pages, so Google results, bookmarks and old links keep working.
+# Cloudflare reads this file (first match wins). 301 = moved for good, so Google moves its listing too.
+# /about, /bp714 and /small-block-press have the same address on the new site, so they need no rule.
+
+# Main pages
+/faqs                       /learn                   301
+/contact-us                 /contact                 301
+/ceb-calculator             /plan                    301
+/purchase-a-ceb-machine     /machines                301
+/hand-made-ceb-machines     /machines                301
+/purchase-cebs              /blocks                  301
+/aect-consulting            /rent#consulting         301
+/building-with-cebs         /learn#videos            301
+/history-of-aect            /about#story             301
+/customer-projects          /about#projects          301
+/ceb-barn-build             /about#projects          301
+/aect-in-the-news           /about#press             301
+/aect-on-tv                 /about#press             301
+/2026-catalog               /assets/docs/aect-2026-catalog.pdf  301
+/privacy-policy             /privacy                 301
+/terms-and-conditions       /privacy                 301
+
+# Machine pages
+/impact-2001a-series        /impact-2001a            301
+/2500hd-series              /2500hd                  301
+/3500-series                /3500                    301
+/aect-mega-mixer            /mega-mixer              301
+/aect-block-cutter          /block-cutter            301
+
+# Old blog posts (the new site has no blog; each goes to the closest page)
+/aect-blog/f/aect---our-consulting-services                          /rent#consulting   301
+/aect-blog/f/fulfilling-the-latest-aect-3500-ceb-machine-order       /3500              301
+/aect-blog/f/fulfilling-the-latest-aect-3500-ceb-machine-order---part-2  /3500          301
+/aect-blog/f/stabilized-vs-un-stabilized-cebs                        /learn             301
+/aect-blog/f/exciting-time-for-aect                                  /about             301
+/aect-blog/*                                                         /about#projects    301
+/aect-blog                  /learn                   301
+
+# Old online shop and appointment booking
+/shop/*                     /machines                301
+/shop                       /machines                301
+/ola/*                      /contact?topic=consult   301

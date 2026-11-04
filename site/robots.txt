@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /reach-out
+
+Sitemap: https://aectearthblock.com/sitemap.xml
