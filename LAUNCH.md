@@ -3,7 +3,7 @@
 The new site and the lead dashboard already run on one Cloudflare Worker (`aect-leads`). Launch means pointing aectearthblock.com at that Worker. When it's done:
 
 - **Website:** https://aectearthblock.com/
-- **Lead dashboard:** https://aectearthblock.com/admin/ (sign-in for anyone in the `ADMIN_EMAILS` secret: Lauren, Nicole, Ryan)
+- **Lead dashboard:** https://aectearthblock.com/admin/ (sign-in for anyone in the `ADMIN_EMAILS` secret: lburandt2@gmail.com, nicole@rancherogroup.co, ryan@aectearthblock.com, info@aectearthblock.com)
 - **Public email:** info@AECTearthblock.com, which is already on every page and in the emails. It stays on Google Workspace (Gmail), untouched. (Checked 2026-11-04: the domain's mail records point to Google, not Microsoft.)
 
 GoDaddy stays the **registrar**: AECT keeps owning and renewing the domain there. Only the domain's DNS moves to Cloudflare (free), because a Worker can only use a custom domain whose DNS Cloudflare runs.
