@@ -3,7 +3,7 @@
 // uses real leads; on other static hosts (GitHub preview, local preview) it runs on sample leads in this browser (demo mode).
 import {
   STAGES, PATHS, PROJECTS, INTENTS, TIMELINES, normalize, initialStage, interestStage, isOverdue, customerEmail, internalEmail, planEmail, contactEmail,
-} from "./pipeline.js";
+} from "./pipeline.js?v=20261105b";
 
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -173,6 +173,7 @@ function cardHtml(l) {
   </button>`;
 }
 
+const MAX_CARDS = 6;
 function render() {
   if (view === "contacts") return renderContacts();
   const list = filtered();
@@ -191,11 +192,15 @@ function render() {
     // Stages with a deadline show the longest-waiting lead first.
     if (st.due) inStage = inStage.sort((a, b) => (a.stage_changed_at || a.created_at).localeCompare(b.stage_changed_at || b.created_at));
     const late = inStage.filter((l) => isOverdue(l)).length;
+    // Columns show the first 6; "View all" opens the stage's own page with everyone.
+    const more = inStage.length > MAX_CARDS ? `<button class="view-all" type="button" data-show-stage="${st.id}">View all ${inStage.length} →</button>` : "";
     return `<section class="col col--${st.id}" data-stage="${st.id}">
       <header class="col-head"><h2>${st.label}</h2><span class="count${late ? " count--late" : ""}" title="${late ? `${late} overdue` : ""}">${inStage.length}</span></header>
       <p class="col-hint">${esc(st.hint)}</p>
       ${st.todo ? `<p class="col-todo">→ ${esc(st.todo)}</p>` : ""}
-      <div class="col-cards">${inStage.map(cardHtml).join("") || `<p class="empty">No leads</p>`}</div>
+      ${more}
+      <div class="col-cards">${inStage.slice(0, MAX_CARDS).map(cardHtml).join("") || `<p class="empty">No leads</p>`}</div>
+      ${more}
     </section>`;
   }).join("");
 }
@@ -235,6 +240,9 @@ function contactList() {
 }
 function renderContacts() {
   const list = contactList();
+  const st = STAGES.find((x) => x.id === $("#stageFilter").value);
+  $("#contactTitle").textContent = st ? st.label : "All contacts";
+  $("#contactHint").textContent = st ? `${st.hint}${st.todo ? ` · Next: ${st.todo}` : ""}` : "Everyone who has used the planner or contact form";
   $("#contactCount").textContent = `${list.length} contact${list.length === 1 ? "" : "s"}${selected.size ? ` · ${selected.size} selected` : ""}`;
   $("#contactRows").innerHTML = list.map((l) => `<tr data-id="${esc(l.id)}" class="${isOverdue(l) ? "is-late" : ""}">
     <td class="c-check"><input type="checkbox" data-sel="${esc(l.id)}" ${selected.has(l.id) ? "checked" : ""} aria-label="Select ${esc(l.name || l.email)}"></td>
@@ -259,7 +267,8 @@ $("#contactRows").addEventListener("change", (e) => {
   e.target.checked ? selected.add(id) : selected.delete(id); renderContacts();
 });
 $("#selAll").onchange = (e) => { contactList().forEach((l) => (e.target.checked ? selected.add(l.id) : selected.delete(l.id))); renderContacts(); };
-$("#stageFilter").onchange = render;
+$("#stageFilter").onchange = () => { syncUrl(false); render(); };
+$("#backToBoard").onclick = () => setView("board");
 // Opens one email with everyone selected in Bcc, so they don't see each other's addresses.
 $("#emailSelBtn").onclick = async () => {
   const url = `mailto:${encodeURIComponent(me)}?bcc=${selectedEmails().map(encodeURIComponent).join(",")}`;
@@ -279,14 +288,32 @@ $("#csvBtn").onclick = () => {
   a.click(); URL.revokeObjectURL(a.href);
 };
 
-function setView(v) {
+// The page lives in the URL (?view=contacts, ?stage=quoted) so Back works and a stage page can be bookmarked.
+function syncUrl(push) {
+  const stage = view === "contacts" ? $("#stageFilter").value : "";
+  const qs = stage ? `?stage=${stage}` : view === "contacts" ? "?view=contacts" : "";
+  if (location.search !== qs) history[push ? "pushState" : "replaceState"](null, "", location.pathname + qs);
+}
+function showView(v) {
   view = v;
   board.hidden = v !== "board"; contacts.hidden = v !== "contacts";
   document.querySelectorAll("[data-view]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === v)));
-  try { localStorage.setItem("aect-view", v); } catch {}
+  if (v === "board") $("#stageFilter").value = "";
+  render();
+  window.scrollTo(0, 0);
+}
+function setView(v) { showView(v); syncUrl(true); }
+function viewFromUrl() {
+  const p = new URLSearchParams(location.search);
+  const stage = STAGES.some((s) => s.id === p.get("stage")) ? p.get("stage") : "";
+  $("#stageFilter").value = stage;
+  view = stage || p.get("view") === "contacts" ? "contacts" : "board";
+  showView(view);
+  $("#stageFilter").value = stage;
   render();
 }
-document.querySelectorAll("[data-view]").forEach((b) => (b.onclick = () => setView(b.dataset.view)));
+window.addEventListener("popstate", () => { if (api) viewFromUrl(); });
+document.querySelectorAll("[data-view]").forEach((b) => (b.onclick = () => { if (b.dataset.view === "contacts") $("#stageFilter").value = ""; setView(b.dataset.view); }));
 
 async function moveLead(id, stage) {
   const l = leads.find((x) => x.id === id);
@@ -461,9 +488,8 @@ async function showApp() {
   $("#signin").hidden = true; $("#tools").hidden = false;
   const m = location.hash.match(/lead=([\w-]+)/);
   if (m) openId = m[1];
-  let v = "board"; try { v = localStorage.getItem("aect-view") || v; } catch {}
   leads = await api.list();
-  setView(v);
+  viewFromUrl();
   if (openId) openLead(openId, false);
 }
 

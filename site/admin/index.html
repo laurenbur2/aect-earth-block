@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="admin.css?v=20261105b">
   <link rel="icon" href="../assets/img/favicon-32.png" type="image/png" sizes="32x32">
   <!-- SHARE -->
   <meta property="og:type" content="website">
@@ -58,6 +58,10 @@
 
 <!-- Every lead in one searchable list -->
 <main class="contacts" id="contacts" hidden aria-label="All contacts">
+  <div class="c-head">
+    <div><h2 id="contactTitle">All contacts</h2><p class="c-hint" id="contactHint"></p></div>
+    <button class="btn-plain" type="button" id="backToBoard">← Back to board</button>
+  </div>
   <div class="c-tools">
     <select id="stageFilter" aria-label="Filter by stage"><option value="">All stages</option></select>
     <span class="c-count" id="contactCount"></span>
@@ -94,6 +98,6 @@
   <iframe id="emailFrame" title="Email preview" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
 </dialog>
 
-<script type="module" src="admin.js"></script>
+<script type="module" src="admin.js?v=20261105b"></script>
 </body>
 </html>

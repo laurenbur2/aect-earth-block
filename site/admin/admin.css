@@ -55,6 +55,12 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.15; margin: 0; color:
 .col-hint { color: var(--muted); font-size: .78rem; margin: 4px 0 12px; min-height: 3.4em; }
 .col-cards { display: flex; flex-direction: column; gap: 10px; }
 .empty { color: var(--muted); font-size: .85rem; text-align: center; margin: 18px 0; }
+.view-all { width: 100%; background: var(--paper); border: 1px dashed var(--brand); color: var(--brand-dark); border-radius: 8px; padding: 7px 10px; margin: 0 0 10px; font-weight: 600; font-size: .85rem; cursor: pointer; }
+.col-cards + .view-all { margin: 10px 0 0; }
+.view-all:hover { background: var(--brand-tint); }
+.c-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.c-head h2 { font-size: 1.7rem; }
+.c-hint { color: var(--muted); margin: 4px 0 0; font-size: .9rem; }
 .col--slim { background: rgba(255,255,255,.3); }
 .col--slim .col-hint { min-height: 0; }
 .col--slim .btn-plain { width: 100%; }
