@@ -59,7 +59,7 @@ const workerApi = {
 };
 
 // ---- Data: demo (sample leads in localStorage) ------------------------------------------------
-const DEMO_KEY = "aect-admin-demo-v11";
+const DEMO_KEY = "aect-admin-demo-v12";
 const day = 864e5;
 const DEMO_SEED = [
   { days: 0.1, stage: null, interested: true, p: { source: "aect-ceb-planner", contact: { name: "Sam Ortiz", email: "sam.ortiz@example.com" },
@@ -99,7 +99,7 @@ function demoSeed() {
     ev({ kind: "created", title: lead.source === "planner" ? "Finished the planner" : "Sent the contact form", meta: { payload: p } });
     const mine = customerEmail(row), alert = internalEmail(row, row.stage);
     ev({ kind: "email", title: mine.subject, body: mine.html, meta: { to: row.email, subject: mine.subject, audience: "customer", status: "sent" } }, 5000);
-    ev({ kind: "email", title: alert.subject, body: alert.html, meta: { to: "info@AECTearthblock.com", subject: alert.subject, audience: "aect", status: "sent" } }, 5000);
+    if (row.stage !== "later") ev({ kind: "email", title: alert.subject, body: alert.html, meta: { to: "info@AECTearthblock.com", subject: alert.subject, audience: "aect", status: "sent" } }, 5000);
     if (interested !== undefined) {
       ev({ kind: "interest", title: interested ? "Still interested: wants a team member to reach out" : "Not interested right now" }, 60000);
       row.wants_contact = interested;
@@ -143,10 +143,12 @@ function demoApi() {
 }
 
 // ---- UI ---------------------------------------------------------------------------------------
-let api, me = "", leads = [], openId = null;
-const board = $("#board"), drawer = $("#drawer"), scrim = $("#scrim");
+let api, me = "", leads = [], openId = null, view = "board";
+const board = $("#board"), contacts = $("#contacts"), drawer = $("#drawer"), scrim = $("#scrim");
+const selected = new Set();
 
 Object.entries(PATHS).forEach(([k, v]) => $("#pathFilter").add(new Option(v, k)));
+STAGES.forEach((st) => $("#stageFilter").add(new Option(st.label, st.id)));
 
 function filtered() {
   const q = $("#search").value.trim().toLowerCase();
@@ -172,8 +174,19 @@ function cardHtml(l) {
 }
 
 function render() {
+  if (view === "contacts") return renderContacts();
   const list = filtered();
   board.innerHTML = STAGES.map((st) => {
+    // "Not ready yet" can run long, so the board shows only its count; the leads are in All contacts.
+    if (st.id === "later") {
+      const n = list.filter((l) => l.stage === st.id).length;
+      return `<section class="col col--later col--slim" data-stage="${st.id}">
+        <header class="col-head"><h2>${st.label}</h2><span class="count">${n}</span></header>
+        <p class="col-hint">${esc(st.hint)}. No alerts are emailed for these.</p>
+        <button class="btn-plain" type="button" data-show-stage="${st.id}">See all ${n} →</button>
+        <p class="col-drop">Drag a card here to move it to Not ready yet</p>
+      </section>`;
+    }
     let inStage = list.filter((l) => l.stage === st.id);
     // Stages with a deadline show the longest-waiting lead first.
     if (st.due) inStage = inStage.sort((a, b) => (a.stage_changed_at || a.created_at).localeCompare(b.stage_changed_at || b.created_at));
@@ -209,7 +222,71 @@ board.addEventListener("drop", async (e) => {
   e.preventDefault(); col.classList.remove("is-over");
   await moveLead(e.dataTransfer.getData("text/plain"), col.dataset.stage);
 });
-board.addEventListener("click", (e) => { const c = e.target.closest(".card"); if (c) openLead(c.dataset.id); });
+board.addEventListener("click", (e) => {
+  const show = e.target.closest("[data-show-stage]");
+  if (show) { $("#stageFilter").value = show.dataset.showStage; return setView("contacts"); }
+  const c = e.target.closest(".card"); if (c) openLead(c.dataset.id);
+});
+
+// ---- All contacts -----------------------------------------------------------------------------
+function contactList() {
+  const stage = $("#stageFilter").value;
+  return filtered().filter((l) => !stage || l.stage === stage).sort((a, b) => b.created_at.localeCompare(a.created_at));
+}
+function renderContacts() {
+  const list = contactList();
+  $("#contactCount").textContent = `${list.length} contact${list.length === 1 ? "" : "s"}${selected.size ? ` · ${selected.size} selected` : ""}`;
+  $("#contactRows").innerHTML = list.map((l) => `<tr data-id="${esc(l.id)}" class="${isOverdue(l) ? "is-late" : ""}">
+    <td class="c-check"><input type="checkbox" data-sel="${esc(l.id)}" ${selected.has(l.id) ? "checked" : ""} aria-label="Select ${esc(l.name || l.email)}"></td>
+    <td><button class="c-name" type="button" data-open="${esc(l.id)}">${esc(l.name || "No name")}</button><span class="c-email">${esc(l.email)}</span></td>
+    <td><span class="c-stage c-stage--${esc(l.stage)}">${esc(stageLabel(l.stage))}</span>${isOverdue(l) ? ` <span class="chip chip--late">Overdue</span>` : ""}</td>
+    <td>${esc(PATHS[l.path] || "")}</td>
+    <td>${esc(l.state || "")}</td>
+    <td>${esc(TIMELINES[l.timeline] || "")}</td>
+    <td title="${esc(when(l.created_at))}">${l.source === "planner" ? "Planner" : "Contact form"} · ${ago(l.created_at)}</td>
+  </tr>`).join("") || `<tr><td colspan="7" class="empty">No contacts match</td></tr>`;
+  const shown = list.filter((l) => selected.has(l.id)).length;
+  $("#selAll").checked = list.length > 0 && shown === list.length;
+  $("#selAll").indeterminate = shown > 0 && shown < list.length;
+  $("#emailSelBtn").disabled = $("#copySelBtn").disabled = !selected.size;
+}
+const selectedEmails = () => leads.filter((l) => selected.has(l.id)).map((l) => l.email).filter(Boolean);
+$("#contactRows").addEventListener("click", (e) => {
+  const o = e.target.closest("[data-open]"); if (o) openLead(o.dataset.open);
+});
+$("#contactRows").addEventListener("change", (e) => {
+  const id = e.target.dataset.sel; if (!id) return;
+  e.target.checked ? selected.add(id) : selected.delete(id); renderContacts();
+});
+$("#selAll").onchange = (e) => { contactList().forEach((l) => (e.target.checked ? selected.add(l.id) : selected.delete(l.id))); renderContacts(); };
+$("#stageFilter").onchange = render;
+// Opens one email with everyone selected in Bcc, so they don't see each other's addresses.
+$("#emailSelBtn").onclick = async () => {
+  const url = `mailto:${encodeURIComponent(me)}?bcc=${selectedEmails().map(encodeURIComponent).join(",")}`;
+  if (url.length < 1900) return void (location.href = url);
+  await navigator.clipboard.writeText(selectedEmails().join(", ")).catch(() => {});
+  alert(`${selected.size} addresses is too many to open in one email link, so they're copied instead. Paste them into Bcc.`);
+};
+$("#copySelBtn").onclick = async () => {
+  try { await navigator.clipboard.writeText(selectedEmails().join(", ")); $("#copySelBtn").textContent = "Copied"; setTimeout(() => ($("#copySelBtn").textContent = "Copy emails"), 1500); }
+  catch { prompt("Copy these emails:", selectedEmails().join(", ")); }
+};
+$("#csvBtn").onclick = () => {
+  const cell = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const rows = [["Name", "Email", "Stage", "Wants", "Location", "Project", "Timeline", "Source", "Came in"]].concat(contactList().map((l) =>
+    [l.name, l.email, stageLabel(l.stage), PATHS[l.path], l.state, PROJECTS[l.project], TIMELINES[l.timeline], l.source, l.created_at]));
+  const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(new Blob([rows.map((r) => r.map(cell).join(",")).join("\n")], { type: "text/csv" })), download: "aect-contacts.csv" });
+  a.click(); URL.revokeObjectURL(a.href);
+};
+
+function setView(v) {
+  view = v;
+  board.hidden = v !== "board"; contacts.hidden = v !== "contacts";
+  document.querySelectorAll("[data-view]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === v)));
+  try { localStorage.setItem("aect-view", v); } catch {}
+  render();
+}
+document.querySelectorAll("[data-view]").forEach((b) => (b.onclick = () => setView(b.dataset.view)));
 
 async function moveLead(id, stage) {
   const l = leads.find((x) => x.id === id);
@@ -349,6 +426,8 @@ $("#rulesBtn").onclick = () => {
       ${row("Clicks <i>Not right now</i> on their results", "Not ready yet")}
       ${row("Sends the contact form", "Wants us to reach out (Not ready yet if they picked <i>Just curious</i>)")}
     </table>
+    <p>AECT gets an alert email for every new lead <b>except</b> Not ready yet. If a Not ready yet lead later says yes to a team member reaching out, the alert goes out then.
+    Not ready yet shows only a count on the board; see the people in <b>All contacts</b>.</p>
     <p><b>What to do</b></p>
     <ul style="padding-left:20px">${STAGES.filter((s) => s.todo).map((s) => `<li><b>${s.label}:</b> ${s.todo}${s.due ? ` (marked overdue after ${s.due} days)` : ""}</li>`).join("")}</ul>
   </body></html>`;
@@ -368,7 +447,7 @@ $("#emailsBtn").onclick = () => {
     t("Rental reply", "Auto-reply to a rental request", contactEmail(rentLead)),
     t("Block quote reply", "Auto-reply to a block quote request", contactEmail(sample(DEMO_SEED.find((d) => d.p.topic === "blocks").p))),
     t("Consult reply", "Auto-reply to a video consult request", contactEmail(consult)),
-    t("Alert to AECT", "Sent to AECT's inbox for every new lead", internalEmail(planLead, planLead.stage)),
+    t("Alert to AECT", "Sent to AECT's inbox for every new lead, except Not ready yet", internalEmail(planLead, planLead.stage)),
   ]);
 };
 
@@ -379,10 +458,13 @@ $("#refreshBtn").onclick = () => load();
 window.addEventListener("focus", () => { if (api && !$("#tools").hidden) load(); });
 
 async function showApp() {
-  $("#signin").hidden = true; $("#tools").hidden = false; board.hidden = false;
+  $("#signin").hidden = true; $("#tools").hidden = false;
   const m = location.hash.match(/lead=([\w-]+)/);
   if (m) openId = m[1];
-  await load();
+  let v = "board"; try { v = localStorage.getItem("aect-view") || v; } catch {}
+  leads = await api.list();
+  setView(v);
+  if (openId) openLead(openId, false);
 }
 
 (async function boot() {

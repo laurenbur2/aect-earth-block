@@ -30,6 +30,10 @@
   <h1>Leads</h1>
   <span class="demo-badge" id="demoBadge" hidden title="No lead backend here (this copy is on a static host). These are sample leads stored in this browser.">Demo data</span>
   <div class="bar-tools" id="tools" hidden>
+    <div class="views" role="group" aria-label="View">
+      <button type="button" data-view="board" aria-pressed="true">Board</button>
+      <button type="button" data-view="contacts" aria-pressed="false">All contacts</button>
+    </div>
     <input class="search" id="search" type="search" placeholder="Search name, email, state…" aria-label="Search leads">
     <select id="pathFilter" aria-label="Filter by what they want"><option value="">Everything</option></select>
     <button class="btn-plain" type="button" id="rulesBtn">How leads are sorted</button>
@@ -51,6 +55,28 @@
 </main>
 
 <main class="board" id="board" hidden aria-label="Lead stages"></main>
+
+<!-- Every lead in one searchable list -->
+<main class="contacts" id="contacts" hidden aria-label="All contacts">
+  <div class="c-tools">
+    <select id="stageFilter" aria-label="Filter by stage"><option value="">All stages</option></select>
+    <span class="c-count" id="contactCount"></span>
+    <span class="c-actions">
+      <button class="btn-plain" type="button" id="emailSelBtn" disabled>Email selected</button>
+      <button class="btn-plain" type="button" id="copySelBtn" disabled>Copy emails</button>
+      <button class="btn-plain" type="button" id="csvBtn">Download CSV</button>
+    </span>
+  </div>
+  <div class="c-wrap">
+    <table class="c-table">
+      <thead><tr>
+        <th class="c-check"><input type="checkbox" id="selAll" aria-label="Select all shown"></th>
+        <th>Name</th><th>Stage</th><th>Wants</th><th>Location</th><th>Timeline</th><th>Came in</th>
+      </tr></thead>
+      <tbody id="contactRows"></tbody>
+    </table>
+  </div>
+</main>
 
 <!-- Lead detail -->
 <aside class="drawer" id="drawer" hidden aria-label="Lead details">

@@ -251,12 +251,16 @@ async function submit(req, env) {
   }
 
   // Emails go out after the lead is saved, so a mail outage never loses a lead.
+  // No alert to AECT for "Not ready yet" leads; if they later say yes to "still interested?", interest() alerts then.
   const notify = list(env.NOTIFY_EMAIL);
   const mine = customerEmail({ ...lead, summary: row.summary, reachUrl: await reachUrl(env, row.id) });
-  const alert = internalEmail(row, row.stage, dashboardLink(env, req, row.id));
-  const [r1, r2] = await Promise.all([send(env, [lead.email], mine.subject, mine.html, notify[0]), send(env, notify, alert.subject, alert.html, lead.email)]);
+  const r1 = await send(env, [lead.email], mine.subject, mine.html, notify[0]);
   await addEvent(env, row.id, { kind: "email", title: mine.subject, body: mine.html, meta: { to: lead.email, subject: mine.subject, audience: "customer", ...r1 } });
-  await addEvent(env, row.id, { kind: "email", title: alert.subject, body: alert.html, meta: { to: notify.join(", "), subject: alert.subject, audience: "aect", ...r2 } });
+  if (row.stage !== "later") {
+    const alert = internalEmail(row, row.stage, dashboardLink(env, req, row.id));
+    const r2 = await send(env, notify, alert.subject, alert.html, lead.email);
+    await addEvent(env, row.id, { kind: "email", title: alert.subject, body: alert.html, meta: { to: notify.join(", "), subject: alert.subject, audience: "aect", ...r2 } });
+  }
   return json({ ok: true }, 200, headers);
 }
 
