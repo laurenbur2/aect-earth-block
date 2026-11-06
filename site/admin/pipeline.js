@@ -63,7 +63,9 @@ export function normalize(p) {
     return {
       source: "contact",
       path: TOPIC_TO_PATH[p.topic] || null,
-      name: clean(p.name, 120), email: clean(p.email, 200), state: clean(p.state, 60),
+      name: clean(p.name, 120), email: clean(p.email, 200),
+      // Outside the US: store their country as the location, so emails and the dashboard show it.
+      state: clean(p.state === "Outside the US" && clean(p.country) ? p.country : p.state, 60),
       project: null, intent: null, timeline: STATUS_TO_TIMELINE[p.status] || null,
       // Hidden fields for other topics still post their defaults, so keep only the ones for this topic.
       summary: {

@@ -9,6 +9,16 @@
 
   const stateSel = document.getElementById("c-state");
   (window.AECTCalc?.OPTIONS.state || []).forEach((s) => stateSel.add(new Option(s, s), stateSel.options[1]));
+  // Outside the US: ask which country, so the lead shows where they are.
+  const countryField = document.getElementById("countryField");
+  const country = document.getElementById("c-country");
+  const syncCountry = () => {
+    const intl = stateSel.value === "Outside the US";
+    countryField.hidden = !intl;
+    country.required = intl;
+    if (!intl) { country.value = ""; countryField.classList.remove("has-error"); }
+  };
+  stateSel.addEventListener("change", syncCountry);
 
   function applyTopic(topic) {
     details.disabled = !topic;
