@@ -35,23 +35,22 @@ const BLOCK_VOLUME_CUFT = {
   '10" x 14"': 0.8333333 * 1.1666666 * 0.333333,
 };
 
-/** AECT price per purchased (cement-stabilized) block, keyed by block size (C3:C9 / J3:J9). */
+/** AECT price per purchased (cement-stabilized) block, keyed by block size (C3:C9 / J3:J9). 2026 prices. */
 const AECT_BLOCK_PRICE = {
-  '4" x 12"': 2.75,
-  '6" x 12"': 3.1,
-  '7" x 14"': 3.25,
-  '7" x 14" holey, interlocking': 3.5,
-  '8" x 14"': 3.35,
-  '10" x 14"': 3.5,
+  '4" x 12"': 3.5,
+  '6" x 12"': 4,
+  '7" x 14"': 4.25,
+  '7" x 14" holey, interlocking': 4.5,
+  '8" x 14"': 4.5,
+  '10" x 14"': 5,
 };
 
 /** Machine -> rated blocks/hr and purchase price (F3:F11, H3:H11, I3:I11). */
-// NOTE: the 2022 spreadsheet had $39k / $79k / $59k and BP714 at 200 blocks/hr.
-// Updated to the prices and output listed on the live site (Oct 2026). Confirm with AECT before launch.
+// Prices and output match AECT's 2026 price sheet (Nov 2026).
 const MACHINES = {
   'AECT Impact 2001A': { blocksPerHour: 300, price: 59000 },
   'AECT 3500': { blocksPerHour: 480, price: 149000 },
-  'AECT BP714': { blocksPerHour: 240, price: 69625 },
+  'AECT BP714': { blocksPerHour: 200, price: 69625 },
   'AECT 2500HD': { blocksPerHour: 480, price: 89000 },
 };
 
@@ -113,66 +112,66 @@ const MATERIAL_PER_CUFT = {
   },
 };
 
-/** Per-state AECT mobilization/setup cost (rental) and delivery cost per truck (L1:N49). No Alaska or Hawaii. */
+/** Per-state AECT mobilization/setup cost (rental) and delivery cost per truck (L1:N49, 2026 prices). No Alaska or Hawaii. */
 const STATES = {
-  "Alabama": { setup: 25000, shipping: 2600 },
-  "Arizona": { setup: 25000, shipping: 2600 },
+  "Alabama": { setup: 25000, shipping: 3000 },
+  "Arizona": { setup: 25000, shipping: 3000 },
   "Arkansas": { setup: 20000, shipping: 1800 },
-  "California": { setup: 30000, shipping: 3200 },
-  "Colorado": { setup: 25000, shipping: 2600 },
-  "Connecticut": { setup: 30000, shipping: 3200 },
-  "Delaware": { setup: 30000, shipping: 3200 },
-  "District of Columbia": { setup: 30000, shipping: 3200 }, // not in the sheet; uses Maryland/Virginia rates
-  "Florida": { setup: 30000, shipping: 3200 },
-  "Georgia": { setup: 30000, shipping: 3200 },
-  "Idaho": { setup: 30000, shipping: 3200 },
-  "Illinois": { setup: 30000, shipping: 3200 },
-  "Indiana": { setup: 30000, shipping: 3200 },
-  "Iowa": { setup: 30000, shipping: 3200 },
-  "Kansas": { setup: 25000, shipping: 2600 },
-  "Kentucky": { setup: 30000, shipping: 3200 },
+  "California": { setup: 30000, shipping: 3900 },
+  "Colorado": { setup: 25000, shipping: 3000 },
+  "Connecticut": { setup: 30000, shipping: 3900 },
+  "Delaware": { setup: 30000, shipping: 3900 },
+  "District of Columbia": { setup: 30000, shipping: 3900 }, // not in the sheet; uses Maryland/Virginia rates
+  "Florida": { setup: 30000, shipping: 3900 },
+  "Georgia": { setup: 30000, shipping: 3900 },
+  "Idaho": { setup: 30000, shipping: 3900 },
+  "Illinois": { setup: 30000, shipping: 3900 },
+  "Indiana": { setup: 30000, shipping: 3900 },
+  "Iowa": { setup: 30000, shipping: 3900 },
+  "Kansas": { setup: 25000, shipping: 3000 },
+  "Kentucky": { setup: 30000, shipping: 3900 },
   "Louisiana": { setup: 20000, shipping: 1800 },
-  "Maine": { setup: 30000, shipping: 3200 },
-  "Maryland": { setup: 30000, shipping: 3200 },
-  "Massachusetts": { setup: 30000, shipping: 3200 },
-  "Michigan": { setup: 30000, shipping: 3200 },
-  "Minnesota": { setup: 30000, shipping: 3200 },
-  "Mississippi": { setup: 25000, shipping: 2600 },
-  "Missouri": { setup: 25000, shipping: 2600 },
-  "Montana": { setup: 30000, shipping: 3200 },
-  "Nebraska": { setup: 25000, shipping: 2600 },
-  "Nevada": { setup: 30000, shipping: 3200 },
-  "New Hampshire": { setup: 30000, shipping: 3200 },
-  "New Jersey": { setup: 30000, shipping: 3200 },
+  "Maine": { setup: 30000, shipping: 3900 },
+  "Maryland": { setup: 30000, shipping: 3900 },
+  "Massachusetts": { setup: 30000, shipping: 3900 },
+  "Michigan": { setup: 30000, shipping: 3900 },
+  "Minnesota": { setup: 30000, shipping: 3900 },
+  "Mississippi": { setup: 25000, shipping: 3000 },
+  "Missouri": { setup: 25000, shipping: 3000 },
+  "Montana": { setup: 30000, shipping: 3900 },
+  "Nebraska": { setup: 25000, shipping: 3000 },
+  "Nevada": { setup: 30000, shipping: 3900 },
+  "New Hampshire": { setup: 30000, shipping: 3900 },
+  "New Jersey": { setup: 30000, shipping: 3900 },
   "New Mexico": { setup: 20000, shipping: 1800 },
-  "New York": { setup: 30000, shipping: 3200 },
-  "North Carolina": { setup: 30000, shipping: 3200 },
-  "North Dakota": { setup: 30000, shipping: 3200 },
-  "Ohio": { setup: 30000, shipping: 3200 },
+  "New York": { setup: 30000, shipping: 3900 },
+  "North Carolina": { setup: 30000, shipping: 3900 },
+  "North Dakota": { setup: 30000, shipping: 3900 },
+  "Ohio": { setup: 30000, shipping: 3900 },
   "Oklahoma": { setup: 20000, shipping: 1800 },
-  "Oregon": { setup: 30000, shipping: 3200 },
-  "Pennsylvania": { setup: 30000, shipping: 3200 },
-  "Rhode Island": { setup: 30000, shipping: 3200 },
-  "South Carolina": { setup: 30000, shipping: 3200 },
-  "South Dakota": { setup: 30000, shipping: 3200 },
-  "Tennessee": { setup: 25000, shipping: 2600 },
+  "Oregon": { setup: 30000, shipping: 3900 },
+  "Pennsylvania": { setup: 30000, shipping: 3900 },
+  "Rhode Island": { setup: 30000, shipping: 3900 },
+  "South Carolina": { setup: 30000, shipping: 3900 },
+  "South Dakota": { setup: 30000, shipping: 3900 },
+  "Tennessee": { setup: 25000, shipping: 3000 },
   "Texas": { setup: 20000, shipping: 1800 },
-  "Utah": { setup: 25000, shipping: 2600 },
-  "Vermont": { setup: 30000, shipping: 3200 },
-  "Virginia": { setup: 30000, shipping: 3200 },
-  "Washington": { setup: 30000, shipping: 3200 },
-  "West Virginia": { setup: 30000, shipping: 3200 },
-  "Wisconsin": { setup: 30000, shipping: 3200 },
-  "Wyoming": { setup: 30000, shipping: 3200 },
+  "Utah": { setup: 25000, shipping: 3000 },
+  "Vermont": { setup: 30000, shipping: 3900 },
+  "Virginia": { setup: 30000, shipping: 3900 },
+  "Washington": { setup: 30000, shipping: 3900 },
+  "West Virginia": { setup: 30000, shipping: 3900 },
+  "Wisconsin": { setup: 30000, shipping: 3900 },
+  "Wyoming": { setup: 30000, shipping: 3900 },
 };
 
 // Other fixed constants from the sheet
 const EXTERNAL_MORTAR_FACTOR = 0.8; // B9: wall volume x 0.8 (openings/mortar allowance) for external walls
 const INTERNAL_MORTAR_FACTOR = 0.85; // B22: x 0.85 for internal walls
-const PRODUCTION_EFFICIENCY = 0.2; // B55: effective rate = rated blocks/hr x 0.2
+const PRODUCTION_EFFICIENCY = 0.75; // B55: effective rate = rated blocks/hr x 0.75 (2026 sheet; was 0.2)
 const PALLETS_PER_CUYD = 0.86; // F61: pallets = (earth yd3 + cement yd3) x 0.86
 const CUFT_PER_TRUCK = 384; // B78: truckloads = wall ft3 / 384
-const RENTAL_PER_BLOCK = 1; // B88: AECT machinery rental $1 per block
+const RENTAL_PER_BLOCK = 2; // B88: AECT machinery rental $2 per block (2026 sheet; was $1)
 
 // Allowed dropdown values in the original UI
 const OPTIONS = {
@@ -314,7 +313,7 @@ function calculate(inputs = {}) {
 
 const TABLES = {
   BLOCK_SIZE_BY_WALL_WIDTH, BLOCK_VOLUME_CUFT, AECT_BLOCK_PRICE, MACHINES, MACHINE_BLOCK_THRESHOLD,
-  MACHINE_BY_BLOCK_SIZE, INTERNAL_WALL_WIDTH_BY_MACHINE, INTERNAL_BLOCK_SIZE_ROWS, MATERIAL_PER_CUFT, STATES,
+  MACHINE_BY_BLOCK_SIZE, INTERNAL_WALL_WIDTH_BY_MACHINE, INTERNAL_BLOCK_SIZE_ROWS, MATERIAL_PER_CUFT, STATES, RENTAL_PER_BLOCK,
 };
 
 if (typeof module !== 'undefined') module.exports = { calculate, TABLES, OPTIONS };

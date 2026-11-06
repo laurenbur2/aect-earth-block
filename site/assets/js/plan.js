@@ -14,7 +14,7 @@
       intro: "The same 6\"×12\" block as the Impact, at 480 blocks an hour, with a one-yard hopper you load with a tractor. Built for tens of thousands of blocks, fast and without much effort." },
     "AECT 3500": { img: IMG + "62570b0a-3778-44b5-b0fb-e9200ed393c6.jpg", rate: "480 blocks/hr",
       intro: "The Cadillac of CEB machines. Big, fast, versatile and built to last. There are 3500s in the field today that have made one, two, even three million blocks." },
-    "AECT BP714": { img: IMG + "889d4a57-f36f-4da9-8b17-e691db617e06.jpg", rate: "240 blocks/hr",
+    "AECT BP714": { img: IMG + "889d4a57-f36f-4da9-8b17-e691db617e06.jpg", rate: "200 blocks/hr",
       intro: "Some projects and jurisdictions (California, for example) call for interlocking, holey blocks you can run rebar and grout through. The BP714 makes exactly that, with a dual-stage compression chamber for consistent size and strength." },
   };
   // Defaults for questions we no longer ask (kept simple on purpose).
@@ -32,7 +32,8 @@
   };
   const STORE_KEY = "aect-plan-v3";
 
-  const { calculate, OPTIONS } = window.AECTCalc;
+  const { calculate, OPTIONS, TABLES } = window.AECTCalc;
+  const RENTAL = TABLES.RENTAL_PER_BLOCK;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const steps = $$(".q");
@@ -305,6 +306,7 @@
         <h2>${heading}</h2>
         <p class="q-help">${sub}</p>
         <div class="options3">${order.map((k) => cards[k]).join("")}</div>
+        <p class="fine" style="margin-top:12px">Rough estimate only. Prices, setup and delivery vary by location, and our team will confirm exact pricing for your site.</p>
       </div>
 
       <!-- Asked right under the three options; a sticky bar repeats it if they scroll past without answering. -->
@@ -345,7 +347,7 @@
           <li>${state.labor === "hired" ? `Crew of ${DEFAULTS.crew} at $${DEFAULTS.rate}/hr.` : "Volunteer labor."} ${state.dirt === "own" ? "Free site dirt." : `Earth at $${DEFAULTS.earthDelivered}/yd³.`} Cement at $${DEFAULTS.cement}/yd³.</li>
           <li>Wall volume reduced 20% (exterior) and 15% (interior) for doors, windows and mortar.</li>
           <li>Kit prices FOB San Antonio, TX; shipping extra. Prices change with 30 days' notice.</li>
-          <li>Estimates are for planning only, not a quote.</li>
+          <li>Prices, setup and delivery vary by location. Estimates are for planning only, not a quote.</li>
         </ul>
       </details>
 
@@ -407,14 +409,14 @@
         <li><b>We produce.</b> Our operator runs the plant and trains your crew on mixing, moisture, stacking and curing.</li>
         <li><b>You build.</b> Blocks are palletized on site, typically 5,000 to 8,000 a week.</li>
       </ol>
-      <ul class="pop-facts"><li><span>Setup & delivery${state.state && state.state !== "intl" ? ` (${state.state})` : ""}</span><b>${money(r.mobilizationCost)}</b></li><li><span>Rental, $1 per block</span><b>${money(r.rentalMachineryCost)}</b></li><li><span>Your materials & crew</span><b>${money(r.rentalMaterialLaborIncidental)}</b></li></ul>
+      <ul class="pop-facts"><li><span>Setup & delivery${state.state && state.state !== "intl" ? ` (${state.state})` : ""}</span><b>${money(r.mobilizationCost)}</b></li><li><span>Rental, $${RENTAL} per block</span><b>${money(r.rentalMachineryCost)}</b></li><li><span>Your materials & crew</span><b>${money(r.rentalMaterialLaborIncidental)}</b></li></ul>
       <p class="fine">You provide the crew (typically 4 to 6), a tractor with loader, forklift, earth, stabilizer, water, power, pallets and lodging for our operator.</p>${cta}`;
     return `
       <span class="eyebrow">Buy finished blocks</span>
       <h2>Blocks delivered, ready to lay</h2>
       <p>Skip the equipment. Your blocks are made on AECT machines, cement-stabilized, palletized and delivered to your site.</p>
       <ul class="pop-facts"><li><span>${int(r.totalBlocks)} blocks × ${money2(r.blockPrice)}</span><b>${money(r.purchaseCost)}</b></li><li><span>Delivery (${up(r.truckloads)} trucks)</span><b>${money(r.deliveryCost)}</b></li><li><span>Total, delivered</span><b>${money(r.purchaseTotal)}</b></li></ul>
-      <p class="fine">Planning estimate. Our team will confirm block size, price and delivery with you.</p>${cta}`;
+      <p class="fine">Rough estimate. Block prices and delivery vary by location; our team will confirm exact pricing for your site.</p>${cta}`;
   }
   document.addEventListener("click", (e) => {
     const pop = e.target.closest("[data-pop]");
