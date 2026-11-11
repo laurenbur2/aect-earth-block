@@ -36,7 +36,7 @@ Delete these (old GoDaddy website): A `@` → `13.248.243.5` and `76.223.105.230
 - [x] **Blog:** all 15 old posts (text, 112 photos, videos) moved to `/blog/`; old post addresses forward to them.
 - [x] **Press archive:** now a "More coverage" list on `about.html#more-press`.
 - [ ] **Privacy policy:** draft at `site/privacy.html`, linked from every footer. AECT must review and approve it. (The old site's Privacy and Terms pages were empty, so the Terms link is gone.)
-- [ ] **Book a call (on hold):** no Calendly yet, so `BOOK_CALL_URL` is empty in `main.js` and `pipeline.js`. "Book a call" links go to the consult request on the contact form, and emails say "Request a call". Once Calendly exists, paste its link into both files ([README.md](README.md#calendly-the-75-call-with-ryan)).
+- [x] **Book a call:** $200, 60-minute call with Ryan on his Google Calendar booking page (paid through Stripe), set in `main.js` and `pipeline.js` ([README.md](README.md#booking-a-call-the-200-call-with-ryan)). Test one real booking and refund it.
 - [x] **Old URLs:** all 44 old addresses (pages, blog posts, shop, booking) forward to the closest new page via `site/_redirects` (301s, so Google moves its listings). Add a line there if an old link turns up later.
 
 ## 2. Point the domain at the site: DONE 2026-11-04
@@ -60,7 +60,7 @@ To undo: put the GoDaddy A record back to the Website Builder site (Website → 
 - [ ] Lauren, Nicole and Ryan can each sign in at `/admin/`
 - [ ] Lead and sign-in emails arrive from `@aectearthblock.com` and aren't in spam
 - [ ] Email to info@AECTearthblock.com still arrives, and info@ can still send
-- [ ] Book a call goes to the consult request (or Calendly, once set up); Privacy loads; no broken images
+- [ ] Book a call opens Ryan's Google Calendar booking page; Privacy loads; no broken images
 - [ ] Old links forward: try `aectearthblock.com/faqs` and `/3500-series`
 - [ ] Only then: cancel GoDaddy's **Websites + Marketing** plan. Keep the **domain** registration. (Email is billed by Google, not GoDaddy; check GoDaddy for an unused Microsoft 365 plan before canceling anything.)
 

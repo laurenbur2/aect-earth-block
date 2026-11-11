@@ -4,10 +4,11 @@
 // Public site address, used for links and the logo in emails.
 export const SITE_URL = "https://aectearthblock.com/";
 export const AECT_EMAIL = "info@AECTearthblock.com";
-// Paid video call with Ryan. On hold until AECT sets up Calendly (see README, "Calendly"): while BOOK_CALL_URL is
-// empty, emails link to the consult request on the contact form instead. The site's copy is in assets/js/main.js.
-export const CONSULT = { price: "$75", length: "30-minute", with: "Ryan Runge" };
-export const BOOK_CALL_URL = "";
+// Paid video call with Ryan, booked and paid on his Google Calendar booking page (see README, "Booking a call").
+// If BOOK_CALL_URL is emptied, emails link to the consult request on the contact form instead.
+// The site's copy is in assets/js/main.js.
+export const CONSULT = { price: "$200", length: "60-minute", with: "Ryan Runge" };
+export const BOOK_CALL_URL = "https://calendar.app.google/gYZce9sKyBLcg89b7";
 
 // The funnel, in board order. Wants us to reach out, Ready to build and Not ready yet (last, out of the
 // way) are set automatically from the quiz and contact form; the rest are moved by AECT as they work the lead.
@@ -266,17 +267,12 @@ function reachOut(lead) {
     </td></tr></table>`;
 }
 
-/** "Have questions? Book a call", the paid video consult with Ryan. */
+/** "Still need help?", the paid video call with Ryan. A quiet line at the bottom of each email, not a big call to action. */
 function bookCall() {
   const href = BOOK_CALL_URL || url("contact.html?topic=consult");
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${C.line};border-radius:16px;margin:0 0 4px"><tr>
-    <td class="stack" style="padding:22px 24px;vertical-align:middle">
-      <div style="${HEAD}font-size:20px;font-weight:800;color:${C.navy}">Have questions? Book a call.</div>
-      <div style="${BODY}font-size:14px;line-height:1.5;color:${C.muted};margin-top:4px">A ${CONSULT.length} video call with ${CONSULT.with}, AECT's president. Soil, machines, cost, design: anything about your build. <b style="color:${C.ink}">${CONSULT.price}</b></div></td>
-    <td class="stack" align="right" style="padding:0 24px 22px 24px;vertical-align:middle;white-space:nowrap">
-      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px"><tr><td style="border:2px solid ${C.blue};border-radius:999px">
-        <a href="${href}" style="${HEAD}display:inline-block;padding:12px 22px;color:${C.blue};font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none">${BOOK_CALL_URL ? "Book" : "Request"} a call &middot; ${CONSULT.price}</a></td></tr></table></td>
-  </tr></table>`;
+  return `<div style="${BODY}border-top:1px solid ${C.line};padding:18px 0 0;margin:8px 0 0;font-size:14px;line-height:1.55;color:${C.muted}">
+    <b style="color:${C.ink}">Still need help?</b> If you'd like one-on-one support, you can talk it through with our president, ${CONSULT.with},
+    on a ${CONSULT.length} video call (${CONSULT.price}). <a href="${href}" style="color:${C.blue};font-weight:700;text-decoration:underline">${BOOK_CALL_URL ? "Book" : "Request"} a call</a></div>`;
 }
 
 // ---- The emails ----
@@ -313,10 +309,11 @@ export function planEmail(lead) {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${C.line};border-radius:14px;overflow:hidden;border-collapse:separate;margin:0 0 14px">${rows}</table>
     ${para("Planning estimates, not a quote. Kit prices FOB San Antonio, TX; shipping extra.", `font-size:12px;color:${C.muted};margin-bottom:26px`)}
     ${reachOut(lead)}
-    ${bookCall()}
     ${rule()}
     ${feature}
-    ${showcase(others, "Explore more from AECT")}`;
+    ${showcase(others, "Explore more from AECT")}
+    ${spacer(24)}
+    ${bookCall()}`;
   return { subject: `${n ? n + ", your" : "Your"} CEB plan: about ${int(s.totalBlocks)} blocks`,
     html: layout({ preheader: `About ${int(s.totalBlocks)} blocks, your recommended kit, and three ways to get them.`, body }) };
 }
@@ -334,8 +331,8 @@ const CONTACT_REPLY = {
   consulting: { subject: "We got your consulting request", line: "We'll be in touch about your site and dates.",
     next: [["We review your project", "What you're building and where your crew is today."], ["We email you", "Usually within 2 business days, to plan dates."], ["We come to your site", "Hands-on help from soil prep to the last course of plaster."]],
     more: ["impact", "k3500", "rent", "blocks"] },
-  consult: { subject: "We got your video consult request", line: "We'll send times for your 30-minute call with Ryan Runge.",
-    next: [["We email you times", "Usually within 2 business days."], ["You pick a time", "A 30-minute video call with Ryan Runge."], ["Bring your questions", "Soil, machines, cost, design: anything about your build."]],
+  consult: { subject: "We got your video consult request", line: `We'll send times for your ${CONSULT.length} call with Ryan Runge.`,
+    next: [["We email you times", "Usually within 2 business days."], ["You pick a time", `A ${CONSULT.length} video call with Ryan Runge.`], ["Bring your questions", "Soil, machines, cost, design: anything about your build."]],
     more: ["impact", "k3500", "rent", "blocks"] },
   tools: { subject: "We got your order request", line: "We'll confirm availability, shipping and payment.",
     next: [["We confirm your order", "Availability and shipping to your location."], ["You get an invoice", "By email, usually within 2 business days."], ["We ship it", "From our shop in San Antonio, TX."]],
@@ -360,12 +357,12 @@ export function contactEmail(lead) {
     ${s.message ? `<div style="border-left:3px solid ${C.accent};padding:4px 0 4px 18px;margin:0 0 30px"><div style="${BODY}font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:${C.muted};margin-bottom:6px">Your message</div><div style="${BODY}font-size:16px;line-height:1.55;color:${C.ink};font-style:italic;white-space:pre-wrap">${esc(s.message)}</div></div>` : ""}
     ${h2("What happens next")}
     ${steps(r.next)}
-    ${lead.path === "consult" ? "" : bookCall()}
     ${rule()}
     ${r.feature ? featureCard(PRODUCTS[r.feature], "While you wait") : ""}
     ${showcase(r.more.filter((k) => k !== r.feature), "Explore the AECT lineup")}
     ${spacer(24)}
-    ${para(`Have a question before then? Our <a href="${url("learn.html")}" style="color:${C.brand};font-weight:700">FAQ</a> covers soil, cost and building with compressed earth blocks.`, `font-size:15px;color:${C.muted}`)}`;
+    ${para(`Have a question before then? Our <a href="${url("learn.html")}" style="color:${C.brand};font-weight:700">FAQ</a> covers soil, cost and building with compressed earth blocks.`, `font-size:15px;color:${C.muted}`)}
+    ${bookCall()}`;
   return { subject: `${r.subject}${n ? ", " + n : ""}`, html: layout({ preheader: `${r.line} We'll reply within 2 business days.`, body }) };
 }
 

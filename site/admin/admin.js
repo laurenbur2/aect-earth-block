@@ -3,7 +3,7 @@
 // uses real leads; on other static hosts (GitHub preview, local preview) it runs on sample leads in this browser (demo mode).
 import {
   STAGES, PATHS, PROJECTS, INTENTS, TIMELINES, normalize, initialStage, interestStage, isOverdue, customerEmail, internalEmail, planEmail, contactEmail,
-} from "./pipeline.js?v=20261105b";
+} from "./pipeline.js?v=20261111c";
 
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

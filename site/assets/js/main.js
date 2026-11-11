@@ -1,10 +1,10 @@
 // Shared behavior: sticky header, mobile nav, scroll reveals, click-to-load videos, hero video.
 (function () {
-  // Where "Book a call" links go: the $75 video call with Ryan. Set here once for the whole site
-  // (emails use BOOK_CALL_URL in admin/pipeline.js). Links marked data-book-call get this href.
-  // On hold until AECT sets up Calendly (see README, "Calendly"): while it's empty, those links keep their
-  // fallback (the consult request on the contact form) and anything marked data-book-call-only is removed.
-  const BOOK_CALL_URL = "";
+  // Where "Book a call" links go: Ryan's $200, 60-minute booking page in Google Calendar (paid through Stripe;
+  // see README, "Booking a call"). Set here once for the whole site (emails use BOOK_CALL_URL in admin/pipeline.js).
+  // Links marked data-book-call get this href. If it's ever emptied, those links keep their fallback (the consult
+  // request on the contact form) and anything marked data-book-call-only is removed.
+  const BOOK_CALL_URL = "https://calendar.app.google/gYZce9sKyBLcg89b7";
   if (BOOK_CALL_URL) document.querySelectorAll("[data-book-call]").forEach((a) => { a.href = BOOK_CALL_URL; a.target = "_blank"; a.rel = "noopener"; });
   else document.querySelectorAll("[data-book-call-only]").forEach((el) => el.remove());
 

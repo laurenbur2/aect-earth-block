@@ -48,23 +48,15 @@ python3 tools/build_machines.py
 - Link previews (logo, title, description when a page is texted or shared): `python3 tools/add_share_tags.py` after changing a page title or running `build_machines.py`. `build_blog.py` runs it for you.
 - Redirects: old-site addresses are in `site/_redirects`. After editing it, run `python3 tools/build_redirect_pages.py` (makes them work on GitHub Pages too).
 - Blog: posts are in `blog-src/` (one HTML file each, details at the top of `tools/build_blog.py`). After adding or editing a post, or changing the header/footer, run `python3 tools/build_blog.py` to rebuild `site/blog/` and `sitemap.xml`.
-- The $75 call with Ryan is on hold until AECT sets up Calendly (below). Until then, "Book a call" goes to the consult request on the contact form.
+- "Book a call" (the $200, 60-minute video call with Ryan) opens his Google Calendar booking page (below).
 
-## Calendly (the $75 call with Ryan)
-On hold: `BOOK_CALL_URL` is empty, so "Book a call" goes to the consult request on the contact form and the team schedules the call by email. (The old GoDaddy Online Appointments page goes away with the old site.) To turn on real booking:
+## Booking a call (the $200 call with Ryan)
+Set up 2026-11-11 as a Google Calendar **appointment schedule** in ryan@aectearthblock.com: "AECT Consultation", 60 minutes, $200 paid at booking through Stripe (connected under Texaterra LLC), Google Meet, Mon–Fri 10am–2pm Eastern, cancel 24 hours ahead for a refund.
 
-1. **Account:** AECT signs up at calendly.com with Ryan's calendar (Google or Outlook) connected. Collecting payment needs a paid plan (Standard or higher); check current pricing.
-2. **Payments:** Integrations > Stripe (or PayPal). Connect AECT's Stripe account so the $75 is paid at booking.
-3. **Event type:** "CEB consultation: video call with Ryan Runge", 30 minutes, $75.
-   - Location: Zoom or Google Meet (link added automatically).
-   - Hours to match today: Mon–Fri, 9:00 AM–2:00 PM Mountain, 30-minute slots. Add a 15-minute buffer and at least 24 hours' notice.
-   - Description: "Our president, Ryan Runge, will answer your questions about compressed earth blocks: soil, machines, cost and design."
-   - Booking questions: phone (optional); "What are you building, and where?"; "Your block count from the planner, if you have one".
-4. **Link:** copy the event's link (e.g. `https://calendly.com/aect/ceb-consultation`) and paste it in two places:
-   - `site/assets/js/main.js` → `BOOK_CALL_URL` (every "Book a call" on the website)
-   - `site/admin/pipeline.js` → `BOOK_CALL_URL` (the emails), then redeploy the Worker (`cd worker && npx wrangler deploy`)
-5. **Test:** book a call end to end with a real card and refund it, then check the confirmation email and calendar invite.
-6. **Optional, later:** a Calendly webhook can add bookings to the lead dashboard as "Booked a call" (needs a Calendly plan with webhooks).
+- Booking link: https://calendar.app.google/gYZce9sKyBLcg89b7
+- It's set in two places: `site/assets/js/main.js` → `BOOK_CALL_URL` (every link marked `data-book-call` on the website) and `site/admin/pipeline.js` → `BOOK_CALL_URL` + `CONSULT` (price and length in the emails). After changing `pipeline.js`, redeploy the Worker (`cd worker && npx wrangler deploy`).
+- Change hours, price or description in Google Calendar (Ryan's account, the appointment schedule's **Edit**); the link stays the same. If the price or length changes, update `CONSULT` and the copy on `contact.html`, `rent.html`, `reach-out.html` and `learn.html`.
+- Where it shows: low-key on purpose, so people still use the planner first. Bottom of every customer email; contact form ("Video call with Ryan" topic); rental page price list; reach-out page; FAQ page.
 
 ## Deploy
 The Worker in `worker/` serves the whole site and the dashboard. Moving aectearthblock.com onto it (DNS to Cloudflare, keeping AECT's Google email working) is step by step in [LAUNCH.md](LAUNCH.md).

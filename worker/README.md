@@ -40,4 +40,4 @@ Setup and the test script: [TESTING.md](TESTING.md).
 - Spam: both forms have a hidden "website" field; submissions that fill it are dropped silently. If spam becomes a problem, add Cloudflare Turnstile.
 - If Resend is down or not configured, the lead is still saved and the timeline shows the email as "not sent" or "failed".
 - `SITE_URL` in `pipeline.js` is the GitHub Pages address for now. Change it to `https://aectearthblock.com/` at launch.
-- The $75 call with Ryan is booked on the old GoDaddy site until it moves to Calendly before launch; see "Calendly" in the main README.
+- The $200 call with Ryan is booked on his Google Calendar booking page; see "Booking a call" in the main README.
